@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Hexo 블로그로의 전환과 Vexo 테마 수정기 - Taeseung Hahn</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Taeseung Hahn"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Taeseung Hahn"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="이 글은 오늘은 또 무슨 딴짓을 하고 살았는지에 대한 기록이다.     하라는 데이터 공부는 안하고"><meta property="og:type" content="blog"><meta property="og:title" content="Hexo 블로그로의 전환과 Vexo 테마 수정기"><meta property="og:url" content="https://taes.me/HexoVexo/"><meta property="og:site_name" content="Taeseung Hahn"><meta property="og:description" content="이 글은 오늘은 또 무슨 딴짓을 하고 살았는지에 대한 기록이다.     하라는 데이터 공부는 안하고"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://i.imgur.com/bR69fdj.jpeg"><meta property="og:image" content="https://i.imgur.com/RV0JZhl.png"><meta property="article:published_time" content="2021-05-08T00:00:00.000Z"><meta property="article:modified_time" content="2023-04-24T12:21:03.174Z"><meta property="article:author" content="Taeseung Hahn"><meta property="article:tag" content="Others"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://i.imgur.com/bR69fdj.jpeg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taes.me/HexoVexo/"},"headline":"Hexo 블로그로의 전환과 Vexo 테마 수정기","image":["https://i.imgur.com/RV0JZhl.png"],"datePublished":"2021-05-08T00:00:00.000Z","dateModified":"2023-04-24T12:21:03.174Z","author":{"@type":"Person","name":"Taeseung Hahn"},"publisher":{"@type":"Organization","name":"Taeseung Hahn","logo":{"@type":"ImageObject","url":"https://taes.me/img/ts_logo.png"}},"description":"이 글은 오늘은 또 무슨 딴짓을 하고 살았는지에 대한 기록이다.     하라는 데이터 공부는 안하고"}</script><link rel="canonical" href="https://taes.me/HexoVexo/"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=UA-194796796-1" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'UA-194796796-1');</script><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><meta name="naver-site-verification" content="45964f95ee60d3fb1ae3878a54b2ee03a83367b8"><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Find me on Linkedin!" href="https://www.linkedin.com/in/taeshahn/"><i class="fab fa-linkedin"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-9-tablet is-9-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-05-08T00:00:00.000Z" title="5/8/2021, 12:00:00 AM">2021-05-08</time></span><span class="level-item"><a class="link-muted" href="/categories/Others/">Others</a></span><span class="level-item">21 minutes read (About 3182 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Hexo 블로그로의 전환과 Vexo 테마 수정기</h1><div class="content"><p>이 글은 오늘은 또 무슨 딴짓을 하고 살았는지에 대한 기록이다.</p>
+<center>
+
+<p><img src="https://i.imgur.com/bR69fdj.jpeg"></p>
+<p> <del>하라는 데이터 공부는 안하고</del><br> </center></p>
+<h1 id="1-글을-조금-작성해보려하면-찾아오시는-그-분"><a href="#1-글을-조금-작성해보려하면-찾아오시는-그-분" class="headerlink" title="1. 글을 조금 작성해보려하면 찾아오시는 그 분"></a>1. 글을 조금 작성해보려하면 찾아오시는 그 분</h1><p>고질병이 다시 찾아와서 블로그 테마를 바꿨다. 사실 테마만 바꾼 수준이 아니라 Static Site Generator 자체를 Jekyll에서 Hexo로 변경했다. 변경한 이유는 여러 가지가 있지만, Jupyter로 생성한 이미지 파일들을 마크다운에서 경로 수정없이 바로 참조할 수 있게 되었다는 점이 가장 좋은 것 같다. 이외에도 포스팅 관련 파일과 블로그 관련 파일을 별도로 버전 관리할 수 있게 되었다는 점도 마음에 든다.</p>
+<p>Jekyll에서는 <a target="_blank" rel="noopener" href="https://github.com/mmistakes/minimal-mistakes">Minimal-Mistakes</a>라는 테마를 사용했었다. Minimal-Mistakes는 7.9K Star, 14.5K Fork를 자랑할 뿐만 아니라 Contributor만도 225명이나 되는 굉장히 인기있는 테마다. 이미 어지간한 기능들은 테마에 다 포함되어 있기 때문에, 옵션만 조금 조정해주면 어렵지 않게 커스터마이징해서 쓸 수 있는 강력한 테마였다.</p>
+<p>한편 Hexo로 넘어오면서 선택한 테마는 <a target="_blank" rel="noopener" href="https://github.com/yanm1ng/hexo-theme-vexo">Vexo</a>였다. Hexo의 개발자가 대만 출신이라서 관련 생태계에서 중화권의 비율이 꽤 높은 것으로 알고 있는데, GitHub 프로필을 참고해보면 이 테마 또한 알리페이에서 근무하는 중국 개발자분이 만드신 것 같다. 다른 부분은 별로 고민하지 않았고 단순히 샘플 웹페이지의 디자인이 마음에 들어서 선택했다.</p>
+<p>미적 감각이라고는 없는 내가 이런 멋진 테마를 무료로 사용할 수 있다는 것은 정말 감사한 일이지만, 항상 그렇듯이 직접 기획해서 만든 게 아니라면 아쉬운 부분들이 눈에 들어오기 마련이다. 대충 적응해서 써보려고 했지만, 미적인 부분들이 아니라 기능적으로 크리티컬한 부분들이 자꾸 눈에 들어와서 결국 한번 작정하고 수정해보기로 했다.</p>
+<h1 id="2-그래서-어디를-고치겠다고"><a href="#2-그래서-어디를-고치겠다고" class="headerlink" title="2. 그래서 어디를 고치겠다고?"></a>2. 그래서 어디를 고치겠다고?</h1><p>그래서 일단 수정해야할 부분들을 List-up 해보았다. 개인적으로 수정할 부분들은 아래 리스트 이외에도 조금 더 있었지만, 추가적으로 필요하거나 현재 문제가 있는 기능들은 5개 내외 정도로 정리해 볼 수 있었다.</p>
+<ol>
+<li>글의 Table of Contents 링크가 정상적으로 작동하지 않는 문제 </li>
+<li>Tags 레이아웃에서 각 태그 레이블의 링크가 정상적으로 작동하지 않는 문제</li>
+<li><code>Utterances</code>를 댓글 시스템으로 사용할 수 있도록 추가</li>
+<li>블로그 내 검색 기능 추가</li>
+<li>Tags 레이아웃 이용 시, 태그 및 포스팅이 정렬되지 않는 문제</li>
+<li>기타 자잘한 수정사항들<ul>
+<li>하드코딩된 한자 제거</li>
+<li>깨진 URL&#x2F;이미지 제거 및 대체</li>
+<li>Minor한 CSS 수정</li>
+</ul>
+</li>
+</ol>
+<h1 id="3-하나씩-차례대로"><a href="#3-하나씩-차례대로" class="headerlink" title="3. 하나씩 차례대로!"></a>3. 하나씩 차례대로!</h1><p>지금부터는 앞서 언급한 리스트의 각 항목들이 어떤 맥락에서 수정이 필요했고, 또 어떻게 수정을 했는지 하나씩 기록해보도록 하겠다.</p>
+<h4 id="1-글의-Table-of-Contents-링크가-정상적으로-작동하지-않는-문제"><a href="#1-글의-Table-of-Contents-링크가-정상적으로-작동하지-않는-문제" class="headerlink" title="(1) 글의 Table of Contents 링크가 정상적으로 작동하지 않는 문제"></a>(1) 글의 Table of Contents 링크가 정상적으로 작동하지 않는 문제</h4><p>정확히 이야기하자면 링크되는 단락에 ‘한글이 포함되어 있는 경우’에만 이동이 정상적으로 이루어지지 않았다. 예를 들자면, <code>Taes&#39; R</code> 시리즈 첫번째 글의 Table of Contents에서, 첫번째 단락인 <code>0. 시작하기에 앞서</code>을 눌러도 아무런 반응이 없었다. 확인해보니 다음과 같이 링크는 정상적으로 생성이 되었는데, 한글에 해당하는 링크의 뒷부분이 정상적으로 디코딩되지 않아서 발생하는 문제였다. 링크 생성 시 URL을 디코딩하도록 수정해줌으로써 간단히 해결할 수 있었다.</p>
+<blockquote>
+<p>&lt; 다음: 아래의 두 링크의 내용은 동일하다. &gt;</p>
+<p><code>https://taes.me/TaesR01/#0-시작하기에-앞서</code></p>
+<p><code>https://taes.me/TaesR01/#0-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0%EC%97%90-%EC%95%9E%EC%84%9C</code></p>
+</blockquote>
+<h4 id="2-Tags-레이아웃에서-각-태그-레이블의-링크가-정상적으로-작동하지-않는-문제"><a href="#2-Tags-레이아웃에서-각-태그-레이블의-링크가-정상적으로-작동하지-않는-문제" class="headerlink" title="(2) Tags 레이아웃에서 각 태그 레이블의 링크가 정상적으로 작동하지 않는 문제"></a>(2) Tags 레이아웃에서 각 태그 레이블의 링크가 정상적으로 작동하지 않는 문제</h4><p>이 문제도 정확히 이야기하자면 태그에 특수문자(공백 포함)가 포함되어 있는 경우에만 발생했다. 예를 들자면 Tag가 <code>TaesR</code>인 경우에는 정상적으로 링크가 작동해서 스크롤링이 되었지만, <code>Taes&#39; R</code>이나 <code>Taes R</code> 처럼 특수문자가 포함된 경우에는 클릭 시에도 아무런 반응이 없었다.  도대체 왜 반응이 없는지 찾느라 시간이 조금 걸리긴 했지만, 정규표현식으로 특수문자들을 Escaping 처리해줌으로써 이 문제도 어렵지 않게 해결할 수 있었다.</p>
+<h4 id="3-Utterances를-댓글-시스템으로-사용할-수-있도록-추가"><a href="#3-Utterances를-댓글-시스템으로-사용할-수-있도록-추가" class="headerlink" title="(3) Utterances를 댓글 시스템으로 사용할 수 있도록 추가"></a>(3) <code>Utterances</code>를 댓글 시스템으로 사용할 수 있도록 추가</h4><p>Vexo 테마에 <code>Utterances</code>와 유사한 <code>Gitment</code>를 댓글 시스템으로 이용할 수 있는 기능이 포함되어 있긴 했다. 처음에는 그냥 <code>Gitment</code>를 이용하려고 했는데, 내가 설정을 잘못했는지, 아니면 GitHub Pages를 private repository에서 호스팅하고 있어서 그런지 모르겠지만 도저히 정상적으로 작동하지를 않았다. 그래서 결국 Utterances를 삽입하는 스크립트를 추가하고, 테마의 <code>_config.yml</code> 파일에서 선호하는 댓글 시스템을 설정할 수 있도록 수정하였다.</p>
+<h4 id="4-블로그-내-검색-기능-추가"><a href="#4-블로그-내-검색-기능-추가" class="headerlink" title="(4) 블로그 내 검색 기능 추가"></a>(4) 블로그 내 검색 기능 추가</h4><p>사실 이 부분이 가장 어려웠는데… 수정을 하고 있긴 하지만 내가 웹 개발도 Hexo의 구조도 잘 모르는 상태에서 거의 거의 눈치로 때려맞추는 수준으로 고치고 있는 것이 문제였다. <code>hexo-generator-searchdb</code> 모듈을 사용하면 될 것 같긴한데… 사실 이 모듈 <a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-generator-searchdb">설명 페이지</a>에도 대충 <code>search view</code>, <code>search script</code>를 작성한 후에 둘을 <code>connect</code> 해주면 된다고만 되어있고, 나처럼 배경지식이 없는 사람을 위한 친절한 설명까지는 없었다.</p>
+<p>자세한 내용은 NexT 테마의 소스 코드를 참고하라고 하길래, 일단 NexT 테마를 들고와서 구조를 뜯어봤다. <code>Local Search</code>와 관련된 소스들과, 해당 소스를 참조하는 소스가 다음과 같은 구조로 되어 있는 것을 확인할 수 있었다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">layout/_layout.swig</span><br><span class="line">    layout/_partial/header/index.swig</span><br><span class="line">        layout/_partial/header/menu.swig -- insert search button</span><br><span class="line">        layout/_partial/search/index.swig</span><br><span class="line">            layout/_partial/search/localsearch.swig -- search view</span><br><span class="line">    layout/_third-party/index.swig</span><br><span class="line">        layout/_third-party/search/localsearch.swig -- connect</span><br><span class="line">            source/js/local_search.js -- search script</span><br></pre></td></tr></table></figure>
+
+<p><del>아, 잠깐만… swig요…? vexo는 ejs 쓰던데…?</del></p>
+<p>대충 복사&#x2F;붙여넣기 해서 돌려볼 생각이었던 나는 확장자가 다른 것을 확인한 순간 내 실력으로 수정하기에는 글러먹었구나 싶었다. 그래도 조금 찾아보니까 둘 다 템플릿 엔진의 한 종류이고, 어떤 식으로 작동하는지는 정도는 확인할 수 있었다. 한번만 해보고 안되면 포기할 생각으로 수정을 시작했다. 일단 참조하는 테마와 유사하게 다음과 같이 구조를 잡았다.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">layout/layout.ejs</span><br><span class="line">    layout/_partial/header.ejs -- insert search button</span><br><span class="line">        layout/_partial/search/localsearch_button.ejs -- search button</span><br><span class="line">        layout/_partial/search/localsearch.ejs -- search view</span><br><span class="line">    layout/_partial/head.ejs</span><br><span class="line">        layout/_third-party/localsearch.ejs -- connect</span><br><span class="line">            source/js/local-search.js -- search script</span><br></pre></td></tr></table></figure>
+
+<p>중간에 삽질을 많이 하긴 했지만, 조금만 더 하면 될 것 같아서 대충 눈치로 수정을 거듭하다보니 동작을 했다. 다만, 기존 소스에서는 설정할 수 있는 Hexo의 변수를 자바스크립트(<code>local-search.js</code>)로 넘겨서 처리하는 부분이 있었는데, 어떻게 넘기는건지 잘 모르겠어서 <code>local-search.js</code>에 그냥 하드코딩으로 박아버렸다. (…) </p>
+<p>어쨌든 이리저리 수정을 하다보니 정상적으로 검색이 되는 수준까지는 수정을 할 수 있었다. 물론 기능은 작동을 한 후에도 검색 팝업창의 디자인은 조금 이상했지만, 크롬 개발자 도구 통해서 class 속성이나 css를 확인해가면서 적당히 수정해주었다.</p>
+<p><em>(View가 모바일로 변경되면서 search 버튼이 사라지는 문제가 있어서 현재는 재수정한 상태이다.)</em></p>
+<h3 id="5-Tags-레이아웃-이용-시-태그-및-포스팅이-정렬되지-않는-문제"><a href="#5-Tags-레이아웃-이용-시-태그-및-포스팅이-정렬되지-않는-문제" class="headerlink" title="(5) Tags 레이아웃 이용 시, 태그 및 포스팅이 정렬되지 않는 문제"></a>(5) Tags 레이아웃 이용 시, 태그 및 포스팅이 정렬되지 않는 문제</h3><p>이건 사실 버그라기보다는, 원래 기획된 기능과 내가 바라는 기능이 달랐던 부분인 것 같다. Tag를 이용하여 글들을 Grouping할 때에는 굳이 포스팅이나 태그에 대한 정렬이 필요하지 않을 수도 있다. 하지만 나는 <a target="_blank" rel="noopener" href="https://velog.io/">Velog</a>에서의 시리즈처럼 글들을 특정 주제로 묶고, 일관된(랜덤하지 않은) 순서로 보여줄 수 있는 레이아웃이 있었으면 했다. 마침 포스팅에 지정할 수 있는 category를 이용한 레이아웃이 없길래, <code>post.categories</code> 변수를 이용해서 시리즈 기능을 할 수 있는 레이아웃을 만들어봤다. Hexo에서 제공하는 변수들과 자바스크립트 자체에 익숙하지 않아서 시행 착오가 조금 있긴 했지만, 그래도 블로그 내 검색 기능 추가하는 것보다는 수월하게 추가할 수 있었다.</p>
+<h3 id="6-기타-자잘한-수정사항들"><a href="#6-기타-자잘한-수정사항들" class="headerlink" title="(6) 기타 자잘한 수정사항들"></a>(6) 기타 자잘한 수정사항들</h3><p>이외에도 이미지나 URL이 깨져있다거나, 한자가 하드코딩 되어있어서 페이지에 보인다거나, CSS 스타일에 조금 조정이 필요하다거나 하는 부분들에 대한 사소한 수정들을 진행했다.</p>
+<h1 id="4-PULL-REQUEST"><a href="#4-PULL-REQUEST" class="headerlink" title="4. PULL REQUEST"></a>4. PULL REQUEST</h1><p>수정을 해놓고 보니 내게 맞춰서 커스터마이징한 부분들만 있는 것이 아니라, 기능적으로 추가되거나 버그를 수정한 부분들이 꽤 많았다. 그래서, 받아들여질지는 모르겠지만 수정한 내용을 정리를 좀 해서 원본 테마 Repository에 PR를 해보기로 마음먹었다. 이왕 수정한 소스 남들도 같이 사용하면 좋을 것 같고, 솔직히 말하자면 내가 수정에 쏟아부은 하루의 시간이 아깝기도 했다.</p>
+<p>그래서 어떤 기능을 추가&#x2F;수정을 했고, 그러한 작업을 위해서 어느 소스 코드를 수정했는지 아래와 같이 정리하고, <code>README.md</code>에 새로운 기능들을 설정할 수 있는 방법들도 조금 작성해서 <a target="_blank" rel="noopener" href="https://github.com/yanm1ng/hexo-theme-vexo/pull/128">Pull Request</a>를 날려보았다.</p>
+<h3 id="lt-The-List-of-New-x2F-Updated-Sources-gt"><a href="#lt-The-List-of-New-x2F-Updated-Sources-gt" class="headerlink" title="&lt; The List of New&#x2F;Updated Sources &gt;"></a>&lt; The List of New&#x2F;Updated Sources &gt;</h3><table>
+<thead>
+<tr>
+<th>File Path&#x2F;Name</th>
+<th>ChangeType</th>
+<th align="center">Utterances</th>
+<th align="center">Local Search</th>
+<th align="center">Series (Category Layout)</th>
+<th align="center">Broken Link</th>
+<th align="center">Hard-coded Chinese</th>
+<th align="center">Symbols Escaping for Tags&#x2F;Categories Hyperlink</th>
+<th align="center">URL Decoding for ToC HiperLink</th>
+<th align="center">CSS</th>
+<th>[#] NOTE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>_config.yml</td>
+<td>Modified</td>
+<td align="center">O</td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Removed</td>
+</tr>
+<tr>
+<td>layout&#x2F;page.ejs</td>
+<td>Modified</td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>source&#x2F;js&#x2F;local-search.js</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;search.styl</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>layout&#x2F;_partial&#x2F;head.ejs</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>layout&#x2F;_partial&#x2F;header.ejs</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;style.styl</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td>[modify] display: inline-grid</td>
+</tr>
+<tr>
+<td>layout&#x2F;_third-party&#x2F;localsearch.ejs</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>layout&#x2F;_partial&#x2F;search&#x2F;localsearch_button.ejs</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>layout&#x2F;_partial&#x2F;search&#x2F;localsearch_view.ejs</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>_source&#x2F;series&#x2F;</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>layout&#x2F;series.ejs</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;categories.styl</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+</tr>
+<tr>
+<td>source&#x2F;js&#x2F;script.js</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td align="center">O</td>
+<td align="center"></td>
+<td>Escaping Special symbols in Tag</td>
+</tr>
+<tr>
+<td>layout&#x2F;project.ejs</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Replace <code>开源项目</code> with <code>GitHub Open Source Projects</code></td>
+</tr>
+<tr>
+<td>layout&#x2F;tags.ejs</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Replace <code>标签检索</code> with <code>Tag Retrieval</code></td>
+</tr>
+<tr>
+<td>layout&#x2F;archive.ejs</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Replace <code>文章归档</code> with <code>Archives</code></td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;images&#x2F;error_icon.png</td>
+<td>New</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td>Replaced</td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;about.styl</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td>[remove] opacity: 0.25</td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;catalog.styl</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td>[modify] ToC margin&#x2F;padding</td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;footer.styl</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td>[modify] max-width: 960px</td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;header.styl</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td>[remove] border-bottom</td>
+</tr>
+<tr>
+<td>source&#x2F;css&#x2F;_partial&#x2F;markdown.styl</td>
+<td>Modified</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">O<sup>#</sup></td>
+<td>[modify] overflow-x, font-size</td>
+</tr>
+</tbody></table>
+<h1 id="5-PR의-결과는"><a href="#5-PR의-결과는" class="headerlink" title="5. PR의 결과는?"></a>5. PR의 결과는?</h1><p><img src="https://i.imgur.com/RV0JZhl.png"></p>
+<p>수정한 내용을 정리한 정성 덕분이었는지, <del>소스의 퀄리티에도 불구하고</del> 감사하게도 하루만에 PR이 승인되어 master 브랜치로 병합되었다. 이렇게 <code>뿌듯+1</code>을 추가하며 오늘의 딴짓도 보람차게 마무리했다.</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Hexo 블로그로의 전환과 Vexo 테마 수정기</p><p><a href="https://taes.me/HexoVexo/">https://taes.me/HexoVexo/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Taeseung Hahn</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-05-08</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-04-24</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Others/">Others</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=62811fe0d1ad83001a8b9206&amp;product=inline-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/R02/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/R01/"><span class="level-item">[Taes&#039; R #1] R에서의 분석 프로세스와 일관된 인터페이스</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="taeshahn/PagesUtterances" issue-term="pathname" label="comment" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-3-tablet is-3-desktop is-3-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Information-Theory/"><span class="level-start"><span class="level-item">Information Theory</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Others/"><span class="level-start"><span class="level-item">Others</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Taes-R/"><span class="level-start"><span class="level-item">Taes&#039; R</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/WeeklyNLP/"><span class="level-start"><span class="level-item">WeeklyNLP</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-04-23T00:00:00.000Z">2023-04-23</time></p><p class="title"><a href="/Knowledge%20Integration%20in%20Language%20Model/">Knowledge Integration in Language Models</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-02-01T00:00:00.000Z">2023-02-01</time></p><p class="title"><a href="/Language%20Models/">Language Models</a></p><p class="categories"><a href="/categories/WeeklyNLP/">WeeklyNLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-02-28T00:00:00.000Z">2022-02-28</time></p><p class="title"><a href="/Weekly-NLP-Intro/">Weekly-NLP, Introduction</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-06-08T00:00:00.000Z">2021-06-08</time></p><p class="title"><a href="/R03/">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-16T00:00:00.000Z">2021-05-16</time></p><p class="title"><a href="/R02/">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a><p class="is-size-7"><span>&copy; 2023 Taeseung Hahn</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

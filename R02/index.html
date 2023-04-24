@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여 - Taeseung Hahn</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Taeseung Hahn"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Taeseung Hahn"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="1. 지난 이야기지난 글에서는 일관된 인터페이스(Consistent Interface)에 대해 살펴보았다. 오늘의 주제에 대해 이야기 하기에 앞서, 잠시 분석 프로세스를 최대한 멀리서 한 번 바라보도록 하자. R을 이용한 데이터 분석을 최대한 간단하게 나타낸다면, 다음과 같이 ‘데이터’를 분석을 위한 ‘함수’에 넣어서 ‘분석 결과’를 도출하는 과정으로 표현"><meta property="og:type" content="blog"><meta property="og:title" content="[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여"><meta property="og:url" content="https://taes.me/R02/"><meta property="og:site_name" content="Taeseung Hahn"><meta property="og:description" content="1. 지난 이야기지난 글에서는 일관된 인터페이스(Consistent Interface)에 대해 살펴보았다. 오늘의 주제에 대해 이야기 하기에 앞서, 잠시 분석 프로세스를 최대한 멀리서 한 번 바라보도록 하자. R을 이용한 데이터 분석을 최대한 간단하게 나타낸다면, 다음과 같이 ‘데이터’를 분석을 위한 ‘함수’에 넣어서 ‘분석 결과’를 도출하는 과정으로 표현"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://i.imgur.com/BqgPKzA.png"><meta property="og:image" content="https://i.imgur.com/CiLwS1G.png"><meta property="og:image" content="https://i.imgur.com/MypS4Qj.png"><meta property="og:image" content="https://i.imgur.com/v7TbPJR.png"><meta property="article:published_time" content="2021-05-16T00:00:00.000Z"><meta property="article:modified_time" content="2023-04-24T12:21:03.174Z"><meta property="article:author" content="Taeseung Hahn"><meta property="article:tag" content="Taes&#039; R"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://i.imgur.com/BqgPKzA.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taes.me/R02/"},"headline":"[Taes' R #2] '좋은 형태의 데이터'와 'Tidiness'에 대하여","image":["https://i.imgur.com/BqgPKzA.png","https://i.imgur.com/CiLwS1G.png","https://i.imgur.com/MypS4Qj.png","https://i.imgur.com/v7TbPJR.png"],"datePublished":"2021-05-16T00:00:00.000Z","dateModified":"2023-04-24T12:21:03.174Z","author":{"@type":"Person","name":"Taeseung Hahn"},"publisher":{"@type":"Organization","name":"Taeseung Hahn","logo":{"@type":"ImageObject","url":"https://taes.me/img/ts_logo.png"}},"description":"1. 지난 이야기지난 글에서는 일관된 인터페이스(Consistent Interface)에 대해 살펴보았다. 오늘의 주제에 대해 이야기 하기에 앞서, 잠시 분석 프로세스를 최대한 멀리서 한 번 바라보도록 하자. R을 이용한 데이터 분석을 최대한 간단하게 나타낸다면, 다음과 같이 ‘데이터’를 분석을 위한 ‘함수’에 넣어서 ‘분석 결과’를 도출하는 과정으로 표현"}</script><link rel="canonical" href="https://taes.me/R02/"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=UA-194796796-1" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'UA-194796796-1');</script><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><meta name="naver-site-verification" content="45964f95ee60d3fb1ae3878a54b2ee03a83367b8"><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Find me on Linkedin!" href="https://www.linkedin.com/in/taeshahn/"><i class="fab fa-linkedin"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-9-tablet is-9-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-05-16T00:00:00.000Z" title="5/16/2021, 12:00:00 AM">2021-05-16</time></span><span class="level-item"><a class="link-muted" href="/categories/Taes-R/">Taes&#039; R</a></span><span class="level-item">24 minutes read (About 3655 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</h1><div class="content"><h2 id="1-지난-이야기"><a href="#1-지난-이야기" class="headerlink" title="1. 지난 이야기"></a>1. 지난 이야기</h2><p><a href="https://taes.me/R01/">지난 글</a>에서는 일관된 인터페이스(Consistent Interface)에 대해 살펴보았다. 오늘의 주제에 대해 이야기 하기에 앞서, 잠시 분석 프로세스를 최대한 멀리서 한 번 바라보도록 하자. R을 이용한 데이터 분석을 최대한 간단하게 나타낸다면, 다음과 같이 ‘데이터’를 분석을 위한 ‘함수’에 넣어서 ‘분석 결과’를 도출하는 과정으로 표현할 수 있을 것 같다.</p>
+<center>
+
+<!-- ![Analysis Process](https://i.imgur.com/BqgPKzA.png) -->
+
+<img src="https://i.imgur.com/BqgPKzA.png" width="400px" height="400px">
+
+</center>
+
+<table>
+<thead>
+<tr>
+<th align="center">* Analysis Process *</th>
+</tr>
+</thead>
+</table>
+<p>이전 글에서 일관된 인터페이스를 지닌 ‘함수’에 대해 살펴보았다면, 이번 글에서 관심을 갖고 살펴볼 대상은 또 하나의 핵심 요소인 ‘데이터’ 그 자체이다.</p>
+<h2 id="2-내가-생각한-플롯은-이게-아닌데…"><a href="#2-내가-생각한-플롯은-이게-아닌데…" class="headerlink" title="2. 내가 생각한 플롯은 이게 아닌데…?"></a>2. 내가 생각한 플롯은 이게 아닌데…?</h2><p>간단한 데이터 시각화 예시로부터 이야기를 시작해보자. 우리는 시계열 데이터와 R의 기본 그래픽 함수 plot()을 이용해서 두 가지 플롯을 그려볼 것이다. 하나는 시간의 흐름에 따른 값의 변화를 나타내는 라인 그래프가 될 것이고, 다른 하나는 해당 기간동안의 값의 분포를 보여주는 히스토그램이 될 것이다.</p>
+<p>샘플 데이터로는 ggplot2 패키지의 economics 데이터를 이용해보도록 하겠다. 해당 데이터셋은 미국의 경제 관련 지표들에 대한 시계열 데이터를 담고 있고, 우리는 이 중에서 psavert라는 항목만을 이용할 것이다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">library<span class="punctuation">(</span>tidyverse<span class="punctuation">)</span></span><br><span class="line">data<span class="punctuation">(</span>economics<span class="punctuation">)</span></span><br><span class="line">head<span class="punctuation">(</span>economics<span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">data_ts <span class="operator">=</span> economics <span class="operator">%&gt;%</span> pull<span class="punctuation">(</span>pce<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>plot()</code>함수의 Document를 확인해보면, 다음과 같이 플롯의 타입을 지정해 줄 수 있는 것을 확인할 수 있다.</p>
+<blockquote>
+<p><code>type</code>: what type of plot should be drawn. Possible types are</p>
+<ul>
+<li><code>&quot;l&quot;</code> for lines</li>
+<li><code>&quot;h&quot;</code> for ‘histogram’ like (or ‘high-density’) vertical lines</li>
+</ul>
+</blockquote>
+<p>우선 라인 그래프 먼저 그려보자. 미리 말해두자면, 이 친구에게는 아무런 문제가 없다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot<span class="punctuation">(</span>x<span class="operator">=</span>data_ts<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&#x27;l&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<center>
+
+<!-- ![](https://i.imgur.com/CiLwS1G.png) -->
+
+<img src="https://i.imgur.com/CiLwS1G.png" width="400px" height="400px">
+
+</center>
+
+
+<p>다음은 type&#x3D;’h’ 옵션을 이용한 히스토그램의 차례다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot<span class="punctuation">(</span>x<span class="operator">=</span>data_ts<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&#x27;h&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<center>
+
+<!-- ![](https://i.imgur.com/MypS4Qj.png) -->
+
+<img src="https://i.imgur.com/MypS4Qj.png" width="400px" height="400px">
+
+
+</center>
+
+
+<p><del>…? 그냥 위에 있는 그래프 아래 면적 색칠한 것 같은데?</del> 우리가 원했던 히스토그램이 아닌, 주어진 데이터 값을 높이로 하는 vertical bar 플롯이 생성되었다. 사실 type&#x3D;’h’ 옵션을 주면서 히스토그램을 그리고 싶다면, 원본 데이터가 아니라 원본 데이터의 도수 분포표를 생성해서 입력값으로 넣어줘야 한다.</p>
+<p>우리가 원했던 형태의 플롯을 얻기위해서 데이터를 8개의 등구간으로 분할한 도수분포표를 구한 후, 이를 통해 히스토그램을 그리는 코드는 다음과 같다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">br <span class="operator">=</span> seq<span class="punctuation">(</span><span class="built_in">min</span><span class="punctuation">(</span>data_ts<span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">max</span><span class="punctuation">(</span>data_ts<span class="punctuation">)</span><span class="punctuation">,</span> length.out<span class="operator">=</span><span class="number">9</span><span class="punctuation">)</span></span><br><span class="line">freq_table <span class="operator">=</span> table<span class="punctuation">(</span>cut<span class="punctuation">(</span>data_ts<span class="punctuation">,</span> breaks<span class="operator">=</span>br<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">names</span><span class="punctuation">(</span>freq_table<span class="punctuation">)</span> <span class="operator">=</span> paste<span class="punctuation">(</span><span class="string">&quot;≤&quot;</span><span class="punctuation">,</span> <span class="built_in">round</span><span class="punctuation">(</span>br<span class="punctuation">[</span><span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">plot<span class="punctuation">(</span>freq_table<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&#x27;h&#x27;</span><span class="punctuation">,</span> lwd<span class="operator">=</span><span class="number">60</span><span class="punctuation">,</span> lend<span class="operator">=</span><span class="number">1</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<center>
+
+<!-- ![](https://i.imgur.com/v7TbPJR.png) -->
+
+<img src="https://i.imgur.com/v7TbPJR.png" width="400px" height="400px">
+
+</center>
+
+
+<p>왜 처음에 예상과 다른 그래프가 그려졌을까? <code>plot()</code> 함수가 요구하는 데이터의 형태(도수분포표)가 내가 생각했던 데이터의 형태(원본 데이터)와 달랐기 때문이다. 지난 글에서와 비슷한 문제가 여기에도 존재한다. ‘우리는 그래프마다 정해져있는 데이터의 포멧을 또 모두 외워야하는가?’에 대한 문제이다.</p>
+<p>사실 Plotting을 위한 함수와 데이터를 정의하는 데에는 다음과 같은 두 가지 방법이 있다.</p>
+<ul>
+<li>데이터의 표준형을 정해두고 Plotting 함수를 데이터에 맞춰 정의하는 방법</li>
+<li>Plotting 함수마다 다르게 정의된 데이터 형태에 맞추어 데이터 포멧을 변경하는 방법</li>
+</ul>
+<p>두 방법 중 어떤 방법이 더 효율적일까? 복잡하게 따져볼 것도 없이 전자의 방법이 훨씬 더 효율적이다. 데이터 분석 과정에서 대부분이 시간이 데이터 처리에 소요된다는 것은 널리 알려진 사실이다. 그만큼 데이터의 형태를 바꾸는 것은 상당한 작업과 시간이 소요되는 작업이다. 따라서 데이터를 표준적인 형태로 한 번만 변형해놓고, 해당 데이터셋을 계속 이용할 수 있도록 함수를 정의하는 것이 훨씬 더 효율적인 방법이라고 볼 수 있다. 이러한 이유로 전자의 방법을 따르기로 했다면, 자연스럽게 따라오는 질문이 하나 있다. </p>
+<blockquote>
+<p>데이터의 어떤 형태가 좋은 형태인가? 어떤 데이터 포멧을 표준형으로 정해야하나?</p>
+</blockquote>
+<p><del>R 생태계의 절대자</del>Hadley Wickham 교수는 이러한 질문에 대한 답변으로 Tidy Data라는 개념을 제안한다. 이 글에서는 Tidy Data의 개념을 포함하여 다음과 같은 총 세 가지 관점에서 데이터의 형태에 대해 이야기 해 볼 예정이다.</p>
+<ul>
+<li>Raw Data vs Summary Data (Full Data vs Aggregated Data)</li>
+<li>Long Form vs Wide Form</li>
+<li>Tidy Data vs Messy Data</li>
+</ul>
+<h2 id="3-데이터의-형태를-바라보는-다양한-관점"><a href="#3-데이터의-형태를-바라보는-다양한-관점" class="headerlink" title="3.데이터의 형태를 바라보는 다양한 관점"></a>3.데이터의 형태를 바라보는 다양한 관점</h2><h4 id="1-Raw-Data-vs-Summary-Data-Full-Data-vs-Aggregated-Data"><a href="#1-Raw-Data-vs-Summary-Data-Full-Data-vs-Aggregated-Data" class="headerlink" title="(1) Raw Data vs Summary Data (Full Data vs Aggregated Data)"></a>(1) Raw Data vs Summary Data (Full Data vs Aggregated Data)</h4><p>앞서 economics 데이터셋에서 살펴보았던 원본 데이터와 도수분포표의 관계가 바로 이 첫번째 경우에 해당한다. 이 둘을 구분하는 기준은 ‘데이터 형태 변화에 따른 정보량의 감소 여부’이다. 다르게 표현하자면 ‘데이터의 형태 변환이 Invertible한가?’라고 이야기 할 수도 있겠다.</p>
+<p><code>data_ts</code>가 주어지면, 라인 그래프와 (데이터 변환이 필요하기는 하지만) 히스토그램을 모두 생성할 수 있다. 그러나 반대로 <code>freq_table</code>만 주어지는 경우, 히스토그램은 그릴 수 있지만 라인 그래프는 생성할 수가 없다. <code>freq_table</code>은 <code>data_ts</code>가 Summary된 형태의 데이터이고, Sumamry 과정에서 일부 정보가 소실되었기 때문이다. 이러한 형태의 데이터 변환(연산)은 굉장히 쉽게 찾아볼 수 있는데, 대표적으로 우리가 매우 흔하게 접하는 평균을 구하는 연산 또한 그 중 하나이다.</p>
+<p>이를테면 어느 회사의 모든 구성원의 연봉 정보를 알 수 있다면 평균 연봉을 구할 수 있지만, 평균 연봉을 안다고 해서 개인별 연봉 정보를 다시 복원할 수는 없다. 이는 전체 데이터인 ‘개별 연봉 정보’가 대표값인 ‘평균 연봉’으로 집계&#x2F;요약(Aggregation&#x2F;Summary)되면서 정보량이 감소했기 때문이다. 또 다른 대표적인 예로는 SQL에서의 group by aggregation을 생각해 볼 수도 있겠다.</p>
+<p>다시 원래의 주제로 돌아와서, 어떤 형태가 표준형에 적합한지에 대해 이야기해보자면 Sumamry Data로는 표현할 수 있는 정보에 한계가 있기 때문에 Full Data가 상대적으로 적합한 형태라고 볼 수 있겠다.</p>
+<h4 id="2-Long-Form-vs-Wide-Form"><a href="#2-Long-Form-vs-Wide-Form" class="headerlink" title="(2) Long Form vs Wide Form"></a>(2) Long Form vs Wide Form</h4><p>앞서 살펴본 (1)번의 경우는 데이터 형태에 따라 정보량에 차이가 발생하게 되는 구분이었다. 이와 달리, 정보량 자체에는 차이가 없더라도 데이터의 형태는 다를 수 있다. 두번째로는 이러한 케이스에 해당하는 Long Form과 Wide Form에 대해서 살펴보도록 하자.</p>
+<p>Long Form과 Wide Form은 각각 다음과 같은 형태를 의미한다.</p>
+<ul>
+<li>Wide Form: 서로 다른 속성을 나타내는 값들이 각각 하나의 컬럼을 이루는 형태</li>
+<li>Long Form: 속성의 종류와 해당 속성의 값을 나타내는 컬럼이 각각 하나씩 존재하는 형태</li>
+</ul>
+<p>설명만으로는 충분히 와닿지 않을 수 있으니 데이터 샘플을 통해 형태를 확인해보도록 하자. 예시에는 앞서 활용했던 economics 데이터셋을 그대로 이용하도록 하겠다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">economics_row3 <span class="operator">=</span> economics <span class="operator">%&gt;%</span> head<span class="punctuation">(</span><span class="number">3</span><span class="punctuation">)</span></span><br><span class="line">economics_row3</span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 3 × 6</caption>
+<thead>
+    <tr><th scope=col>date</th><th scope=col>pce</th><th scope=col>pop</th><th scope=col>psavert</th><th scope=col>uempmed</th><th scope=col>unemploy</th></tr>
+    <tr><th scope=col>&lt;date&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>1967-07-01</td><td>506.7</td><td>198712</td><td>12.6</td><td>4.5</td><td>2944</td></tr>
+    <tr><td>1967-08-01</td><td>509.8</td><td>198911</td><td>12.6</td><td>4.7</td><td>2945</td></tr>
+    <tr><td>1967-09-01</td><td>515.6</td><td>199113</td><td>11.9</td><td>4.6</td><td>2958</td></tr>
+</tbody>
+</table>
+
+
+
+<p>편의를 위해 economics에서 가장 상위의 3개 행만 뽑아서 살펴보면, 해당 데이터는 date라는 컬럼을 기준으로 해당 일자의 pce, pop, psavert, unempmed, unemploy 라는 5가지 속성을 담고있는 데이터라는 것을 알 수 있다. 각 행을 유니크하게 식별할 수 있는 Unique Key는 Date이며, <strong>5개의 속성은 각각의 컬럼으로 표현</strong>되고 있으므로 이 데이터는 <strong>Wide Form</strong>이라고 볼 수 있다.</p>
+<p>이 데이터를 long form으로 변환하면 다음과 같은 형태가 된다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">economics_row3 <span class="operator">%&gt;%</span> </span><br><span class="line">  pivot_longer<span class="punctuation">(</span>cols<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span>pce<span class="punctuation">,</span> pop<span class="punctuation">,</span> psavert<span class="punctuation">,</span> uempmed<span class="punctuation">,</span> unemploy<span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 15 × 3</caption>
+<thead>
+    <tr><th scope=col>date</th><th scope=col>name</th><th scope=col>value</th></tr>
+    <tr><th scope=col>&lt;date&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>1967-07-01</td><td>pce     </td><td>   506.7</td></tr>
+    <tr><td>1967-07-01</td><td>pop     </td><td>198712.0</td></tr>
+    <tr><td>1967-07-01</td><td>psavert </td><td>    12.6</td></tr>
+    <tr><td>1967-07-01</td><td>uempmed </td><td>     4.5</td></tr>
+    <tr><td>1967-07-01</td><td>unemploy</td><td>  2944.0</td></tr>
+    <tr><td>1967-08-01</td><td>pce     </td><td>   509.8</td></tr>
+    <tr><td>1967-08-01</td><td>pop     </td><td>198911.0</td></tr>
+    <tr><td>1967-08-01</td><td>psavert </td><td>    12.6</td></tr>
+    <tr><td>1967-08-01</td><td>uempmed </td><td>     4.7</td></tr>
+    <tr><td>1967-08-01</td><td>unemploy</td><td>  2945.0</td></tr>
+    <tr><td>1967-09-01</td><td>pce     </td><td>   515.6</td></tr>
+    <tr><td>1967-09-01</td><td>pop     </td><td>199113.0</td></tr>
+    <tr><td>1967-09-01</td><td>psavert </td><td>    11.9</td></tr>
+    <tr><td>1967-09-01</td><td>uempmed </td><td>     4.6</td></tr>
+    <tr><td>1967-09-01</td><td>unemploy</td><td>  2958.0</td></tr>
+</tbody>
+</table>
+
+<p>Wide Form에서 하나의 행으로 표현되던 1967년 7월 1일의 데이터는 Long Form에서는 총 5개의 행으로 변환되어 표현되고 있다. 5개의 컬럼으로 표현되던 각각의 속성이, 속성의 이름과 값을 담고있는 5개의 행으로 변환되었으며, 이에 따라 전체 행의 개수는 기존의 3개에서 3(기존 행)*5(속성의 수)&#x3D;15개로 증가한 것을 살펴볼 수 있다. 하나의 행이 여러 개의 행으로 분리되어 표현되었므로 더 이상 date 컬럼만으로는 각 행을 유니크하게 식별할 수 없으며, Unique Key가 date + name으로 변경된 것 또한 확인할 수 있다.</p>
+<p>이미 눈치챈 사람들도 있겠지만, 데이터의 Long&#x2F;Wide Form 전환은 우리에게 엑셀 혹은 SQL을 통해 이미 친숙한 개념인 Pivot과 매우 연관이 있다. 다시 말해, 우리는 Pivot을 통해 Long Form의 데이터를 데이터를 Wide Form으로, 혹은 그 반대로 변환할 수 있다.</p>
+<p>이번 절에서 우리는 데이터의 Long&#x2F;Wide Form이란 무엇이고, 각 형태 사이의 변환이 어떤 의미를 지니는지에 대해 살펴보았다. 어떤 형태의 데이터를 의미하는 것인지는 알겠는데, 도대체 이런 형태 변환을 왜 하는지에 대한 의문이 드는 것은 어쩌면 자연스러운 일일 것이다. 이러한 의문을 해소하고 조금 더 실용적인 Long&#x2F;Wide Form의 변환 예시를 확인하고 싶다면 <a href="https://taes.me/R03/">다음 글</a>을 살펴보도록 하자.</p>
+<h4 id="3-Tidy-Data-vs-Messy-Data"><a href="#3-Tidy-Data-vs-Messy-Data" class="headerlink" title="(3) Tidy Data vs Messy Data"></a>(3) Tidy Data vs Messy Data</h4><p>앞서 언급했듯이 Tidy Data는 Hadley Wickham 교수가 2014년 8월에 Journal of Statistical Software에 기고한 그의 <a target="_blank" rel="noopener" href="https://www.jstatsoft.org/article/view/v059i10/v59i10.pdf">논문</a>에서 제안한 개념으로, 다음과 같은 세 가지 조건을 만족하는 데이터셋을 의미한다.</p>
+<ol>
+<li>각 변수는 하나의 열(column)을 구성한다. (Each variable forms a column.)</li>
+<li>각 관측치는 하나의 행(row)를 구성한다. (Each observation forms a row.)</li>
+<li>각 관측 기준의 데이터는 하나의 테이블을 구성한다. (Each type of observational unit forms a table.)</li>
+</ol>
+<p>정의 자체는 어렵지 않지만, 왜 이러한 조건들이 좋은 데이터의 기준이 되는지는 잘 와닿지 않을 수도 있다. 만약 데이터베이스에 대한 약간의 지식이 있다면 Tidy Data의 개념을 가장 쉽게 이해할 수 있는 방법은 이를 정규형(Codd’s Normal Form)과 연관지어 생각해보는 것이다. 결론부터 이야기하자면 Tidy Data는 데이터베이스에서의 ‘제3정규형’을 의미한다. 두 개념이 어떻게 연관되는지가 궁금하다면, <a target="_blank" rel="noopener" href="https://datascience.stackexchange.com/questions/43184/equivalence-of-tidy-data-and-third-normal-form">다음 페이지</a>가 Tidy Data와 제 3정규형의 동치에 대해 간략한 내용을 담고 있으므로 도움이 될 것으로 보인다.</p>
+<blockquote>
+<p>This is Codd’s 3rd normal form (Codd 1990), but with the constraints framed in statistical language, and the focus put on a single dataset rather than the many connected datasets common in relational databases. Messy data is any other arrangement of the data.</p>
+</blockquote>
+<p>데이터 정규화의 정의나 필요성, 그리고 그 유용함에 대해서는 이미 잘 정리되어 있는 글들이 많으니 설명을 줄이고자 한다. 다만 여기에서 이야기하고자 하는 Tidiness의 개념은, 데이터베이스에서 추구해온 Efficiency와는 다소 다르다는 점에 유의할 필요가 있다. Tidy Data는 다소간의 중복 등을 포함하더라도 최대한 정보량을 보존하면서, 다른 형태로의 규칙적인 전환이 쉬운 데이터이며, 효율적인 저장과 처리보다는 분석 목적의 활용에 보다 초점이 맞춰져있는 데이터의 형태라고 이해하면 될 것 같다.</p>
+<h2 id="4-마치면서"><a href="#4-마치면서" class="headerlink" title="4. 마치면서"></a>4. 마치면서</h2><p>데이터 과학과 관련된 공부를 하다보면, Tidy Data와 Codd’s Normal Form처럼 서로 다른 두 분야가 영향을 주면서 발전하거나, 독립적으로 발전했음에도 불구하고 결국에는 같은 결론에 도달한 경우를 자주 볼 수 있다. 이를 보며 문득 베이즈 정리가 떠올라 관련된 이야기로 글을 마무리해보고자 한다. 베이지안 추론에 대한 하나의 해석은 다음과 같이 표현된다.</p>
+<p>$$lim_{Experiences \to \infty}(Inference\ Based\ on\ Experiences) &#x3D; Truth$$</p>
+<p>다시 말해, 베이즈 정리의 간단한 수식에는 우리가 현상에 대한 점점 더 많은 정보(혹은 경험, 혹은 데이터)를 모을수록 진리에 한 걸음 더 가까이 다가갈 수 있다는 베이지안 학파의 수학적, 철학적 관점이 반영되어 있다. 각각 독립적인 분야에서 시작된 연구들이 어느 정도 수준에 이르러서 비슷한 결론으로 수렴한다는 사실은 이러한 해석을 다시 한번 떠올려보게 하며, 매우 흥미로운 관점이 아닐 수 없다.</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</p><p><a href="https://taes.me/R02/">https://taes.me/R02/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Taeseung Hahn</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-05-16</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-04-24</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Taes-R/">Taes&#039; R</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=62811fe0d1ad83001a8b9206&amp;product=inline-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/R03/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/HexoVexo/"><span class="level-item">Hexo 블로그로의 전환과 Vexo 테마 수정기</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="taeshahn/PagesUtterances" issue-term="pathname" label="comment" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-3-tablet is-3-desktop is-3-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Information-Theory/"><span class="level-start"><span class="level-item">Information Theory</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Others/"><span class="level-start"><span class="level-item">Others</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Taes-R/"><span class="level-start"><span class="level-item">Taes&#039; R</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/WeeklyNLP/"><span class="level-start"><span class="level-item">WeeklyNLP</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-04-23T00:00:00.000Z">2023-04-23</time></p><p class="title"><a href="/Knowledge%20Integration%20in%20Language%20Model/">Knowledge Integration in Language Models</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-02-01T00:00:00.000Z">2023-02-01</time></p><p class="title"><a href="/Language%20Models/">Language Models</a></p><p class="categories"><a href="/categories/WeeklyNLP/">WeeklyNLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-02-28T00:00:00.000Z">2022-02-28</time></p><p class="title"><a href="/Weekly-NLP-Intro/">Weekly-NLP, Introduction</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-06-08T00:00:00.000Z">2021-06-08</time></p><p class="title"><a href="/R03/">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-16T00:00:00.000Z">2021-05-16</time></p><p class="title"><a href="/R02/">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a><p class="is-size-7"><span>&copy; 2023 Taeseung Hahn</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여 - Taeseung Hahn</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Taeseung Hahn"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Taeseung Hahn"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="1. 지난 이야기지난 글에서는 데이터가 표현될 수 있는 다양한 형태들에 대해 살펴보았다. 이 글에서는 그 중 하나였던 Wide&amp;#x2F;Long Form 전환의 필요성에 대해 다룰 예정이다. 원활한 이해를 위해 업무로 수행했던 분석 과제 중 하나를 매우 간소화해서 예제로 제시하고, 이를 함께 해결해보고자 한다."><meta property="og:type" content="blog"><meta property="og:title" content="[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여"><meta property="og:url" content="https://taes.me/R03/"><meta property="og:site_name" content="Taeseung Hahn"><meta property="og:description" content="1. 지난 이야기지난 글에서는 데이터가 표현될 수 있는 다양한 형태들에 대해 살펴보았다. 이 글에서는 그 중 하나였던 Wide&amp;#x2F;Long Form 전환의 필요성에 대해 다룰 예정이다. 원활한 이해를 위해 업무로 수행했던 분석 과제 중 하나를 매우 간소화해서 예제로 제시하고, 이를 함께 해결해보고자 한다."><meta property="og:locale" content="en_US"><meta property="og:image" content="https://taes.me/img/og_image.png"><meta property="article:published_time" content="2021-06-08T00:00:00.000Z"><meta property="article:modified_time" content="2023-04-24T12:21:03.174Z"><meta property="article:author" content="Taeseung Hahn"><meta property="article:tag" content="Taes&#039; R"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taes.me/R03/"},"headline":"[Taes' R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여","image":["https://taes.me/img/og_image.png"],"datePublished":"2021-06-08T00:00:00.000Z","dateModified":"2023-04-24T12:21:03.174Z","author":{"@type":"Person","name":"Taeseung Hahn"},"publisher":{"@type":"Organization","name":"Taeseung Hahn","logo":{"@type":"ImageObject","url":"https://taes.me/img/ts_logo.png"}},"description":"1. 지난 이야기지난 글에서는 데이터가 표현될 수 있는 다양한 형태들에 대해 살펴보았다. 이 글에서는 그 중 하나였던 Wide&#x2F;Long Form 전환의 필요성에 대해 다룰 예정이다. 원활한 이해를 위해 업무로 수행했던 분석 과제 중 하나를 매우 간소화해서 예제로 제시하고, 이를 함께 해결해보고자 한다."}</script><link rel="canonical" href="https://taes.me/R03/"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=UA-194796796-1" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'UA-194796796-1');</script><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><meta name="naver-site-verification" content="45964f95ee60d3fb1ae3878a54b2ee03a83367b8"><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Find me on Linkedin!" href="https://www.linkedin.com/in/taeshahn/"><i class="fab fa-linkedin"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-9-tablet is-9-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-06-08T00:00:00.000Z" title="6/8/2021, 12:00:00 AM">2021-06-08</time></span><span class="level-item"><a class="link-muted" href="/categories/Taes-R/">Taes&#039; R</a></span><span class="level-item">an hour read (About 6899 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</h1><div class="content"><h2 id="1-지난-이야기"><a href="#1-지난-이야기" class="headerlink" title="1. 지난 이야기"></a>1. 지난 이야기</h2><p><a href="https://taes.me/R02/">지난 글</a>에서는 데이터가 표현될 수 있는 다양한 형태들에 대해 살펴보았다. 이 글에서는 그 중 하나였던 Wide&#x2F;Long Form 전환의 필요성에 대해 다룰 예정이다. 원활한 이해를 위해 업무로 수행했던 분석 과제 중 하나를 매우 간소화해서 예제로 제시하고, 이를 함께 해결해보고자 한다.</p>
+<h2 id="2-분석-과제-정의"><a href="#2-분석-과제-정의" class="headerlink" title="2. 분석 과제 정의"></a>2. 분석 과제 정의</h2><p>이 글에서 우리는 VOD Contents를 고객에게 제공하는 Provider로서, 고객의 VOD 시청 로그를 이용하여 해당 고객의 다음 달 서비스 이탈 여부를 예측해보고자 한다. 각 고객에 대해 이탈 여부를 예측하고자 하므로, 모형의 학습에 이용할 최종 트레이닝 데이터 세트의 하나의 행에는 하나의 고객이 표현되어야 한다. 다시 말해, 우리의 분석 단위(<a target="_blank" rel="noopener" href="https://pressbooks.bccampus.ca/jibcresearchmethods/chapter/4-4-units-of-analysis-and-units-of-observation/">Unit of Analysis</a>)는 고객 개인이며, 하나의 행으로 표현된 각 고객의 여러 특징 정보들은 각각의 개별적인 컬럼으로 표현되도록 할 것이다. 즉, 우리가 모델링을 위해 이용할 데이터는 최종적으로 다음과 같은 형태가 되어야 한다.</p>
+<table>
+<thead>
+<tr>
+<th align="center">USER_ID</th>
+<th align="center">$Y$</th>
+<th align="center">$X_1$</th>
+<th align="center">$X_2$</th>
+<th align="center">…</th>
+<th align="center">$X_m$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">USER<sub>1</sub></td>
+<td align="center">YES</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr>
+<td align="center">USER<sub>2</sub></td>
+<td align="center">NO</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr>
+<td align="center">USER<sub>n</sub></td>
+<td align="center">YES</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody></table>
+<p>데이터의 각 행을 유니크하게 식별할 수 있는 Unique Key는 <code>USER_ID</code>라는 사실을 기억해두고 다음으로 넘어가보도록 하자.</p>
+<h2 id="3-가상-데이터의-생성"><a href="#3-가상-데이터의-생성" class="headerlink" title="3. 가상 데이터의 생성"></a>3. 가상 데이터의 생성</h2><p>이제 우리가 활용할 가상의 VOD 시청 기록 데이터를 생성해볼 차례이다. 순서대로 유저, 컨텐츠, 유저의 컨텐츠 시청 로그 순으로 정의할 것이며, tidyverse 라이브러리를 이용할 예정이다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">library<span class="punctuation">(</span>tidyverse<span class="punctuation">)</span></span><br><span class="line">set.seed<span class="punctuation">(</span><span class="number">19</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-유저-데이터"><a href="#1-유저-데이터" class="headerlink" title="(1) 유저 데이터"></a>(1) 유저 데이터</h3><p>슬프게도 우리는 당장 내일 망해도 이상할 게 없을 정도로 소규모의 VOD Contents Provider이다. 따라서 우리의 고객은 단 100명 뿐이고, 샘플 데이터의 간결함을 위해 우리가 고객에 대해 가지고 있는 정보는 고객 개개인을 유일하게 식별할 수 있는 <code>user_id</code>와 성별을 나타내는 <code>gender</code>, 그리고 해당 고객의 서비스 이탈 여부를 나타내는 <code>target</code> 뿐이라고 가정한다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">n_user <span class="operator">=</span> <span class="number">100</span></span><br><span class="line">target_v <span class="operator">=</span> readLines<span class="punctuation">(</span>url<span class="punctuation">(</span><span class="string">&quot;https://www.dropbox.com/s/o7dbkdl7wwo0wh3/target.txt?raw=1&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># target_v = sample(c(&quot;CHURN&quot;, &quot;STAY&quot;), n_user, replace=TRUE)</span></span><br><span class="line"></span><br><span class="line">users <span class="operator">=</span> tibble<span class="punctuation">(</span></span><br><span class="line">    user_id <span class="operator">=</span> paste0<span class="punctuation">(</span><span class="string">&quot;user_&quot;</span><span class="punctuation">,</span> str_pad<span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span>n_user<span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="string">&quot;left&quot;</span><span class="punctuation">,</span> <span class="string">&quot;0&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    gender <span class="operator">=</span> factor<span class="punctuation">(</span>sample<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;F&quot;</span><span class="punctuation">,</span> <span class="string">&quot;M&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> n_user<span class="punctuation">,</span> replace<span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    target <span class="operator">=</span> factor<span class="punctuation">(</span>target_v<span class="punctuation">,</span> levels<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;CHURN&quot;</span><span class="punctuation">,</span> <span class="string">&quot;STAY&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>users<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 6 × 3</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>F</td><td>CHURN</td></tr>
+    <tr><td>user_02</td><td>M</td><td>STAY </td></tr>
+    <tr><td>user_03</td><td>M</td><td>STAY </td></tr>
+    <tr><td>user_04</td><td>F</td><td>CHURN</td></tr>
+    <tr><td>user_05</td><td>F</td><td>STAY </td></tr>
+    <tr><td>user_06</td><td>M</td><td>STAY </td></tr>
+</tbody>
+</table>
+
+
+
+<h3 id="2-컨텐츠-데이터"><a href="#2-컨텐츠-데이터" class="headerlink" title="(2) 컨텐츠 데이터"></a>(2) 컨텐츠 데이터</h3><p>다음으로는 우리가 보유한 VOD 컨텐츠에 대해 정의해보자. 우리가 서비스하는 컨텐츠는 다음과 같은 특징들을 지니고 있다.</p>
+<ul>
+<li>보유한 VOD 컨텐츠의 개수는 총 20개이다.</li>
+<li>모든 VOD 컨텐츠는 다음 3개 채널 중 하나에 속한다.<ul>
+<li><code>ch_a</code>, <code>ch_b</code>, <code>ch_c</code></li>
+</ul>
+</li>
+<li>모든 VOD 컨텐츠는 다음 4개 장르 중 하나에 속한다.<ul>
+<li><code>drama</code>, <code>horror</code>, <code>comedy</code>, <code>romance</code></li>
+</ul>
+</li>
+<li>모든 VOD 컨텐츠는 0, 1000, 5000원 중 하나의 가격에 제공된다.</li>
+<li>전체 VOD 마켓의 가격별 컨텐츠 비율은 대략적으로 다음과 같다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>가격</th>
+<th>비율</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>0원</code></td>
+<td>60%</td>
+</tr>
+<tr>
+<td><code>1000원</code></td>
+<td>30%</td>
+</tr>
+<tr>
+<td><code>5000원</code></td>
+<td>10%</td>
+</tr>
+<tr>
+<td>합계</td>
+<td>100%</td>
+</tr>
+</tbody></table>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">n_content <span class="operator">=</span> <span class="number">20</span></span><br><span class="line">channels <span class="operator">=</span> paste0<span class="punctuation">(</span><span class="string">&quot;ch_&quot;</span><span class="punctuation">,</span> <span class="built_in">letters</span><span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">genres <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;drama&quot;</span><span class="punctuation">,</span> <span class="string">&quot;horror&quot;</span><span class="punctuation">,</span> <span class="string">&quot;comedy&quot;</span><span class="punctuation">,</span> <span class="string">&quot;romance&quot;</span><span class="punctuation">)</span></span><br><span class="line">prices <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span> <span class="number">1000</span><span class="punctuation">,</span> <span class="number">5000</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">contents <span class="operator">=</span> tibble<span class="punctuation">(</span></span><br><span class="line">    content_id <span class="operator">=</span> paste0<span class="punctuation">(</span><span class="string">&quot;content_&quot;</span><span class="punctuation">,</span> <span class="number">1</span><span class="operator">:</span>n_content<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    content_channel <span class="operator">=</span> channels<span class="punctuation">[</span><span class="built_in">ceiling</span><span class="punctuation">(</span>runif<span class="punctuation">(</span>n_content<span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">,</span> <span class="built_in">length</span><span class="punctuation">(</span>channels<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    content_genre <span class="operator">=</span> genres<span class="punctuation">[</span><span class="built_in">ceiling</span><span class="punctuation">(</span>runif<span class="punctuation">(</span>n_content<span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">,</span> <span class="built_in">length</span><span class="punctuation">(</span>genres<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    content_price <span class="operator">=</span> sample<span class="punctuation">(</span>prices<span class="punctuation">,</span> n_content<span class="punctuation">,</span> prob<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">0.6</span><span class="punctuation">,</span> <span class="number">0.3</span><span class="punctuation">,</span> <span class="number">0.1</span><span class="punctuation">)</span><span class="punctuation">,</span> replace<span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>contents<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 6 × 4</caption>
+<thead>
+    <tr><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>content_1</td><td>ch_c</td><td>romance</td><td>   0</td></tr>
+    <tr><td>content_2</td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>content_3</td><td>ch_a</td><td>comedy </td><td>1000</td></tr>
+    <tr><td>content_4</td><td>ch_c</td><td>romance</td><td>   0</td></tr>
+    <tr><td>content_5</td><td>ch_a</td><td>horror </td><td>1000</td></tr>
+    <tr><td>content_6</td><td>ch_c</td><td>comedy </td><td>   0</td></tr>
+</tbody>
+</table>
+
+
+
+<p>우리가 방금 생성한 <code>contents</code> 데이터셋은 <code>content_id</code> 컬럼을 이용하여 각 행을 유일하게 식별할 수 있다는 사실을 쉽게 확인할 수 있다. 다시 말해, <code>contents</code> 데이터셋의 Unique Key는 <code>content_id</code>이다.</p>
+<h3 id="3-시청-로그-데이터"><a href="#3-시청-로그-데이터" class="headerlink" title="(3) 시청 로그 데이터"></a>(3) 시청 로그 데이터</h3><p>마지막으로, 우리의 소중한 고객들이 컨텐츠를 시청한 로그 데이터는 다음과 같은 특징들을 가지고 있다.</p>
+<ul>
+<li>보유한 시청 로그는 총 3000개이며, 고객마다 시청한 VOD 컨텐츠 개수는 상이하다.</li>
+<li>고객이 컨텐츠를 한 번 시청할 때마다, 각 고객별 시퀀스 번호를 신규 생성하여 하나의 레코드(행)로 기록한다.</li>
+<li>컨텐츠 1회 시청 시간은 평균 30분 정도이며, 일반적으로 10분 정도 수준의 편차가 존재한다.</li>
+<li>고객이 컨텐츠 시청을 시작한 시간대에 대한 정보를 기록하고 있다.</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">n_log <span class="operator">=</span> <span class="number">3000</span></span><br><span class="line">logs <span class="operator">=</span> users<span class="punctuation">[</span><span class="built_in">ceiling</span><span class="punctuation">(</span>runif<span class="punctuation">(</span>n_log<span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">,</span> n_user<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span><span class="string">&quot;user_id&quot;</span><span class="punctuation">]</span> <span class="operator">%&gt;%</span></span><br><span class="line">    group_by<span class="punctuation">(</span>user_id<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    mutate<span class="punctuation">(</span>seq <span class="operator">=</span> row_number<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    ungroup<span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    mutate<span class="punctuation">(</span></span><br><span class="line">        watching_time <span class="operator">=</span> <span class="built_in">floor</span><span class="punctuation">(</span>runif<span class="punctuation">(</span>n_log<span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">,</span> <span class="number">24</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        watching_duration <span class="operator">=</span> <span class="built_in">ceiling</span><span class="punctuation">(</span>rnorm<span class="punctuation">(</span>n_log<span class="punctuation">,</span> <span class="number">30</span><span class="punctuation">,</span> <span class="number">10</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        content_id <span class="operator">=</span> pull<span class="punctuation">(</span>contents<span class="punctuation">[</span><span class="built_in">ceiling</span><span class="punctuation">(</span>runif<span class="punctuation">(</span>n_log<span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">,</span> n_content<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span><span class="string">&quot;content_id&quot;</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    arrange<span class="punctuation">(</span>user_id<span class="punctuation">,</span> seq<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">head<span class="punctuation">(</span>logs<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 6 × 5</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>1</td><td>20</td><td>25</td><td>content_9 </td></tr>
+    <tr><td>user_01</td><td>2</td><td>21</td><td>35</td><td>content_19</td></tr>
+    <tr><td>user_01</td><td>3</td><td> 0</td><td>29</td><td>content_17</td></tr>
+    <tr><td>user_01</td><td>4</td><td>12</td><td>24</td><td>content_16</td></tr>
+    <tr><td>user_01</td><td>5</td><td> 5</td><td>10</td><td>content_19</td></tr>
+    <tr><td>user_01</td><td>6</td><td>20</td><td>31</td><td>content_19</td></tr>
+</tbody>
+</table>
+
+
+
+<p><code>logs</code> 데이터셋의 경우, 우선 <code>user_id</code>를 통해 <code>users</code> 데이터셋과, <code>content_id</code>를 통해 <code>contents</code> 데이터셋과 결합할 수 있으리라는 점을 쉽게 살펴볼 수 있다. 다만 <code>users</code> 데이터셋과는 달리 각 행은 <code>user_id</code> 하나만으로는 유일하게 식별되지 않으며, <code>seq</code> 컬럼이 추가된 <code>user_id + seq</code>가 Unique Key가 된다는 사실 또한 확인할 수 있다.</p>
+<h2 id="4-최종-데이터의-형태"><a href="#4-최종-데이터의-형태" class="headerlink" title="4. 최종 데이터의 형태"></a>4. 최종 데이터의 형태</h2><p>이제 우리가 어떤 데이터를 보유하고 있는지 모두 살펴보았다. 지금부터는 이 세 개의 데이터를 어떻게 조합해서 모델 학습에 이용할 최종 데이터셋을 생성할 지에 대해 생각해보자. 우선 시청 로그와 컨텐츠 데이터를 먼저 결합해보자. 시청 로그 데이터를 기준으로 우측에 컨텐츠 정보를 추가하는 형태가 될 것이고, 결합을 위한 Join Key는 각 데이터셋의 <code>content_id</code> 컬럼이 될 것이다. 결합이 완료된 데이터셋의 Unique Key는 <code>contents</code> 데이터셋과 동일하게 <code>user_id + seq</code>로 유지된다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">logs_with_contents <span class="operator">=</span> logs <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>contents<span class="punctuation">,</span> by <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;content_id&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>logs_with_contents<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 6 × 8</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>1</td><td>20</td><td>25</td><td>content_9 </td><td>ch_c</td><td>drama </td><td>0</td></tr>
+    <tr><td>user_01</td><td>2</td><td>21</td><td>35</td><td>content_19</td><td>ch_b</td><td>drama </td><td>0</td></tr>
+    <tr><td>user_01</td><td>3</td><td> 0</td><td>29</td><td>content_17</td><td>ch_a</td><td>drama </td><td>0</td></tr>
+    <tr><td>user_01</td><td>4</td><td>12</td><td>24</td><td>content_16</td><td>ch_a</td><td>horror</td><td>0</td></tr>
+    <tr><td>user_01</td><td>5</td><td> 5</td><td>10</td><td>content_19</td><td>ch_b</td><td>drama </td><td>0</td></tr>
+    <tr><td>user_01</td><td>6</td><td>20</td><td>31</td><td>content_19</td><td>ch_b</td><td>drama </td><td>0</td></tr>
+</tbody>
+</table>
+
+
+
+<p>이제 남은 문제는 유저 데이터와 시청 로그 데이터를 어떻게 결합할 것인지에 대한 부분이다. 둘 중 어느 데이터가 기준 데이터(Left Join을 가정할 때 Left에 위치하게 될 데이터)가 되어야 할 지 먼저 생각해보자. 앞서 <a href="https://taes.me/R03/#2-%EB%B6%84%EC%84%9D-%EA%B3%BC%EC%A0%9C-%EC%A0%95%EC%9D%98">2. 분석 과제 정의</a>에서 우리의 분석 단위는 고객 개인이며, 따라서 학습에 이용할 최종 데이터셋에서 각 고객은 하나의 행으로 표현되어야 한다는 부분을 이미 언급했다. 즉, 최종 데이터셋의 Unique Key는 <code>user_id</code>가 되어야 할 것이다.</p>
+<p>만약 단순하게 <code>user_id</code>를 기준으로 두 데이터셋(<code>users</code>와 <code>logs_with_contents</code>)를 결합하면 어떻게 될까? <code>logs_with_contents</code> 데이터의 각 고객은 여러 행에 걸쳐서 표현되고 있으므로, 두 데이터셋을 단순 결합할 경우 결과 데이터셋 또한 한 명의 고객의 데이터가 여러 행에 걸쳐서 나타나게 될 것이다. 다르게 표현하자면, 두 데이터셋의 Unique Key의 관계가 <code>1:N</code>이기 때문에, <code>1</code>에 해당하는 <code>user_id</code>를 Unique Key로 유지한 상태로 결합하기 위해서는 <code>N</code>에 해당하는 데이터셋의 변환이 필요하다는 이야기이다.</p>
+<p>따라서 우리가 원하는 최종 데이터 형태를 얻기 위해서는 <code>users</code>를 기준으로 데이터를 결합하되, <code>N</code>에 해당하는 <code>logs_with_contents</code>의 데이터는 다음의 세 가지 방법 중 하나를 통해 변환되어야만 한다.</p>
+<ol>
+<li><a href="https://taes.me/R03/#1-%EC%B2%AB-%EB%B2%88%EC%A7%B8-%EB%B0%A9%EB%B2%95-%ED%8A%B9%EC%A0%95-%ED%96%89%EC%9D%98-%EC%84%A0%ED%83%9D">다수의 행에서 특정 행을 선택</a></li>
+<li><a href="https://taes.me/R03/#2-%EB%91%90-%EB%B2%88%EC%A7%B8-%EB%B0%A9%EB%B2%95-%EB%B6%84%EC%84%9D-%EB%8B%A8%EC%9C%84%EB%A5%BC-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EC%A7%91%EA%B3%84">분석 단위(Unit of Analysis, <code>user_id</code>)를 기준으로 집계</a></li>
+<li><a href="https://taes.me/R03/#3-%EC%84%B8-%EB%B2%88%EC%A7%B8-%EB%B0%A9%EB%B2%95-%EB%B6%84%EC%84%9D-%EB%8B%A8%EC%9C%84%EB%B3%B4%EB%8B%A4-%EC%84%B8%EB%B6%80-%EB%8B%A8%EC%9C%84%EB%A5%BC-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EC%A7%91%EA%B3%84-%ED%9B%84-%EA%B2%B0%EA%B3%BC-%ED%96%89%EC%9D%98-%EA%B0%9C%EB%B3%84-%EC%BB%AC%EB%9F%BC%ED%99%94">분석 단위보다 세부 단위를 기준으로 집계 후, 결과 행의 개별 컬럼화</a></li>
+</ol>
+<p>이해를 돕기 위해 두 데이터셋에서 <code>user_id</code>가 ‘user_08’에 해당하는 데이터를 예시로 살펴보면서 각 방법에 대해서 살펴보도록 하자.</p>
+<h2 id="5-결합을-위한-데이터의-변환"><a href="#5-결합을-위한-데이터의-변환" class="headerlink" title="5. 결합을 위한 데이터의 변환"></a>5. 결합을 위한 데이터의 변환</h2><p><code>users</code> 데이터셋에서 <code>user_id</code>가 ‘user_08’인 행은 단 하나뿐인 반면, <code>logs_with_contents</code> 데이터셋에서 <code>user_id</code>가 ‘user_08’인 행은 총 29개이다. 지금 우리의 관심사는 이 스물 아홉개의 행을 <code>users</code>의 하나의 행과 결합하기 위해서 어떻게 선택 혹은 요약해서 하나의 행으로 표현할 것인지에 대한 것이다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">users <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>user_id<span class="operator">==</span><span class="string">&#x27;user_08&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 3</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>F</td><td>STAY</td></tr>
+</tbody>
+</table>
+
+
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logs_with_contents <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>user_id<span class="operator">==</span><span class="string">&#x27;user_08&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 29 × 8</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td> 1</td><td> 7</td><td>30</td><td>content_12</td><td>ch_a</td><td>drama  </td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 2</td><td>10</td><td>29</td><td>content_2 </td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 3</td><td>15</td><td>28</td><td>content_6 </td><td>ch_c</td><td>comedy </td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 4</td><td> 8</td><td>40</td><td>content_18</td><td>ch_c</td><td>horror </td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 5</td><td>21</td><td>18</td><td>content_2 </td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 6</td><td>19</td><td>22</td><td>content_18</td><td>ch_c</td><td>horror </td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 7</td><td> 9</td><td>22</td><td>content_8 </td><td>ch_a</td><td>comedy </td><td>1000</td></tr>
+    <tr><td>user_08</td><td> 8</td><td>11</td><td>31</td><td>content_18</td><td>ch_c</td><td>horror </td><td>   0</td></tr>
+    <tr><td>user_08</td><td> 9</td><td> 2</td><td>36</td><td>content_13</td><td>ch_a</td><td>comedy </td><td>   0</td></tr>
+    <tr><td>user_08</td><td>10</td><td> 5</td><td>18</td><td>content_2 </td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>11</td><td>17</td><td>39</td><td>content_3 </td><td>ch_a</td><td>comedy </td><td>1000</td></tr>
+    <tr><td>user_08</td><td>12</td><td> 3</td><td>41</td><td>content_7 </td><td>ch_b</td><td>romance</td><td>1000</td></tr>
+    <tr><td>user_08</td><td>13</td><td> 0</td><td>37</td><td>content_18</td><td>ch_c</td><td>horror </td><td>   0</td></tr>
+    <tr><td>user_08</td><td>14</td><td> 5</td><td>39</td><td>content_4 </td><td>ch_c</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>15</td><td> 2</td><td>23</td><td>content_20</td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>16</td><td>21</td><td>31</td><td>content_12</td><td>ch_a</td><td>drama  </td><td>   0</td></tr>
+    <tr><td>user_08</td><td>17</td><td> 4</td><td>33</td><td>content_2 </td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>18</td><td>22</td><td>16</td><td>content_20</td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>19</td><td>17</td><td>36</td><td>content_9 </td><td>ch_c</td><td>drama  </td><td>   0</td></tr>
+    <tr><td>user_08</td><td>20</td><td>13</td><td>11</td><td>content_12</td><td>ch_a</td><td>drama  </td><td>   0</td></tr>
+    <tr><td>user_08</td><td>21</td><td> 2</td><td>35</td><td>content_15</td><td>ch_c</td><td>horror </td><td>1000</td></tr>
+    <tr><td>user_08</td><td>22</td><td> 2</td><td>23</td><td>content_10</td><td>ch_c</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>23</td><td>15</td><td>18</td><td>content_5 </td><td>ch_a</td><td>horror </td><td>1000</td></tr>
+    <tr><td>user_08</td><td>24</td><td>13</td><td>46</td><td>content_20</td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>25</td><td>16</td><td>35</td><td>content_20</td><td>ch_b</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>26</td><td> 0</td><td>35</td><td>content_19</td><td>ch_b</td><td>drama  </td><td>   0</td></tr>
+    <tr><td>user_08</td><td>27</td><td> 9</td><td>50</td><td>content_15</td><td>ch_c</td><td>horror </td><td>1000</td></tr>
+    <tr><td>user_08</td><td>28</td><td> 3</td><td>16</td><td>content_1 </td><td>ch_c</td><td>romance</td><td>   0</td></tr>
+    <tr><td>user_08</td><td>29</td><td> 7</td><td>45</td><td>content_12</td><td>ch_a</td><td>drama  </td><td>   0</td></tr>
+</tbody>
+</table>
+
+
+
+<h3 id="1-첫-번째-방법-특정-행의-선택"><a href="#1-첫-번째-방법-특정-행의-선택" class="headerlink" title="(1) 첫 번째 방법: 특정 행의 선택"></a>(1) 첫 번째 방법: 특정 행의 선택</h3><p>가장 쉽고 간단한 방법은 스물 아홉개의 행 중에서 하나의 행만을 선택해서 결합하는 것이다. 이를테면, 전체 시청 로그 중에서 시청 시간이 가장 긴 행을 대표행으로 선택하거나, 가장 최근의 시청 로그에 해당하는 행을 대표행으로 선택하고 나머지 행을 모두 버리는 방법을 생각해 볼 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># users 데이터셋에서 user_id가 &#x27;user_08&#x27;인 행만 추출 </span></span><br><span class="line"><span class="punctuation">(</span>row_u8 <span class="operator">=</span> users <span class="operator">%&gt;%</span> </span><br><span class="line">    filter<span class="punctuation">(</span>user_id<span class="operator">==</span><span class="string">&#x27;user_08&#x27;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 3</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>F</td><td>STAY</td></tr>
+</tbody>
+</table>
+
+
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># user_08의 컨텐츠 시청 로그 중, 시청 시간(watching_duration)이 가장 긴 행만 추출</span></span><br><span class="line"><span class="punctuation">(</span>method_1_select1 <span class="operator">=</span> logs_with_contents <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>user_id<span class="operator">==</span><span class="string">&#x27;user_08&#x27;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>watching_duration<span class="operator">==</span><span class="built_in">max</span><span class="punctuation">(</span>watching_duration<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>seq<span class="operator">==</span><span class="built_in">min</span><span class="punctuation">(</span>seq<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 결합</span></span><br><span class="line">row_u8 <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>method_1_select1<span class="punctuation">,</span> by<span class="operator">=</span><span class="string">&#x27;user_id&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 8</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>27</td><td>9</td><td>50</td><td>content_15</td><td>ch_c</td><td>horror</td><td>1000</td></tr>
+</tbody>
+</table>
+
+
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 10</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>F</td><td>STAY</td><td>27</td><td>9</td><td>50</td><td>content_15</td><td>ch_c</td><td>horror</td><td>1000</td></tr>
+</tbody>
+</table>
+
+
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># user_08의 컨텐츠 시청 로그 중, 가장 최근에 시청한 컨텐츠에 대한 행만 추출</span></span><br><span class="line"><span class="punctuation">(</span>method_1_select2 <span class="operator">=</span> logs_with_contents <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>user_id<span class="operator">==</span><span class="string">&#x27;user_08&#x27;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    filter<span class="punctuation">(</span>seq<span class="operator">==</span><span class="built_in">max</span><span class="punctuation">(</span>seq<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 결합</span></span><br><span class="line">row_u8 <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>method_1_select2<span class="punctuation">,</span> by<span class="operator">=</span><span class="string">&#x27;user_id&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 8</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>29</td><td>7</td><td>45</td><td>content_12</td><td>ch_a</td><td>drama</td><td>0</td></tr>
+</tbody>
+</table>
+
+
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 10</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th><th scope=col>seq</th><th scope=col>watching_time</th><th scope=col>watching_duration</th><th scope=col>content_id</th><th scope=col>content_channel</th><th scope=col>content_genre</th><th scope=col>content_price</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>F</td><td>STAY</td><td>29</td><td>7</td><td>45</td><td>content_12</td><td>ch_a</td><td>drama</td><td>0</td></tr>
+</tbody>
+</table>
+
+
+
+<p>사실 이러한 첫번째 방법은 지금 우리가 가진 데이터에서는 크게 의미가 없는 방법일 수도 있다. 하지만 예를 들어 한명의 고객이 여러 개의 계정&#x2F;프로필을 가질 수 있고, 그 중에서 대표 계정&#x2F;프로필에 대한 데이터만 선택해서 결합할 필요가 있다거나 하는 경우에는 매우 유용하게 활용될 수 있는 방법이다.</p>
+<h3 id="2-두-번째-방법-분석-단위를-기준으로-집계"><a href="#2-두-번째-방법-분석-단위를-기준으로-집계" class="headerlink" title="(2) 두 번째 방법: 분석 단위를 기준으로 집계"></a>(2) 두 번째 방법: 분석 단위를 기준으로 집계</h3><p>두 번째로는 최종 분석 단위 <code>user_id</code>를 기준으로 데이터를 집계(Aggregation&#x2F;Summary)하는 변환에 대해서 살펴볼 것이다. 예를 들어, <code>logs_with_contents</code> 데이터로부터 <code>user_id</code>별로 총 시청 시간을 집계한 후에 <code>users</code> 데이터셋과 결합해보도록 하자.</p>
+<p>우선 user_08의 29개의 시청 로그는 다음과 같이 하나의 행으로 요약될 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">(</span>total_watching_duration_u8 <span class="operator">=</span> logs_with_contents <span class="operator">%&gt;%</span> </span><br><span class="line">    filter<span class="punctuation">(</span>user_id<span class="operator">==</span><span class="string">&#x27;user_08&#x27;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    group_by<span class="punctuation">(</span>user_id<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    summarise<span class="punctuation">(</span>total_watching_duration <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>watching_duration<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 2</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>total_watching_duration</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>883</td></tr>
+</tbody>
+</table>
+
+
+
+<p><code>users</code>의 user_08에 대한 행도 하나이므로, 요약된 데이터와 다음과 같이 쉽게 결합할 수 있다. </p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">row_u8 <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>total_watching_duration_u8<span class="punctuation">,</span> by<span class="operator">=</span><span class="string">&#x27;user_id&#x27;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 1 × 4</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th><th scope=col>total_watching_duration</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_08</td><td>F</td><td>STAY</td><td>883</td></tr>
+</tbody>
+</table>
+
+
+
+<p>‘user_08’만을 필터링하지 않은 전체 고객에 대한 집계와 결합 또한 다음 코드를 통해 어렵지 않게 수행할 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 각 고객별 총 시청 시간 집계</span></span><br><span class="line">total_watching_duration <span class="operator">=</span> logs_with_contents <span class="operator">%&gt;%</span></span><br><span class="line">    group_by<span class="punctuation">(</span>user_id<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    summarise<span class="punctuation">(</span>total_watching_duration <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>watching_duration<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>total_watching_duration<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 6 × 2</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>total_watching_duration</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td> 684</td></tr>
+    <tr><td>user_02</td><td> 980</td></tr>
+    <tr><td>user_03</td><td>1100</td></tr>
+    <tr><td>user_04</td><td>1155</td></tr>
+    <tr><td>user_05</td><td> 810</td></tr>
+    <tr><td>user_06</td><td> 704</td></tr>
+</tbody>
+</table>
+
+
+
+<p>최종 분석 단위를 기준으로 집계된 데이터의 Unique Key는 당연히 최종 분석 단위 <code>user_id</code> 가 된다. 따라서 <code>users</code> 데이터셋과 <code>total_watching_duration</code> 데이터셋의 Unique Key는 모두 <code>user_id</code>로 <code>1:1</code> 관계이므로, 다음과 같이 쉽게 결합할 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 결합</span></span><br><span class="line">users <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>total_watching_duration<span class="punctuation">,</span> by<span class="operator">=</span><span class="string">&#x27;user_id&#x27;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    head<span class="punctuation">(</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 6 × 4</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th><th scope=col>total_watching_duration</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>F</td><td>CHURN</td><td> 684</td></tr>
+    <tr><td>user_02</td><td>M</td><td>STAY </td><td> 980</td></tr>
+    <tr><td>user_03</td><td>M</td><td>STAY </td><td>1100</td></tr>
+    <tr><td>user_04</td><td>F</td><td>CHURN</td><td>1155</td></tr>
+    <tr><td>user_05</td><td>F</td><td>STAY </td><td> 810</td></tr>
+    <tr><td>user_06</td><td>M</td><td>STAY </td><td> 704</td></tr>
+</tbody>
+</table>
+
+
+
+<h3 id="3-세-번째-방법-분석-단위보다-세부-단위를-기준으로-집계-후-결과-행의-개별-컬럼화"><a href="#3-세-번째-방법-분석-단위보다-세부-단위를-기준으로-집계-후-결과-행의-개별-컬럼화" class="headerlink" title="(3) 세 번째 방법: 분석 단위보다 세부 단위를 기준으로 집계 후, 결과 행의 개별 컬럼화"></a>(3) 세 번째 방법: 분석 단위보다 세부 단위를 기준으로 집계 후, 결과 행의 개별 컬럼화</h3><p>우리는 앞서 살펴본 것처럼 각 고객별 총 시청 시간을 집계해서 변수로 활용할 수도 있지만, 채널별 시청 시간을 집계해서 조금 더 세부적인 정보를 나타내는 변수로 활용하고 싶을 수도 있다. 이 때 집계의 기준 그룹은 기존과 달리 <code>user_id</code>가 아니라 <code>user_id + content_channel</code>이 되고, 집계 결과는 다음 코드를 통해 확인해 볼 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">watching_duration_by_channel <span class="operator">=</span> logs_with_contents <span class="operator">%&gt;%</span></span><br><span class="line">    group_by<span class="punctuation">(</span>user_id<span class="punctuation">,</span> content_channel<span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line">    summarise<span class="punctuation">(</span>total_watching_duration <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>watching_duration<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>watching_duration_by_channel<span class="punctuation">,</span> <span class="number">12</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>`summarise()` has grouped output by &#39;user_id&#39;. You can override using the `.groups` argument.
+</code></pre>
+<table class="dataframe">
+<caption>A grouped_df: 12 × 3</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>content_channel</th><th scope=col>total_watching_duration</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>ch_a</td><td>159</td></tr>
+    <tr><td>user_01</td><td>ch_b</td><td>330</td></tr>
+    <tr><td>user_01</td><td>ch_c</td><td>195</td></tr>
+    <tr><td>user_02</td><td>ch_a</td><td>371</td></tr>
+    <tr><td>user_02</td><td>ch_b</td><td>189</td></tr>
+    <tr><td>user_02</td><td>ch_c</td><td>420</td></tr>
+    <tr><td>user_03</td><td>ch_a</td><td>412</td></tr>
+    <tr><td>user_03</td><td>ch_b</td><td>267</td></tr>
+    <tr><td>user_03</td><td>ch_c</td><td>421</td></tr>
+    <tr><td>user_04</td><td>ch_a</td><td>212</td></tr>
+    <tr><td>user_04</td><td>ch_b</td><td>353</td></tr>
+    <tr><td>user_04</td><td>ch_c</td><td>590</td></tr>
+</tbody>
+</table>
+
+
+
+<p>(2)에서와 달리 집계 결과의 Unique Key는 <code>user_id + content_channel</code>로 우리의 분석 단위 <code>user_id</code>와 일치하지 않는다. 다시 말해, 각 유저별로 3개의 채널에 대한 행을 가지고 있기 때문에 <code>users</code>와 <code>watching_duration_by_channel</code>의 관계는 여전히 <code>1:n</code>이며, 우리는 각 유저의 채널a, 채널b, 채널c 시청 시간을 별도의 컬럼들로 분리시킴으로써 하나의 레코드(행)에 하나의 유저에 대한 정보만 표현될 수 있도록 형태를 변경해볼 것이다. 즉, 현재 1차로 집계한 데이터를 보다 Wide한 형태로 변환할 것이다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">watching_duration_by_channel_wider <span class="operator">=</span> watching_duration_by_channel <span class="operator">%&gt;%</span></span><br><span class="line">    pivot_wider<span class="punctuation">(</span></span><br><span class="line">        names_from<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span>content_channel<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        names_prefix<span class="operator">=</span><span class="string">&quot;watching_duration_&quot;</span><span class="punctuation">,</span></span><br><span class="line">        values_from <span class="operator">=</span> total_watching_duration</span><br><span class="line">    <span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>watching_duration_by_channel_wider<span class="punctuation">,</span> <span class="number">4</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A grouped_df: 4 × 4</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>watching_duration_ch_a</th><th scope=col>watching_duration_ch_b</th><th scope=col>watching_duration_ch_c</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>159</td><td>330</td><td>195</td></tr>
+    <tr><td>user_02</td><td>371</td><td>189</td><td>420</td></tr>
+    <tr><td>user_03</td><td>412</td><td>267</td><td>421</td></tr>
+    <tr><td>user_04</td><td>212</td><td>353</td><td>590</td></tr>
+</tbody>
+</table>
+
+
+
+<p>이전 집계 결과에서는 <code>watching_duration</code>이라는 하나의 컬럼에서 3개 행으로 표현되던 채널별 시청 시간이, 각 채널별로 별도 컬럼으로 표현되도록 형태가 변환된 것을 확인해 볼 수 있다. (3 rows * 1 column)의 형태가 (1 row * 3 columns)으로 변환되면서, 각 <code>user_id</code>의 시청 정보는 하나의 행에 표현되고 있다. 따라서 변환된 집계 결과의 Unique Key는 <code>user_id</code>가 되며, 이전과 마찬가지로 <code>users</code> 데이터셋과 쉽게 결합할 수 있게 되었다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">users <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>watching_duration_by_channel_wider<span class="punctuation">,</span> by<span class="operator">=</span><span class="string">&quot;user_id&quot;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    head<span class="punctuation">(</span><span class="number">4</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 4 × 6</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th><th scope=col>watching_duration_ch_a</th><th scope=col>watching_duration_ch_b</th><th scope=col>watching_duration_ch_c</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>F</td><td>CHURN</td><td>159</td><td>330</td><td>195</td></tr>
+    <tr><td>user_02</td><td>M</td><td>STAY </td><td>371</td><td>189</td><td>420</td></tr>
+    <tr><td>user_03</td><td>M</td><td>STAY </td><td>412</td><td>267</td><td>421</td></tr>
+    <tr><td>user_04</td><td>F</td><td>CHURN</td><td>212</td><td>353</td><td>590</td></tr>
+</tbody>
+</table>
+
+
+
+<p>마지막으로 조금만 더 깊이 들어가보자. 채널별로 <strong>시청 시간만을 집계</strong>했던 조금 전과는 달리, 그룹별로 <strong>여러 개의 요약값을 집계</strong>하면 데이터는 어떤 형태가 될까? 예를 들어, 장르별로 ‘시청 시간’, ‘시청 횟수’, ‘결제액 합계’, ‘최고가 결제액’의 네 가지 수치를 동시에 집계할 경우의 데이터 형태에 대해서 살펴보도록 하자.</p>
+<p>앞서 살펴보았던 케이스와의 차이점은 다음과 같이 정리해 볼 수 있다.</p>
+<ol>
+<li><p>유저별 채널별 시청 시간 합계</p>
+<ul>
+<li>집계 그룹:<ul>
+<li><code>user_id + content_channel</code></li>
+</ul>
+</li>
+<li>요약값:<ul>
+<li>시청 시간 합계 <code>sum(watching_duration)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>유저별 장르별 시청 시간 합계, 시청 횟수, 결제액 합계, 최고가 결제액</p>
+<ul>
+<li>집계 그룹:<ul>
+<li><code>user_id + conetent_genre</code></li>
+</ul>
+</li>
+<li>요약값:<ul>
+<li>시청 시간 합계 <code>sum(watching_duration)</code>  </li>
+<li>시청 횟수 <code>count(content_id)</code></li>
+<li>결제액 합계 <code>sum(content_price)</code></li>
+<li>최고가 결제액 <code>max(content_price</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>기존과 동일한 방법으로 <code>logs_with_contents</code> 데이터셋을 집계한 결과는 다음과 같다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">agg_by_genre <span class="operator">=</span> logs_with_contents <span class="operator">%&gt;%</span></span><br><span class="line">    group_by<span class="punctuation">(</span>user_id<span class="punctuation">,</span> content_genre<span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line">    summarise<span class="punctuation">(</span></span><br><span class="line">        duration_sum <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>watching_duration<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        watching_cnt <span class="operator">=</span> n<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        price_sum <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>content_price<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        price_max <span class="operator">=</span> <span class="built_in">max</span><span class="punctuation">(</span>content_price<span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>agg_by_genre<span class="punctuation">,</span> <span class="number">12</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>`summarise()` has grouped output by &#39;user_id&#39;. You can override using the `.groups` argument.
+</code></pre>
+<table class="dataframe">
+<caption>A grouped_df: 12 × 6</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>content_genre</th><th scope=col>duration_sum</th><th scope=col>watching_cnt</th><th scope=col>price_sum</th><th scope=col>price_max</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>comedy </td><td> 30</td><td> 1</td><td>1000</td><td>1000</td></tr>
+    <tr><td>user_01</td><td>drama  </td><td>341</td><td>11</td><td>   0</td><td>   0</td></tr>
+    <tr><td>user_01</td><td>horror </td><td> 70</td><td> 3</td><td>2000</td><td>1000</td></tr>
+    <tr><td>user_01</td><td>romance</td><td>243</td><td>10</td><td>5000</td><td>1000</td></tr>
+    <tr><td>user_02</td><td>comedy </td><td>217</td><td> 8</td><td>3000</td><td>1000</td></tr>
+    <tr><td>user_02</td><td>drama  </td><td>126</td><td> 4</td><td>   0</td><td>   0</td></tr>
+    <tr><td>user_02</td><td>horror </td><td>276</td><td> 9</td><td>4000</td><td>1000</td></tr>
+    <tr><td>user_02</td><td>romance</td><td>361</td><td>13</td><td>5000</td><td>1000</td></tr>
+    <tr><td>user_03</td><td>comedy </td><td>360</td><td>10</td><td>2000</td><td>1000</td></tr>
+    <tr><td>user_03</td><td>drama  </td><td>141</td><td> 5</td><td>   0</td><td>   0</td></tr>
+    <tr><td>user_03</td><td>horror </td><td>334</td><td>10</td><td>6000</td><td>1000</td></tr>
+    <tr><td>user_03</td><td>romance</td><td>265</td><td>10</td><td>2000</td><td>1000</td></tr>
+</tbody>
+</table>
+
+
+
+<p>출력된 결과와 이전 집계 결과와의 차이점에 대해서 하나씩 살펴보도록 하자. 우선, 컨텐츠의 채널이 <code>ch_a</code>, <code>ch_b</code>, <code>ch_c</code>의 3개 값을 가질 수 있으므로 각 고객의 시청 로그가 3개 행에 걸쳐서 표현되었던 이전 집계 결과와 달리, 장르는 <code>comedy</code>, <code>drama</code>, <code>horror</code>, <code>romance</code> 4개의 값을 가질 수 있으므로 각 고객의 시청로그가 4개 행에 걸쳐서 표현되고 있다는 사실을 쉽게 확인해 볼 수 있다. 다음으로는, 집계된 수치에 해당하는 값이 <code>total_watching_duration</code> 하나 뿐이었던 이전과 달리, 이번 집계 결과에서는 <code>duration_sum</code>, <code>watching_cnt</code>, <code>price_sum</code>, <code>price_max</code>의 네 개의 수치가 집계되었다는 점 또한 확인할 수 있다.</p>
+<p>데이터의 Shape 관점에서는 다음과 같이 정리해 볼 수 있다.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Form</th>
+<th>Row</th>
+<th>Column</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>채널별 집계 결과</td>
+<td>Long</td>
+<td>3</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>형태 변환 후</td>
+<td>Wide</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>상단의 표는 우리가 Long Form의 형태로 표현된 채널별 집계 결과의 각 행을 별도의 컬럼으로 표현함으로써 Wide Form으로 변환할 수 있었다는 것을 의미한다. 한편, 장르별 집계 결과와 우리가 형태 변환을 통해서 얻고자 하는 데이터의 Shape은 다음과 같이 정리해 볼 수 있을 것이다.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Form</th>
+<th>Row</th>
+<th>Column</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>장르별 집계 결과</td>
+<td>-</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+</tr>
+<tr>
+<td>형태 변환 후</td>
+<td>Wide</td>
+<td>1</td>
+<td>16</td>
+<td>16</td>
+</tr>
+</tbody></table>
+<p>이전과 달리 집계 결과가 완전한 Long Form이 아니기 때문에, 이전과 동일한 방법으로 바로 Wide Form으로 변환하기 보다는, 일차적으로 Long Form으로 변환 후에 Wide Form으로 재변환하는 방식으로 데이터의 형태를 바꿔볼 것이다. 이를 정리하자면 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Form</th>
+<th>Row</th>
+<th>Column</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>장르별 집계 결과</td>
+<td>-</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+</tr>
+<tr>
+<td>1차 변환 후</td>
+<td>Long</td>
+<td>16</td>
+<td>1</td>
+<td>16</td>
+</tr>
+<tr>
+<td>2차 변환 후</td>
+<td>Wide</td>
+<td>1</td>
+<td>16</td>
+<td>16</td>
+</tr>
+</tbody></table>
+<p>Long Form으로 데이터를 표현하기 위한 1차 변환은 다음과 같이 수행할 수 있다. 한명의 고객의 데이터가 최대 16개의 행에 걸쳐서 표현된다는 점에 유의해서 살펴보도록 하자.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">agg_by_genre_longer <span class="operator">=</span> agg_by_genre <span class="operator">%&gt;%</span></span><br><span class="line">    pivot_longer<span class="punctuation">(</span>cols <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span>duration_sum<span class="punctuation">,</span> price_sum<span class="punctuation">,</span> price_max<span class="punctuation">,</span> watching_cnt<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">agg_by_genre_longer <span class="operator">%&gt;%</span> head<span class="punctuation">(</span><span class="number">48</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A grouped_df: 48 × 4</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>content_genre</th><th scope=col>name</th><th scope=col>value</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>comedy </td><td>duration_sum</td><td>  30</td></tr>
+    <tr><td>user_01</td><td>comedy </td><td>price_sum   </td><td>1000</td></tr>
+    <tr><td>user_01</td><td>comedy </td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_01</td><td>comedy </td><td>watching_cnt</td><td>   1</td></tr>
+    <tr><td>user_01</td><td>drama  </td><td>duration_sum</td><td> 341</td></tr>
+    <tr><td>user_01</td><td>drama  </td><td>price_sum   </td><td>   0</td></tr>
+    <tr><td>user_01</td><td>drama  </td><td>price_max   </td><td>   0</td></tr>
+    <tr><td>user_01</td><td>drama  </td><td>watching_cnt</td><td>  11</td></tr>
+    <tr><td>user_01</td><td>horror </td><td>duration_sum</td><td>  70</td></tr>
+    <tr><td>user_01</td><td>horror </td><td>price_sum   </td><td>2000</td></tr>
+    <tr><td>user_01</td><td>horror </td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_01</td><td>horror </td><td>watching_cnt</td><td>   3</td></tr>
+    <tr><td>user_01</td><td>romance</td><td>duration_sum</td><td> 243</td></tr>
+    <tr><td>user_01</td><td>romance</td><td>price_sum   </td><td>5000</td></tr>
+    <tr><td>user_01</td><td>romance</td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_01</td><td>romance</td><td>watching_cnt</td><td>  10</td></tr>
+    <tr><td>user_02</td><td>comedy </td><td>duration_sum</td><td> 217</td></tr>
+    <tr><td>user_02</td><td>comedy </td><td>price_sum   </td><td>3000</td></tr>
+    <tr><td>user_02</td><td>comedy </td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_02</td><td>comedy </td><td>watching_cnt</td><td>   8</td></tr>
+    <tr><td>user_02</td><td>drama  </td><td>duration_sum</td><td> 126</td></tr>
+    <tr><td>user_02</td><td>drama  </td><td>price_sum   </td><td>   0</td></tr>
+    <tr><td>user_02</td><td>drama  </td><td>price_max   </td><td>   0</td></tr>
+    <tr><td>user_02</td><td>drama  </td><td>watching_cnt</td><td>   4</td></tr>
+    <tr><td>user_02</td><td>horror </td><td>duration_sum</td><td> 276</td></tr>
+    <tr><td>user_02</td><td>horror </td><td>price_sum   </td><td>4000</td></tr>
+    <tr><td>user_02</td><td>horror </td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_02</td><td>horror </td><td>watching_cnt</td><td>   9</td></tr>
+    <tr><td>user_02</td><td>romance</td><td>duration_sum</td><td> 361</td></tr>
+    <tr><td>user_02</td><td>romance</td><td>price_sum   </td><td>5000</td></tr>
+    <tr><td>user_02</td><td>romance</td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_02</td><td>romance</td><td>watching_cnt</td><td>  13</td></tr>
+    <tr><td>user_03</td><td>comedy </td><td>duration_sum</td><td> 360</td></tr>
+    <tr><td>user_03</td><td>comedy </td><td>price_sum   </td><td>2000</td></tr>
+    <tr><td>user_03</td><td>comedy </td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_03</td><td>comedy </td><td>watching_cnt</td><td>  10</td></tr>
+    <tr><td>user_03</td><td>drama  </td><td>duration_sum</td><td> 141</td></tr>
+    <tr><td>user_03</td><td>drama  </td><td>price_sum   </td><td>   0</td></tr>
+    <tr><td>user_03</td><td>drama  </td><td>price_max   </td><td>   0</td></tr>
+    <tr><td>user_03</td><td>drama  </td><td>watching_cnt</td><td>   5</td></tr>
+    <tr><td>user_03</td><td>horror </td><td>duration_sum</td><td> 334</td></tr>
+    <tr><td>user_03</td><td>horror </td><td>price_sum   </td><td>6000</td></tr>
+    <tr><td>user_03</td><td>horror </td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_03</td><td>horror </td><td>watching_cnt</td><td>  10</td></tr>
+    <tr><td>user_03</td><td>romance</td><td>duration_sum</td><td> 265</td></tr>
+    <tr><td>user_03</td><td>romance</td><td>price_sum   </td><td>2000</td></tr>
+    <tr><td>user_03</td><td>romance</td><td>price_max   </td><td>1000</td></tr>
+    <tr><td>user_03</td><td>romance</td><td>watching_cnt</td><td>  10</td></tr>
+</tbody>
+</table>
+
+
+
+<p>Long Form으로 1차 변환된 집계 결과를 다시 Wide Form으로 최종 변환하는 과정은 다음 코드를 통해서 수행할 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">agg_by_genre_wider <span class="operator">=</span> agg_by_genre_longer <span class="operator">%&gt;%</span></span><br><span class="line">  pivot_wider<span class="punctuation">(</span>names_from <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span>content_genre<span class="punctuation">,</span> name<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>agg_by_genre_wider<span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A grouped_df: 3 × 17</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>comedy_duration_sum</th><th scope=col>comedy_price_sum</th><th scope=col>comedy_price_max</th><th scope=col>comedy_watching_cnt</th><th scope=col>drama_duration_sum</th><th scope=col>drama_price_sum</th><th scope=col>drama_price_max</th><th scope=col>drama_watching_cnt</th><th scope=col>horror_duration_sum</th><th scope=col>horror_price_sum</th><th scope=col>horror_price_max</th><th scope=col>horror_watching_cnt</th><th scope=col>romance_duration_sum</th><th scope=col>romance_price_sum</th><th scope=col>romance_price_max</th><th scope=col>romance_watching_cnt</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td> 30</td><td>1000</td><td>1000</td><td> 1</td><td>341</td><td>0</td><td>0</td><td>11</td><td> 70</td><td>2000</td><td>1000</td><td> 3</td><td>243</td><td>5000</td><td>1000</td><td>10</td></tr>
+    <tr><td>user_02</td><td>217</td><td>3000</td><td>1000</td><td> 8</td><td>126</td><td>0</td><td>0</td><td> 4</td><td>276</td><td>4000</td><td>1000</td><td> 9</td><td>361</td><td>5000</td><td>1000</td><td>13</td></tr>
+    <tr><td>user_03</td><td>360</td><td>2000</td><td>1000</td><td>10</td><td>141</td><td>0</td><td>0</td><td> 5</td><td>334</td><td>6000</td><td>1000</td><td>10</td><td>265</td><td>2000</td><td>1000</td><td>10</td></tr>
+</tbody>
+</table>
+
+
+
+<p>드디어 우리가 원했던대로 각 고객의 정보가 하나의 행에 표현될 수 있도록 데이터의 형태가 변환되었다. 최종 변환된 집계 결과의 Unique Key는 <code>user_id</code>가 되며, 앞서 살펴보았던 케이스들과 마찬가지로 <code>users</code> 데이터셋과 쉽게 결합함으로써 분석을 위한 최종 데이터셋을 생성할 수 있다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">data_for_analysis <span class="operator">=</span> users <span class="operator">%&gt;%</span></span><br><span class="line">    left_join<span class="punctuation">(</span>agg_by_genre_wider<span class="punctuation">,</span> by<span class="operator">=</span><span class="string">&#x27;user_id&#x27;</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">head<span class="punctuation">(</span>data_for_analysis<span class="punctuation">,</span> <span class="number">10</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A tibble: 10 × 19</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>gender</th><th scope=col>target</th><th scope=col>comedy_duration_sum</th><th scope=col>comedy_price_sum</th><th scope=col>comedy_price_max</th><th scope=col>comedy_watching_cnt</th><th scope=col>drama_duration_sum</th><th scope=col>drama_price_sum</th><th scope=col>drama_price_max</th><th scope=col>drama_watching_cnt</th><th scope=col>horror_duration_sum</th><th scope=col>horror_price_sum</th><th scope=col>horror_price_max</th><th scope=col>horror_watching_cnt</th><th scope=col>romance_duration_sum</th><th scope=col>romance_price_sum</th><th scope=col>romance_price_max</th><th scope=col>romance_watching_cnt</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td>F</td><td>CHURN</td><td> 30</td><td>1000</td><td>1000</td><td> 1</td><td>341</td><td>0</td><td>0</td><td>11</td><td> 70</td><td>2000</td><td>1000</td><td> 3</td><td>243</td><td>5000</td><td>1000</td><td>10</td></tr>
+    <tr><td>user_02</td><td>M</td><td>STAY </td><td>217</td><td>3000</td><td>1000</td><td> 8</td><td>126</td><td>0</td><td>0</td><td> 4</td><td>276</td><td>4000</td><td>1000</td><td> 9</td><td>361</td><td>5000</td><td>1000</td><td>13</td></tr>
+    <tr><td>user_03</td><td>M</td><td>STAY </td><td>360</td><td>2000</td><td>1000</td><td>10</td><td>141</td><td>0</td><td>0</td><td> 5</td><td>334</td><td>6000</td><td>1000</td><td>10</td><td>265</td><td>2000</td><td>1000</td><td>10</td></tr>
+    <tr><td>user_04</td><td>F</td><td>CHURN</td><td>278</td><td>2000</td><td>1000</td><td> 9</td><td>261</td><td>0</td><td>0</td><td> 9</td><td>145</td><td>3000</td><td>1000</td><td> 5</td><td>471</td><td>4000</td><td>1000</td><td>16</td></tr>
+    <tr><td>user_05</td><td>F</td><td>STAY </td><td>318</td><td>5000</td><td>1000</td><td>10</td><td>126</td><td>0</td><td>0</td><td> 4</td><td>189</td><td>3000</td><td>1000</td><td> 6</td><td>177</td><td>1000</td><td>1000</td><td> 6</td></tr>
+    <tr><td>user_06</td><td>M</td><td>STAY </td><td>150</td><td>3000</td><td>1000</td><td> 4</td><td> 77</td><td>0</td><td>0</td><td> 2</td><td>283</td><td>4000</td><td>1000</td><td> 9</td><td>194</td><td>3000</td><td>1000</td><td> 8</td></tr>
+    <tr><td>user_07</td><td>F</td><td>CHURN</td><td>305</td><td>4000</td><td>1000</td><td>10</td><td>171</td><td>0</td><td>0</td><td> 5</td><td>229</td><td>2000</td><td>1000</td><td> 8</td><td>432</td><td>4000</td><td>1000</td><td>13</td></tr>
+    <tr><td>user_08</td><td>F</td><td>STAY </td><td>125</td><td>2000</td><td>1000</td><td> 4</td><td>188</td><td>0</td><td>0</td><td> 6</td><td>233</td><td>3000</td><td>1000</td><td> 7</td><td>337</td><td>1000</td><td>1000</td><td>12</td></tr>
+    <tr><td>user_09</td><td>F</td><td>STAY </td><td>202</td><td>2000</td><td>1000</td><td> 6</td><td>200</td><td>0</td><td>0</td><td> 6</td><td>267</td><td>6000</td><td>1000</td><td> 8</td><td>389</td><td>4000</td><td>1000</td><td>14</td></tr>
+    <tr><td>user_10</td><td>F</td><td>STAY </td><td>334</td><td>5000</td><td>1000</td><td>10</td><td>154</td><td>0</td><td>0</td><td> 5</td><td>198</td><td>3000</td><td>1000</td><td> 6</td><td>340</td><td>5000</td><td>1000</td><td>11</td></tr>
+</tbody>
+</table>
+
+
+
+<p>물론 이러한 형태의 데이터 형태 변환이 익숙하다면, 초기 집계 결과의 형태에서 Long Form으로의 중간 전환을 건너뛰고 바로 Wide Form으로 전환하는 것도 가능하다. 이를 위한 코드는 다음과 같으며, 함수의 각 파라미터의 의미에 대해서는 글을 읽는 우리 모두가 형태 변환에 보다 익숙해지기를 바라는 마음으로 직접 고민해 볼 부분으로 남겨놓는다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">agg_by_genre <span class="operator">%&gt;%</span></span><br><span class="line">    pivot_wider<span class="punctuation">(</span></span><br><span class="line">        names_from<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span>content_genre<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        values_from <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span>duration_sum<span class="punctuation">,</span> price_sum<span class="punctuation">,</span> price_max<span class="punctuation">,</span> watching_cnt<span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">    head<span class="punctuation">(</span><span class="number">10</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<table class="dataframe">
+<caption>A grouped_df: 10 × 17</caption>
+<thead>
+    <tr><th scope=col>user_id</th><th scope=col>duration_sum_comedy</th><th scope=col>duration_sum_drama</th><th scope=col>duration_sum_horror</th><th scope=col>duration_sum_romance</th><th scope=col>price_sum_comedy</th><th scope=col>price_sum_drama</th><th scope=col>price_sum_horror</th><th scope=col>price_sum_romance</th><th scope=col>price_max_comedy</th><th scope=col>price_max_drama</th><th scope=col>price_max_horror</th><th scope=col>price_max_romance</th><th scope=col>watching_cnt_comedy</th><th scope=col>watching_cnt_drama</th><th scope=col>watching_cnt_horror</th><th scope=col>watching_cnt_romance</th></tr>
+    <tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;int&gt;</th></tr>
+</thead>
+<tbody>
+    <tr><td>user_01</td><td> 30</td><td>341</td><td> 70</td><td>243</td><td>1000</td><td>0</td><td>2000</td><td>5000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td> 1</td><td>11</td><td> 3</td><td>10</td></tr>
+    <tr><td>user_02</td><td>217</td><td>126</td><td>276</td><td>361</td><td>3000</td><td>0</td><td>4000</td><td>5000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td> 8</td><td> 4</td><td> 9</td><td>13</td></tr>
+    <tr><td>user_03</td><td>360</td><td>141</td><td>334</td><td>265</td><td>2000</td><td>0</td><td>6000</td><td>2000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td>10</td><td> 5</td><td>10</td><td>10</td></tr>
+    <tr><td>user_04</td><td>278</td><td>261</td><td>145</td><td>471</td><td>2000</td><td>0</td><td>3000</td><td>4000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td> 9</td><td> 9</td><td> 5</td><td>16</td></tr>
+    <tr><td>user_05</td><td>318</td><td>126</td><td>189</td><td>177</td><td>5000</td><td>0</td><td>3000</td><td>1000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td>10</td><td> 4</td><td> 6</td><td> 6</td></tr>
+    <tr><td>user_06</td><td>150</td><td> 77</td><td>283</td><td>194</td><td>3000</td><td>0</td><td>4000</td><td>3000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td> 4</td><td> 2</td><td> 9</td><td> 8</td></tr>
+    <tr><td>user_07</td><td>305</td><td>171</td><td>229</td><td>432</td><td>4000</td><td>0</td><td>2000</td><td>4000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td>10</td><td> 5</td><td> 8</td><td>13</td></tr>
+    <tr><td>user_08</td><td>125</td><td>188</td><td>233</td><td>337</td><td>2000</td><td>0</td><td>3000</td><td>1000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td> 4</td><td> 6</td><td> 7</td><td>12</td></tr>
+    <tr><td>user_09</td><td>202</td><td>200</td><td>267</td><td>389</td><td>2000</td><td>0</td><td>6000</td><td>4000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td> 6</td><td> 6</td><td> 8</td><td>14</td></tr>
+    <tr><td>user_10</td><td>334</td><td>154</td><td>198</td><td>340</td><td>5000</td><td>0</td><td>3000</td><td>5000</td><td>1000</td><td>0</td><td>1000</td><td>1000</td><td>10</td><td> 5</td><td> 6</td><td>11</td></tr>
+</tbody>
+</table>
+
+
+
+<h2 id="6-간단한-모델링"><a href="#6-간단한-모델링" class="headerlink" title="6. 간단한 모델링"></a>6. 간단한 모델링</h2><p>다음은 생성한 데이터를 이용한 간단한 모델링과 결과 확인을 위한 샘플 코드이다. 랜덤하게 제너레이팅한 부분이 많은 데이터셋이라서 성능이 만족할만한 수준으로 나오지는 않지만, 모델링을 위한 글이 아니므로 세부적인 내용에 대해서는 다루지 않을 예정이다. 사실 모델링에 대한 내용을 제외해도 이미 한번에 읽기 부담스러울만큼 충분히 긴 글이기도 하다.</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="punctuation">(</span>pkg <span class="keyword">in</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;caret&quot;</span><span class="punctuation">,</span> <span class="string">&quot;e1071&quot;</span><span class="punctuation">,</span> <span class="string">&quot;randomForest&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">    <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span>pkg <span class="operator">%in%</span> installed.packages<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="punctuation">,</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">        install.packages<span class="punctuation">(</span>pkg<span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">library<span class="punctuation">(</span>caret<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<pre><code>Loading required package: lattice
+Attaching package: ‘caret’
+The following object is masked from ‘package:purrr’:
+    lift
+</code></pre>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Imputation for Missing Values</span></span><br><span class="line">data_imp <span class="operator">=</span> data_for_analysis <span class="operator">%&gt;%</span></span><br><span class="line">    mutate_if<span class="punctuation">(</span><span class="built_in">is.numeric</span><span class="punctuation">,</span> <span class="operator">~</span>replace<span class="punctuation">(</span>.<span class="punctuation">,</span> <span class="built_in">is.na</span><span class="punctuation">(</span>.<span class="punctuation">)</span><span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">idx_tr <span class="operator">=</span> createDataPartition<span class="punctuation">(</span>pull<span class="punctuation">(</span>data_imp<span class="punctuation">,</span> target<span class="punctuation">)</span><span class="punctuation">,</span> p <span class="operator">=</span> <span class="number">0.7</span><span class="punctuation">,</span> <span class="built_in">list</span><span class="operator">=</span><span class="literal">FALSE</span><span class="punctuation">)</span></span><br><span class="line">data_tr <span class="operator">=</span> select<span class="punctuation">(</span>data_imp<span class="punctuation">[</span>idx_tr<span class="punctuation">,</span> <span class="punctuation">]</span><span class="punctuation">,</span> <span class="operator">-</span>user_id<span class="punctuation">)</span></span><br><span class="line">data_te <span class="operator">=</span> select<span class="punctuation">(</span>data_imp<span class="punctuation">[</span><span class="operator">-</span>idx_tr<span class="punctuation">,</span> <span class="punctuation">]</span><span class="punctuation">,</span> <span class="operator">-</span>user_id<span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">actual <span class="operator">=</span> pull<span class="punctuation">(</span>data_te<span class="punctuation">,</span> target<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fit_glm <span class="operator">=</span> glm<span class="punctuation">(</span>target <span class="operator">~</span> .<span class="punctuation">,</span> data<span class="operator">=</span>data_tr<span class="punctuation">,</span> family<span class="operator">=</span>binomial<span class="punctuation">)</span></span><br><span class="line">pred_prob_glm <span class="operator">=</span> predict<span class="punctuation">(</span>fit_glm<span class="punctuation">,</span> newdata<span class="operator">=</span>data_te<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&#x27;response&#x27;</span><span class="punctuation">)</span></span><br><span class="line">pred_glm <span class="operator">=</span> as.factor<span class="punctuation">(</span>ifelse<span class="punctuation">(</span>pred_prob_glm <span class="operator">&gt;</span> <span class="number">0.5</span><span class="punctuation">,</span> levels<span class="punctuation">(</span>actual<span class="punctuation">)</span><span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span><span class="punctuation">,</span> levels<span class="punctuation">(</span>actual<span class="punctuation">)</span><span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fit_rf <span class="operator">=</span> train<span class="punctuation">(</span>target <span class="operator">~</span> .<span class="punctuation">,</span> data <span class="operator">=</span> data_tr<span class="punctuation">,</span> method <span class="operator">=</span> <span class="string">&quot;rf&quot;</span><span class="punctuation">,</span> verbose <span class="operator">=</span> <span class="built_in">F</span><span class="punctuation">)</span></span><br><span class="line">pred_prob_rf <span class="operator">=</span> predict<span class="punctuation">(</span>fit_rf<span class="punctuation">,</span> newdata<span class="operator">=</span>data_te<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&#x27;prob&#x27;</span><span class="punctuation">)</span></span><br><span class="line">pred_rf <span class="operator">=</span> as.factor<span class="punctuation">(</span>ifelse<span class="punctuation">(</span>pred_prob_rf<span class="punctuation">[</span><span class="punctuation">,</span><span class="number">2</span><span class="punctuation">]</span> <span class="operator">&gt;</span> <span class="number">0.5</span><span class="punctuation">,</span> <span class="string">&quot;STAY&quot;</span><span class="punctuation">,</span> <span class="string">&quot;CHURN&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">confusionMatrix<span class="punctuation">(</span>pred_glm<span class="punctuation">,</span> actual<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction CHURN STAY
+     CHURN     5    3
+     STAY      6   15
+                                          
+               Accuracy : 0.6897          
+                 95% CI : (0.4917, 0.8472)
+    No Information Rate : 0.6207          
+    P-Value [Acc &gt; NIR] : 0.287           
+                                          
+                  Kappa : 0.304           
+                                          
+ Mcnemar&#39;s Test P-Value : 0.505           
+                                          
+            Sensitivity : 0.4545          
+            Specificity : 0.8333          
+         Pos Pred Value : 0.6250          
+         Neg Pred Value : 0.7143          
+             Prevalence : 0.3793          
+         Detection Rate : 0.1724          
+   Detection Prevalence : 0.2759          
+      Balanced Accuracy : 0.6439          
+                                          
+       &#39;Positive&#39; Class : CHURN           
+                                          
+</code></pre>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">confusionMatrix<span class="punctuation">(</span>pred_rf<span class="punctuation">,</span> actual<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+
+
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction CHURN STAY
+     CHURN     6    1
+     STAY      5   17
+                                          
+               Accuracy : 0.7931          
+                 95% CI : (0.6028, 0.9201)
+    No Information Rate : 0.6207          
+    P-Value [Acc &gt; NIR] : 0.03859         
+                                          
+                  Kappa : 0.5272          
+                                          
+ Mcnemar&#39;s Test P-Value : 0.22067         
+                                          
+            Sensitivity : 0.5455          
+            Specificity : 0.9444          
+         Pos Pred Value : 0.8571          
+         Neg Pred Value : 0.7727          
+             Prevalence : 0.3793          
+         Detection Rate : 0.2069          
+   Detection Prevalence : 0.2414          
+      Balanced Accuracy : 0.7449          
+                                          
+       &#39;Positive&#39; Class : CHURN           
+                                          
+</code></pre>
+<h2 id="7-Wrap-Up"><a href="#7-Wrap-Up" class="headerlink" title="7. Wrap-Up"></a>7. Wrap-Up</h2><p>이번 글에서는 원장성 데이터(마스터)와 이력성 데이터(히스토리)를 가지고 있을 때, 분석을 위한 최종 테이터셋을 생성하는 과정에 대해서 살펴보았다. 그 중에서도 특히 원장성 데이터와 결합하기 위해 이력성 데이터를 선택&#x2F;집계하는 세 가지 방법에 대해 다루었으며, 각 방법을 데이터셋 간의 관계와 데이터의 형태 변환 측면에서 자세히 살펴보고자 했다. </p>
+<p>특히 세 가지 방법 중에서 <a href="https://taes.me/R03/#3-%EC%84%B8-%EB%B2%88%EC%A7%B8-%EB%B0%A9%EB%B2%95-%EB%B6%84%EC%84%9D-%EB%8B%A8%EC%9C%84%EB%B3%B4%EB%8B%A4-%EC%84%B8%EB%B6%80-%EB%8B%A8%EC%9C%84%EB%A5%BC-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EC%A7%91%EA%B3%84-%ED%9B%84-%EA%B2%B0%EA%B3%BC-%ED%96%89%EC%9D%98-%EA%B0%9C%EB%B3%84-%EC%BB%AC%EB%9F%BC%ED%99%94">마지막에 해당하는 방법</a>을 다루면서는, <a href="https://taes.me/R02/">지난 글</a>에서 살펴보았던 데이터의 Long&#x2F;Wide Form 변환에 대해 조금 더 자세히 설명하고자 했다. 이번 글을 통해서 지난 글에서 설명이 다소 부족했던 형태 변환의 필요성과 구체적인 변환 방법에 대한 실마리를 얻을 수 있었다면 더할 나위 없는 보람이 되겠다. </p>
+<p>적지 않은 내용을 다소 많은 관점에서 다루면서 글이 다소 복잡해진 느낌이 들긴 하지만, 누군가에게는 도움이 될 수 있는 내용이기를 바라면서 글을 마친다.</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</p><p><a href="https://taes.me/R03/">https://taes.me/R03/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Taeseung Hahn</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-06-08</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-04-24</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Taes-R/">Taes&#039; R</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=62811fe0d1ad83001a8b9206&amp;product=inline-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Weekly-NLP-Intro/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Weekly-NLP, Introduction</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/R02/"><span class="level-item">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="taeshahn/PagesUtterances" issue-term="pathname" label="comment" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-3-tablet is-3-desktop is-3-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Information-Theory/"><span class="level-start"><span class="level-item">Information Theory</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Others/"><span class="level-start"><span class="level-item">Others</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Taes-R/"><span class="level-start"><span class="level-item">Taes&#039; R</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/WeeklyNLP/"><span class="level-start"><span class="level-item">WeeklyNLP</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-04-23T00:00:00.000Z">2023-04-23</time></p><p class="title"><a href="/Knowledge%20Integration%20in%20Language%20Model/">Knowledge Integration in Language Models</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-02-01T00:00:00.000Z">2023-02-01</time></p><p class="title"><a href="/Language%20Models/">Language Models</a></p><p class="categories"><a href="/categories/WeeklyNLP/">WeeklyNLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-02-28T00:00:00.000Z">2022-02-28</time></p><p class="title"><a href="/Weekly-NLP-Intro/">Weekly-NLP, Introduction</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-06-08T00:00:00.000Z">2021-06-08</time></p><p class="title"><a href="/R03/">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-16T00:00:00.000Z">2021-05-16</time></p><p class="title"><a href="/R02/">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a><p class="is-size-7"><span>&copy; 2023 Taeseung Hahn</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

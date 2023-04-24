@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>나를 위해 기록하는 Jupyter - HTML/PDF 변환 프로세스 - Taeseung Hahn</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Taeseung Hahn"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Taeseung Hahn"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="노트북(.ipynb) 파일은 물론 Reproducible Research의 개념에 매우 잘 어울리는 포멧이다. 그러나 우리는 블로그 작성을 위해서라거나, Reproducibility에는 전혀 관심이 없을 분들을 위한 최종 보고서 작성을 위해서라거나, 파일 수신자가 노트북 파일을 실행할 수 없는 환경에 있다는 등의 다양한 이유로 노트북 파일을 보다 일반적인"><meta property="og:type" content="blog"><meta property="og:title" content="나를 위해 기록하는 Jupyter - HTML/PDF 변환 프로세스"><meta property="og:url" content="https://taes.me/JupToDoc/"><meta property="og:site_name" content="Taeseung Hahn"><meta property="og:description" content="노트북(.ipynb) 파일은 물론 Reproducible Research의 개념에 매우 잘 어울리는 포멧이다. 그러나 우리는 블로그 작성을 위해서라거나, Reproducibility에는 전혀 관심이 없을 분들을 위한 최종 보고서 작성을 위해서라거나, 파일 수신자가 노트북 파일을 실행할 수 없는 환경에 있다는 등의 다양한 이유로 노트북 파일을 보다 일반적인"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://taes.me/img/og_image.png"><meta property="article:published_time" content="2021-02-06T00:00:00.000Z"><meta property="article:modified_time" content="2023-04-24T12:21:03.174Z"><meta property="article:author" content="Taeseung Hahn"><meta property="article:tag" content="Others"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taes.me/JupToDoc/"},"headline":"나를 위해 기록하는 Jupyter - HTML/PDF 변환 프로세스","image":["https://taes.me/img/og_image.png"],"datePublished":"2021-02-06T00:00:00.000Z","dateModified":"2023-04-24T12:21:03.174Z","author":{"@type":"Person","name":"Taeseung Hahn"},"publisher":{"@type":"Organization","name":"Taeseung Hahn","logo":{"@type":"ImageObject","url":"https://taes.me/img/ts_logo.png"}},"description":"노트북(.ipynb) 파일은 물론 Reproducible Research의 개념에 매우 잘 어울리는 포멧이다. 그러나 우리는 블로그 작성을 위해서라거나, Reproducibility에는 전혀 관심이 없을 분들을 위한 최종 보고서 작성을 위해서라거나, 파일 수신자가 노트북 파일을 실행할 수 없는 환경에 있다는 등의 다양한 이유로 노트북 파일을 보다 일반적인"}</script><link rel="canonical" href="https://taes.me/JupToDoc/"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=UA-194796796-1" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'UA-194796796-1');</script><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><meta name="naver-site-verification" content="45964f95ee60d3fb1ae3878a54b2ee03a83367b8"><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Find me on Linkedin!" href="https://www.linkedin.com/in/taeshahn/"><i class="fab fa-linkedin"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-9-tablet is-9-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2021-02-06T00:00:00.000Z" title="2/6/2021, 12:00:00 AM">2021-02-06</time></span><span class="level-item"><a class="link-muted" href="/categories/Others/">Others</a></span><span class="level-item">11 minutes read (About 1686 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">나를 위해 기록하는 Jupyter - HTML/PDF 변환 프로세스</h1><div class="content"><p>노트북(.ipynb) 파일은 물론 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Reproducibility">Reproducible Research</a>의 개념에 매우 잘 어울리는 포멧이다. 그러나 우리는 블로그 작성을 위해서라거나, Reproducibility에는 전혀 관심이 없을 분들을 위한 최종 보고서 작성을 위해서라거나, 파일 수신자가 노트북 파일을 실행할 수 없는 환경에 있다는 등의 다양한 이유로 노트북 파일을 보다 일반적인 형태의 문서로 변환해야하는 상황과 마주친다.</p>
+<p>편리하게도 Jupyter Lab은 다양한 형태로 문서를 내보내는 기능을 제공한다. 노트북 파일을 HTML이나 LaTeX 포멧으로 내보낼수도 있고, 내부적으로 pandoc을 이용하여 pdf로 변환하는 기능도 제공하고 있다. 이러한 과정에서 사용자가 포멧을 직접 설정할 할 수 있는 기능들이 일부 존재하기도 하지만, 아무래도 변환 도구들을 직접 사용하는 것이 아니라 Jupyter를 통해서 접근하는 것이기 때문에 상대적으로 번거롭고 자유도도 떨어진다. 이를 테면 지정된 위치에 custom.css 파일을 작성해놓으면 그 파일을 이용하여 HTML로 내보내준다거나, Pandoc 관련된 옵션을 수동으로 수정할 수 있다거나 하는 식이다.</p>
+<p>몇 가지 방법을 시도해봤으나 뭔가 조금씩 마음에 안들었던 나는, 결국 Jupyter Lab에서 마크다운으로 컨텐츠를 내보낸 후, 마크다운을 편집할 수 있는 에디터를 이용하여 내가 원하는 레이아웃으로 최종 변환하는 방법을 선택했다. 이 글에는 나의 삽질의 과정을 기록하고자 한다.</p>
+<h2 id="1-Notebook-to-Markdown"><a href="#1-Notebook-to-Markdown" class="headerlink" title="1. Notebook to Markdown"></a>1. Notebook to Markdown</h2><p>노트북 파일을 마크다운으로 변환하는 방법은 매우 간단하다. Jupyter Lab에서 노트북 파일을 오픈한 후에, <code>File &gt; Export Notebook As ... &gt; Export Notebook As Markdown</code> 버튼을 차례로 누르면 Markdown 파일과 실행 셀의 결과로 출력된 이미지 파일들이 모두 포함된 압축 파일의 다운로드가 시작된다.</p>
+<h2 id="2-Markdown-Editor-and-Preview-Configuration"><a href="#2-Markdown-Editor-and-Preview-Configuration" class="headerlink" title="2. Markdown Editor and Preview Configuration"></a>2. Markdown Editor and Preview Configuration</h2><p>이 글에서는 마크다운 에디터로 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/">Visual Studio Code</a>를 이용할 것이다. Code에는 기본적으로 마크다운 프리뷰 기능이 포함되어 있으며, 프리뷰 렌더링에 사용하는 별도의 css 파일이 존재한다. 해당 파일을 수정하면 Markdown Preview 화면의 출력 결과를 원하는대로 수정할 수 있는데, 여기에는 폰트나 줄간격, (데이터프레임의 출력 결과를 포함하는) 테이블의 표현 방식, 이미지의 정렬 방식 등이 모두 포함된다.</p>
+<p>Windows 버전 1.45.1 기준으로 렌더링에 사용하는 css 파일의 기본 경로는 다음과 같다.</p>
+<blockquote>
+<p>C:\Users\[Username]\AppData\Local\Programs\Microsoft VS Code\resources\app\extensions\markdown-language-features\media\markdown.css</p>
+</blockquote>
+<p>이 파일을 어떤 식으로 수정할 것인지에 대해서는 <a href="#4-github-style-css">4. GitHub Style CSS</a>를 참조하자. </p>
+<h2 id="3-Extension-Configuration"><a href="#3-Extension-Configuration" class="headerlink" title="3. Extension Configuration"></a>3. Extension Configuration</h2><p>다음으로는 마크다운을 HTML과 PDF로 내보내는 기능을 위해 <a target="_blank" rel="noopener" href="https://github.com/yzane/vscode-markdown-pdf">Markdown PDF</a>라는 Extension을 추가로 설치하여 이용할 것이다. 물론 이 Extension에도 Code의 프리뷰 렌더링 css 파일처럼 HTML과 PDF 파일 생성에 이용하는 CSS 파일들이 존재한다. 각각의 CSS 파일의 경로는 다음과 같다.</p>
+<ul>
+<li><p>Markdown to HTML</p>
+<blockquote>
+<p>C:\Users\[Username]\.vscode\extensions\yzane.markdown-pdf-1.4.4\styles\markdown.css</p>
+</blockquote>
+</li>
+<li><p>Markdown to PDF</p>
+<blockquote>
+<p>C:\Users\[Username]\.vscode\extensions\yzane.markdown-pdf-1.4.4\styles\markdown-pdf.css</p>
+</blockquote>
+</li>
+</ul>
+<p>지금까지 언급한 세 개의 파일을 모두 동일하게 설정할 경우, Code에서 프리뷰로 보는 문서와 동일한 레이아웃의 HTML과 PDF를 외부로 내보낼 수 있다.</p>
+<h2 id="4-GitHub-Style-CSS"><a href="#4-GitHub-Style-CSS" class="headerlink" title="4. GitHub Style CSS"></a>4. GitHub Style CSS</h2><p>앞서 언급한 3개의 CSS 파일들을 어떻게 수정할 지는 개인 취향이다. 미적 감각 같은 건 진작에 포기한 나는 GitHub Style Markdown CSS를 가져다가 취향에 맞게 조금만 수정해서 쓰기로 했다. 잠깐 검색을 해보니 두 개 정도를 찾을 수 있었는데, 나는 그 중 하나를 기반으로 다음과 같은 사항들을 추가적으로 수정하여 이용하고 있다. 개인적으로 수정한 css 파일은 <a target="_blank" rel="noopener" href="https://github.com/tshahn/">이 페이지</a>에서 확인 및 다운받을 수 있다.</p>
+<ul>
+<li>기억나는 수정 사항<ul>
+<li>한글 폰트 추가 설정</li>
+<li>코드 영역 폰트 기본 색상 설정</li>
+<li>테이블 내부 폰트 사이즈 조정</li>
+<li>테이블 전체적인 레이아웃 조정</li>
+<li>H1 ~ H6 BOLD 해제</li>
+<li>H1 border-bottom: 1px solid #333;</li>
+<li>table border-collapse: collapse;</li>
+</ul>
+</li>
+</ul>
+<p>내가 수정하기 이전의 원본 css파일은 <a target="_blank" rel="noopener" href="https://github.com/nicolashery/markdownpad-github">여기</a>와 <a target="_blank" rel="noopener" href="https://gist.github.com/andyferra/2554919">저기</a>에서 확인할 수 있다.</p>
+<h2 id="5-With-VS-Code-Setting"><a href="#5-With-VS-Code-Setting" class="headerlink" title="5. With VS Code Setting"></a>5. With VS Code Setting</h2><p>3, 4번 항목에서 각 CSS 파일의 위치를 명시하고 해당 파일을 덮어쓰는 방식으로 진행했지만, 사실 Code와 Extension은 설정 화면에서 custom css 파일을 지정할 수 있는 옵션을 제공하고 있다. 내가 설정을 제대로 못한 것인지, 아니면 Code에 버그가 있는 것인지 상대경로가 아닌 절대경로로 입력하면 제대로 설정이 안되는 상태이긴 하지만…</p>
+<p>그래도 참고용으로 설정 화면에서 CSS 파일을 지정할 수 있는 Setting ID를 기록해 놓는다.</p>
+<ul>
+<li>Setting ID 및 Json (설정 화면에서 ‘markdown styles’로 검색 시 두 옵션 모두 조회 가능)<ul>
+<li>“markdown.styles”: [“TaesHahn.css”]</li>
+<li>“markdown-pdf.styles”: [“TaesHahn.css”]</li>
+</ul>
+</li>
+</ul>
+<p>추가로, 설정 화면에서 <code>Markdown-pdf: Include Default Styles</code> 옵션은 체크 해제하는 것을 권한다. 아래 경로에 있는 파일이 우리가 직접 지정한 CSS 파일과 중복 적용되는 것을 방지하기 위한 설정이다.</p>
+<ul>
+<li>Setting ID 및 Json<ul>
+<li>“markdown-pdf.includeDefaultStyles”: false<blockquote>
+<p>C:\Users\[Username]\.vscode\extensions\yzane.markdown-pdf-1.4.4\node_modules\jsdom\lib\jsdom\browser\default-stylesheet.js # 미사용 설정</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="At-the-end-…"><a href="#At-the-end-…" class="headerlink" title="At the end …"></a>At the end …</h2><p>이것으로 모든 설정을 마무리하였다. 프로그래밍을 하거나 분석 코드를 작성하는 것만큼, 작성한 글이 읽는 이에게 어떤 형태로 전달되는 지는 매우 중요하다. 이 글이 누군가에게는 도움이 되길 바라면서 글을 마친다.</p>
+<p>Happy Coding! Happy Editing!</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://blog.aliencube.org/ko/2016/07/06/markdown-in-visual-studio-code/">Visual Studio Code 에서 깃헙 스타일 마크다운 사용하기</a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>나를 위해 기록하는 Jupyter - HTML/PDF 변환 프로세스</p><p><a href="https://taes.me/JupToDoc/">https://taes.me/JupToDoc/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Taeseung Hahn</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-02-06</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-04-24</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Others/">Others</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=62811fe0d1ad83001a8b9206&amp;product=inline-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Entropy1/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">[Information Theory #1] Entropy에 대한 이해 I</span></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="taeshahn/PagesUtterances" issue-term="pathname" label="comment" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-3-tablet is-3-desktop is-3-widescreen  order-1"><!--!--><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Information-Theory/"><span class="level-start"><span class="level-item">Information Theory</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Others/"><span class="level-start"><span class="level-item">Others</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Taes-R/"><span class="level-start"><span class="level-item">Taes&#039; R</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/WeeklyNLP/"><span class="level-start"><span class="level-item">WeeklyNLP</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-04-23T00:00:00.000Z">2023-04-23</time></p><p class="title"><a href="/Knowledge%20Integration%20in%20Language%20Model/">Knowledge Integration in Language Models</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-02-01T00:00:00.000Z">2023-02-01</time></p><p class="title"><a href="/Language%20Models/">Language Models</a></p><p class="categories"><a href="/categories/WeeklyNLP/">WeeklyNLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-02-28T00:00:00.000Z">2022-02-28</time></p><p class="title"><a href="/Weekly-NLP-Intro/">Weekly-NLP, Introduction</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-06-08T00:00:00.000Z">2021-06-08</time></p><p class="title"><a href="/R03/">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-16T00:00:00.000Z">2021-05-16</time></p><p class="title"><a href="/R02/">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a><p class="is-size-7"><span>&copy; 2023 Taeseung Hahn</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

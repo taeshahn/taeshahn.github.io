@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Language Models - Taeseung Hahn</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Taeseung Hahn"><meta name="msapplication-TileImage" content="/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Taeseung Hahn"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="결론부터 이야기하자면, 언어 모델language model은 각 문자열에 확률을 부여한 확률 모형probabilistic model of strings이고, 언어 모델링language modelling은 이러한 확률을 부여하기 위한 과정을 의미합니다. 이 글에서는 어떠한 맥락에서 이러한 정의가 성립하는지 살펴보도록 하겠습니다. 우리가 한국어를 할 줄 안다는"><meta property="og:type" content="blog"><meta property="og:title" content="Language Models"><meta property="og:url" content="https://taes.me/Language%20Models/"><meta property="og:site_name" content="Taeseung Hahn"><meta property="og:description" content="결론부터 이야기하자면, 언어 모델language model은 각 문자열에 확률을 부여한 확률 모형probabilistic model of strings이고, 언어 모델링language modelling은 이러한 확률을 부여하기 위한 과정을 의미합니다. 이 글에서는 어떠한 맥락에서 이러한 정의가 성립하는지 살펴보도록 하겠습니다. 우리가 한국어를 할 줄 안다는"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://taes.me/img/og_image.png"><meta property="article:published_time" content="2023-02-01T00:00:00.000Z"><meta property="article:modified_time" content="2023-04-24T12:21:03.174Z"><meta property="article:author" content="Taeseung Hahn"><meta property="article:tag" content="NLP"><meta property="article:tag" content="WNLP-PART1"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://taes.me/Language%20Models/"},"headline":"Language Models","image":["https://taes.me/img/og_image.png"],"datePublished":"2023-02-01T00:00:00.000Z","dateModified":"2023-04-24T12:21:03.174Z","author":{"@type":"Person","name":"Taeseung Hahn"},"publisher":{"@type":"Organization","name":"Taeseung Hahn","logo":{"@type":"ImageObject","url":"https://taes.me/img/ts_logo.png"}},"description":"결론부터 이야기하자면, 언어 모델language model은 각 문자열에 확률을 부여한 확률 모형probabilistic model of strings이고, 언어 모델링language modelling은 이러한 확률을 부여하기 위한 과정을 의미합니다. 이 글에서는 어떠한 맥락에서 이러한 정의가 성립하는지 살펴보도록 하겠습니다. 우리가 한국어를 할 줄 안다는"}</script><link rel="canonical" href="https://taes.me/Language%20Models/"><link rel="icon" href="/img/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=UA-194796796-1" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'UA-194796796-1');</script><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><meta name="naver-site-verification" content="45964f95ee60d3fb1ae3878a54b2ee03a83367b8"><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Find me on Linkedin!" href="https://www.linkedin.com/in/taeshahn/"><i class="fab fa-linkedin"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-9-tablet is-9-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2023-02-01T00:00:00.000Z" title="2/1/2023, 12:00:00 AM">2023-02-01</time></span><span class="level-item"><a class="link-muted" href="/categories/WeeklyNLP/">WeeklyNLP</a></span><span class="level-item">20 minutes read (About 2978 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Language Models</h1><div class="content"><p>결론부터 이야기하자면, 언어 모델<em>language model</em>은 각 문자열에 확률을 부여한 확률 모형<em>probabilistic model of strings</em>이고, 언어 모델링<em>language modelling</em>은 이러한 확률을 부여하기 위한 과정을 의미합니다. 이 글에서는 어떠한 맥락에서 이러한 정의가 성립하는지 살펴보도록 하겠습니다.</p>
+<p>우리가 한국어를 할 줄 안다는 것은 무엇을 의미할까요? 친구가 우리에게 ‘오늘 뭐 해?’라고 물어본 상황을 한 번 가정해보겠습니다. 우리가 질문을 정확히 이해했다면 아마 다음의 (1), (2)번과 같은 대답들을 떠올릴 수 있을 것입니다. 한편, 동일한 질문에 대해서 (3)번이나 (4)번처럼 대답할 일은 별로 없겠죠.</p>
+<blockquote>
+<ol>
+<li>오늘은 집에서 좀 쉬려고!</li>
+<li>응, 너랑은 안놀아.</li>
+<li>어제 피자 먹었어.</li>
+<li>나는 요즘 박보영이 좋더라.</li>
+</ol>
+</blockquote>
+<p>이를 확률의 관점에서 이야기 해보자면, 우리가 ‘오늘 뭐 해?’라는 질문을 받았을 때 ’오늘은 집에서 좀 쉬려고!’ 혹은 ‘응, 너랑은 안놀아.’라는 문장을 선택할 확률은 ‘어제 피자 먹었어.’나 ‘나는 요즘 박보영이 좋더라.’라는 문장을 선택할 확률보다 훨씬 더 높아야 한다는 의미입니다. 즉, ‘언어를 이해하고 사용한다’라는 개념을 매우 거칠게 정의하자면, 해당 언어에서 각 문자열들의 발생 확률을 추측하는 과정이라고 볼 수 있습니다. 이러한 맥락에서, 우리는 모든 후보 문자열에 대한 발생 확률을 추정하는 과정을 언어 모델링<em>language modelling</em>, 그러한 과정을 통해 생성된 문자열들의 확률 분포를 언어 모형<em>language model</em>이라고 부릅니다.</p>
+<h2 id="확률의-추정-—-MLE"><a href="#확률의-추정-—-MLE" class="headerlink" title="확률의 추정 — MLE"></a>확률의 추정 — MLE</h2><p>앞서 우리는 언어 모델링을 각 문자열에 대한 발생 확률을 추정하는 과정으로 정의했습니다. 그러면 이러한 확률들은 어떻게 추정할 수 있을까요? 가장 쉽게 떠올릴 수 있는 방법은 각 문장들의 발생 빈도를 기반으로 하는 것입니다. 예를 들어, 우리에게 10000 문장의 대화 데이터가 주어졌는데, 그 중에서 200 문장이 ‘안녕’이라는 문장이라면 해당 문자열<em>string</em>의 발생 확률은 200&#x2F;10000 &#x3D; 2% 정도 될 것이라고 추정해 볼 수 있는 것이죠. 주어진 데이터에 기반하여 가능도<em>likelihood</em>가 최대가 되도록 확률을 추정하는 이러한 방법을 최대 가능도 추정법<em>MLE, Maximum Likelihood Estimation</em>이라고 부릅니다. 확률론에 기반하고 있는 추정 방법이지만 이 글에서는 깊게 다루지 않습니다. 단순히 ‘문자의 발생빈도&#x2F;전체빈도’를 기준으로 각 문자열의 발생 확률을 추정하는 방법이라고만 이해하고 넘어가도록 하겠습니다.</p>
+<p>빈도를 기반으로 확률을 추정할 수 있게 된 것은 좋은데, 문장 레벨에서 발생 빈도를 카운트 하다보면 발생하는 문제가 있습니다. 우선, 우리가 방금 살펴본 MLE는 각 문장의 발생 확률을 ‘정확한 법칙에 따라 계산’하는 것이 아니라 ‘데이터에 기반하여 추정’하는 방법이라는 사실을 기억할 필요가 있습니다. 또한 MLE에서는 기본적으로 주어진 데이터(샘플)가 전체 언어(모집단)을 대표하기에 충분하다는 것을 가정합니다. 따라서 전체 언어를 대표할 수 있을만한 충분한 데이터를 수집하는 것은 무엇보다 중요한 일이 되는데, ‘언어의 변동성’은 이러한 데이터를 수집하는 것을 매우 어렵게 만듭니다. 다음 단락에서는 ‘언어의 변동성’이 무엇인지 살펴보도록 하겠습니다.</p>
+<h2 id="언어의-변동성-A-Possible-Variability-of-Languages"><a href="#언어의-변동성-A-Possible-Variability-of-Languages" class="headerlink" title="언어의 변동성 A Possible Variability of Languages"></a>언어의 변동성 <em>A Possible Variability of Languages</em></h2><p>언어가 가지는 기본적인 성질들 중 하나인 ‘변동성’은, 언어의 변화 가능성이 무한하다는 것을 의미합니다. 즉, 동일한 의미를 지니는 하나의 문자열은 여러 형태를 지닐 수 있다는 의미입니다. 예를 들어, 앞서 살펴보았던 ‘오늘은 좀 쉬려고!’라는 문장은, 아래와 같이 동일한 의미를 가지는 수없이 많은 문장들로 고쳐쓸 수 있습니다.</p>
+<blockquote>
+<p>1-1) 집에서 오늘은 좀 쉬려고!<br>1-2) 오늘은 집에서 조금 쉬려고!<br>1-3) 오늘 그냥 집에서 좀 쉬려고!<br>1-4) 오늘은 좀 쉴래!</p>
+</blockquote>
+<p>문제는, 이러한 형태 변화가 무한히 가능하기 때문에, 우리가 언어 모델링을 위해 아무리 많은 데이터를 수집한다고 하더라도 다양한 형태들 중 일부만을 포함할 수 밖에 없다는 데에 있습니다. 다시 말해, 언어의 변화 가능성은 무한한 데에 반해 우리의 데이터는 한정적일 수 밖에 없으므로, 언어 모델링에 사용되는 데이터는 전체 언어를 충분히 대표하지 못하게 됩니다. 따라서, 우리가 수집한 데이터에는 나타나지 않은 문장들의 실제 발생 확률은 0이 아님에도 불구하고, MLE 기반의 확률 추정에서는 해당 문장들의 발생 확률을 모두 0으로 추정하는 문제가 발생합니다. 예를 들어, 우리가 수집한 데이터에 <code>(1) 오늘은 좀 쉬려고!</code>라는 문장이 있었더라도, 문장 레벨에서의 MLE에서는 동일한 의미를 지니고 있는 <code>1-1</code>, <code>1-2</code>, <code>1-3</code>, <code>1-4</code> 문장의 발생 확률을 0으로 추정할 수도 있습니다. 그리고 이러한 문제는 문장 레벨에서 발생 빈도를 카운트할 때 더욱 두드러지게 되는데, 정확하게 동일한 문장이 관측될 확률은 동일한 단어가 관측될 확률에 비해 상대적으로 작을 수 밖에 없기 때문입니다. </p>
+<p>또 다른 예시로 ‘사랑하다’라는 의미의 ‘love’라는 영어 단어를 한번 살펴볼까요? 해당 단어는 주어의 단&#x2F;복수 여부에 따라, 시제에 따라, 품사 변화에 따라 loves, loved, loving 등 매우 다양한 형태의 형태로 변화할 수 있습니다. 이러한 단어의 형태 변화를 굴절&#x2F;파생 형변환<em>inflectional&#x2F;derivational morphology</em>이라고 부르며, 언어의 무한한 변동성의 하나의 원인이 됩니다. 단어 레벨에서의 변동성을 완화하기 위한 방법으로는 어간 추출<em>stemming</em>과 표제어 추출<em>lemmatization</em>과 같은 방법들을 사용할 수 있습니다.</p>
+<p>정리해보겠습니다. 언어는 단어 레벨에서의 형 변환과 문장 레벨에서의 단어 조합으로 인해 무수히 많은 변화 가능성을 지니고 있습니다. 이러한 언어의 변동성은 우리가 수집한 데이터가 전체 언어를 정확하게 대표하는 것을 불가능하게 만들고, 이는 MLE를 통해 정확한 확률을 추정하는 것을 어렵게 만듭니다. 단어 레벨에서의 형 변환은 어간 추출이나 표제어 추출과 같은 방법을 통해 완화될 수 있으나, 이 글에서는 자세히 다루지 않습니다. 문장 레벨에서의 단어 조합으로 인한 변동성은 문장을 단어들의 조합으로 다룸으로써 완화될 수 있으며, 다음 단락에서 자세히 살펴보도록 하겠습니다.</p>
+<h2 id="문장-x3D-단어들의-조합"><a href="#문장-x3D-단어들의-조합" class="headerlink" title="문장 &#x3D; 단어들의 조합"></a>문장 &#x3D; 단어들의 조합</h2><p>제한된 데이터로 문장의 발생 확률을 예측하려고 하다보니, 우리가 수집한 데이터에 있는 문장들과 조금이라도 다른 문장들의 발생 확률들은 모두 0으로 추정하게 되었습니다. 우리는 ‘문장<em>sentence</em>’을 조금 작은 단위인 ‘단어들의 조합<em>combination of words</em>’라는 관점에서 바라봄으로써 이러한 문제를 다소 완화할 수 있습니다. 즉, n개의 단어로 구성된 문장 $Sentence_n$은 각 단어 $word_n$을 통해 다음과 같이 표현될 수 있습니다. 아래에서 특수문자 ‘;’는 이어붙임<em>concatenation</em>을 나타냅니다.</p>
+<p>$$ sentence_n &#x3D; word_1; word_2; word_3; \ldots; word_n $$</p>
+<p>이러한 관점 전환을 통해, 우리는 이제 문장의 발생 확률을 각 등장 단어들의 발생 확률의 곱셈을 통해 추정할 수 있게 되었습니다. 따라서, 이제는 우리가 확률을 추정하고자 하는 문자열과 정확하게 동일한 문자열이 수집한 데이터에 포함되어 있지 않더라도 0이 아닌 확률을 추정할 수 있습니다.</p>
+<ul>
+<li>$ P(오늘은\ 집에서\ 좀\ 쉬려고 !) &#x3D; P(오늘은) \times P(집에서) \times P(좀) \times P(쉬려고) \times P(!) $</li>
+<li>$ P(집에서\ 오늘은\ 좀\ 쉬려고 !) &#x3D; P(집에서) \times P(오늘은) \times P(좀) \times P(쉬려고) \times P(!) $</li>
+</ul>
+<p>그러나 이러한 접근법에 장점만 있는 것은 아닙니다. 문장을 단어들의 조합으로 분할하는 과정에서, 단어가 등장하는 순서를 고려할 수 없게 되기 때문입니다. 다음의 두 문장의 예시를 통해 살펴보도록 하겠습니다.</p>
+<blockquote>
+<p>5-1) I am traveling from Seoul to Edinburgh.<br>5-2) I am traveling from Edinburgh to Seoul.</p>
+</blockquote>
+<p>각 문장에서 사용되고 있는 단어는 정확하게 동일하기 때문에, 단어 레벨에서의 MLE를 이용하면 두 문장의 발생 확률은 동일하게 추정됩니다. 문제는, From Seoul과 from Edinburgh, 혹은 to Edinburgh와 to Seoul은 다른 의미를 가지고 있고 발생 확률도 다를텐데, 현재 우리의 언어 모형은 이러한 단어 순서에 따른 차이를 전혀 고려하지 못한다는 점입니다. </p>
+<p>지금까지의 내용을 정리하자면, 우리는 MLE를 통해 문자열의 확률을 추정하고 있습니다. 그리고 데이터에서 관측되지 않은 문자열에 대한 발생 확률을 모두 0으로 추정하는 것은 MLE의 한계라고 볼 수 있습니다. 우리는 문장 레벨이 아닌 단어 레벨에서 빈도를 카운트 함으로써 이를 일정 수준 완화할 수 있으나, 더 이상 단어의 발생 순서를 고려할 수 없게된다는 새로운 문제와 마주하게 됩니다. 다음 글에서는 이러한 문제를 완화하기 위한 방법인 n-grams에 대해 살펴보도록 하겠습니다.</p>
+<h2 id="요약"><a href="#요약" class="headerlink" title="요약"></a>요약</h2><ul>
+<li>언어 모델링은 각 후보 문자열에 확률을 할당하는 과정이며, 언어 모델은 각 문자열의 확률 분포를 나타낸다.</li>
+<li>문자열의 발생 확률은 MLE를 통해 추정할 수 있다.</li>
+<li>문장 레벨에서의 문자열은 발생 빈도가 너무 낮기 때문에, 단어 레벨로 분할하여 확률을 추정할 수 있다.</li>
+<li>문장을 단어 레벨로 분할할 경우 단어의 순서를 고려할 수 없다.</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Language Models</p><p><a href="https://taes.me/Language Models/">https://taes.me/Language Models/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>Taeseung Hahn</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2023-02-01</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2023-04-24</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/NLP/">NLP</a><a class="link-muted mr-2" rel="tag" href="/tags/WNLP-PART1/">WNLP-PART1</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://platform-api.sharethis.com/js/sharethis.js#property=62811fe0d1ad83001a8b9206&amp;product=inline-share-buttons" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Knowledge%20Integration%20in%20Language%20Model/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Knowledge Integration in Language Models</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Weekly-NLP-Intro/"><span class="level-item">Weekly-NLP, Introduction</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><script src="https://utteranc.es/client.js" repo="taeshahn/PagesUtterances" issue-term="pathname" label="comment" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-3-tablet is-3-desktop is-3-widescreen  order-1"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#확률의-추정-—-MLE"><span class="level-left"><span class="level-item">1</span><span class="level-item">확률의 추정 — MLE</span></span></a></li><li><a class="level is-mobile" href="#언어의-변동성-A-Possible-Variability-of-Languages"><span class="level-left"><span class="level-item">2</span><span class="level-item">언어의 변동성 A Possible Variability of Languages</span></span></a></li><li><a class="level is-mobile" href="#문장-x3D-단어들의-조합"><span class="level-left"><span class="level-item">3</span><span class="level-item">문장 = 단어들의 조합</span></span></a></li><li><a class="level is-mobile" href="#요약"><span class="level-left"><span class="level-item">4</span><span class="level-item">요약</span></span></a></li></ul></div></div><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Information-Theory/"><span class="level-start"><span class="level-item">Information Theory</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Others/"><span class="level-start"><span class="level-item">Others</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/Taes-R/"><span class="level-start"><span class="level-item">Taes&#039; R</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/WeeklyNLP/"><span class="level-start"><span class="level-item">WeeklyNLP</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-04-23T00:00:00.000Z">2023-04-23</time></p><p class="title"><a href="/Knowledge%20Integration%20in%20Language%20Model/">Knowledge Integration in Language Models</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-02-01T00:00:00.000Z">2023-02-01</time></p><p class="title"><a href="/Language%20Models/">Language Models</a></p><p class="categories"><a href="/categories/WeeklyNLP/">WeeklyNLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-02-28T00:00:00.000Z">2022-02-28</time></p><p class="title"><a href="/Weekly-NLP-Intro/">Weekly-NLP, Introduction</a></p><p class="categories"><a href="/categories/NLP/">NLP</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-06-08T00:00:00.000Z">2021-06-08</time></p><p class="title"><a href="/R03/">[Taes&#039; R #3] 분석을 위한 데이터셋의 형태 변환과 결합에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2021-05-16T00:00:00.000Z">2021-05-16</time></p><p class="title"><a href="/R02/">[Taes&#039; R #2] &#039;좋은 형태의 데이터&#039;와 &#039;Tidiness&#039;에 대하여</a></p><p class="categories"><a href="/categories/Taes-R/">Taes&#039; R</a></p></div></article></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/ts_logo.png" alt="Taeseung Hahn" height="28"></a><p class="is-size-7"><span>&copy; 2023 Taeseung Hahn</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

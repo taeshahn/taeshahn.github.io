@@ -1,0 +1,182 @@
+---
+title: "[Taes' R #1]() R에서의 분석 프로세스와 일관된 인터페이스"
+categories:
+  - Taes' R
+tags:
+  - Taes' R
+date: 2019-09-20
+---
+
+## 0. 시작하기에 앞서  
+
+안녕하세요, 지금까지 만든 블로그 수가 작성한 글의 수보다 많은 Taes 입니다. 블로그 운영을 매년 새해 목표로만 간직해오다가, 지금은 소소하게 'R과 관련된 포스트 5개 작성해보기'를 목표로 글을 작성하고 있습니다. 작성한 글은 제 개인 [블로그]()[1]()와 SK T Hub에 동시에 업로드 됩니다. 제가 학습한 내용들을 정리하는 차원에서 작성하는 글들이므로, 잘못 이해한 부분들이 있을 수 있습니다. 그러한 부분들은 지적해주시면 더욱 성장하는 기회로 삼고 수정할 수 있도록 하겠습니다 :)
+
+첫 번째 글의 주제는 'R에서의 분석 프로세스와 일관된 인터페이스'입니다.
+
+## 1. 공포스러운 사실 ㅡ 통일되지 않은 인터페이스, 그 난잡함에 대하여  
+
+R은 분명 많은 장점을 가진 언어다. 그 중 하나는 오픈 소스라는 특성 덕분에 수많은 Contributor들에 의해 다양한 최신(cutting edge) 알고리즘들이 빠르게 구현되고, 배포되며, 디버깅되는 생태계가 구성되어 있다는 점이다. 다만 동일한 사유로 인해 파생되는 단점도 있는데, 많은 알고리즘이 서로 다른 라이브러리에서 구현되고, 각각의 라이브러리의 Author가 다르며, 이 때문에 알고리즘을 이용하기 위한 인터페이스도 모두 다르게 개발되고 있다는 점이다.
+
+이야기가 잘 와닿지 않을 수도 있으니, 간단한 예시로 Decision Tree를 구현한 패키지들을 한 번 살펴보자. 간단한 검색으로도 tree, rpart, party 등 여러 종류의 패키지가 존재하는 것을 확인할 수 있다.
+
+> NOTE: 물론 세부적으로 이용되는 알고리즘에는 다음과 같이 약간의 차이가 있다.
+> - tree: Binary recursive partitioning
+> - rpart: Classification and regression trees(CART)
+> - party: Unbiased recursive partitioning based on permutation tests
+
+앞의 두 개 패키지에서 모형을 fitting하는 함수는 각각 `tree()`와 `rpart()`이다. 함수명이 다른 것은 물론이고, 아래에서 확인할 수 있듯이 함수에서 사용되는 세부적인 파라미터에도 차이가 있다.
+
+
+	`R
+rpart(formula, data, weights, subset, na.action = na.rpart, method,
+  model = FALSE, x = FALSE, y = TRUE, parms, control, cost, …)
+	`
+
+
+	`R
+tree(formula, data, weights, subset,
+ na.action = na.pass, control = tree.control(nobs, ...),
+ method = "recursive.partition",
+ split = c("deviance", "gini"),
+ model = FALSE, x = FALSE, y = TRUE, wts = TRUE, ...)
+	`
+
+하지만 머리 아파하기에는 아직 이르다. 각각에 모형에 Cross Validation을 적용하고 싶다면 문제는 더 심각해진다. tree 패키지에서 CV를 지원하는 함수는 `cv.tree()`이고, 이에 대응되는 rpart 패키지의 함수는 `print.cp()`로, 통일성이라고는 찾아볼 수가 없기 때문이다.
+
+긍정적인 마인드를 가져야 행복해진다고 하니, 함수명과 파라미터 쯤이야 알고리즘별로 정리해놓거나 그냥 외워서 해결할 수 있다고 생각해보자. 그렇다고해도 아직 문제는 남아있다. 각각의 함수에 구현되어 있는 CV는 완전히 동일할까? 이 질문에 대한 나의 답변은 '사실 나도 잘 모르겠다'이다. 두 패키지의 함수를 모두 뜯어보기 전까지는 누구도 자신있게 그렇다고 말할 수 없을 것이다.
+
+가장 공포스러운 사실은 Decision Tree만 살펴보아도 이렇게 다른데, 우리가 이용하는 머신러닝 알고리즘은 적게는 수십개에서 많게는 수백개에 이른다는 것이다.
+
+## 2. 옆 동네 이야기 ㅡ Python과 Scikit-learn  
+
+잠깐 옆 동네 Python의 사정을 한 번 살펴보자. 오픈 소스라는 특징을 갖는 것은 Python도 마찬가지지만, Python에서의 머신러닝 알고리즘들의 상황은 훨씬 더 깔끔하게 정리되어 있는 것처럼 보인다.  Google의 Summer of Code Project(GSoC)로부터 시작된 Scikit-learn이라는 라이브러리가 있기 때문이다. Python에서 구현되는 머신러닝의 사실상의 표준이라고 할 수 있는 Scikit-learn은 머신러닝 모델링 프로세스에서 이용할 수 있는 일관된 인터페이스(Consistent Interface)를 제공한다.
+
+Scikit-learn에는 물론 많은 장점들이 있지만, R을 주로 이용하던 내가 해당 라이브러리를 처음 접하면서 가장 먼저 느꼈던 매력 포인트는 모든 모형에 대해 깔끔하게 통일된(일관된) 인터페이스를 제공한다는 점이었다.
+
+R에서 패키지마다 모델을 fitting하는 함수가 달랐던 것을 다시 한 번 떠올려보자. 이와는 반대로, Scikit-learn에서는 내가 이용하는 알고리즘에 관계 없이, 모형을 fitting하는 메서드는 항상 `fit()`이고, 해당 모형을 이용해서 예측을 수행하는 메서드는 항상 `predict()`이다. 내가 이용하는 모형이 Generalized Linear Regression이든, Support Vector Machine이든, Random Forest이든 상관없다. 단순히 원하는 모형의 객체를 생성하고, `fit()` 메서드를 실행함으로써 해당 모형을 training(fitting) 시킬 수 있다.
+
+사실 공통적인 기능을 가진 객체들을 구현하기 위해 하나의 클래스를 정의하고, 해당 기능을 동일한 메서드를 통해 제공하는 것은 OOP(Object Oriented Programming)가 지향하는 기본적인 방향성이다. 이러한 맥락에서 생각해보면 Scikit-learn은 OOP의 기본적인 방향성에 잘 부합하는 형태로 설계된 라이브러리라고 이해할 수도 있겠다.
+
+## 3. 모델링 프로세스  
+
+모형에 관계없이 공통적인 기능이 요구된다는 이야기는, 모델링 과정에 일정한 프로세스가 존재한다는 의미이기도 하다. 조금만 생각을 해보면, 대부분의 모델링 프로세스는 세부적으로 이용되는 모형과 관계없이 다음과 같은 과정들로 구성되어 있다는 사실을 쉽게 떠올릴 수 있다.
+
+![*from caret vignettes*]()(modeling_process.png)
+
+| *\< from caret vignettes \>* |
+|:---:|
+
+간단히 요약하자면, 데이터 전처리, 후보 파라미터 설정, Cross-Validation을 통한 최적 파라미터의 설정, 최적 파라미터를 이용한 모형 Fitting(Traning) 정도를 공통적인 과정으로 볼 수 있겠다. 다음으로 자연스럽게 떠오르는 질문은, R에는 이와 같은 프로세스의 인터페이스를 통일된 형태로 제공하는 패키지가 없는지에 대한 것이다.
+
+왜 없겠는가? 사실 없으면 이 글을 시작도 안했겠지. 드디어 오늘의 주인공 caret을 소개할 시간이다.
+
+## 4. 주인공의 등장 - Package:caret  
+
+caret은 **C**lassification **A**nd **RE**gression **T**raining의 약자로, 예측 모형을 생성하기 위한 매우 다양한 기능들을 제공하는 패키지이다. 포함하고 있는 대략적인 기능들은 다음과 같다.
+
+- Visualization (wrapper for lattice)
+- Pre-Processing (one-hot-encoding, centering and scaling, Imputation, etc.)
+- Data Splitting
+- Model Training and Parameter Tuning
+- Measuring Performance
+- Parallel Processing
+
+사실 caret은 Scikit-learn과 완전히 동일한 방식ㅡ모형의 객체를 생성하고 메서드를 이용하는 방식ㅡ으로 작동하지는 않는다. 이는 두 언어의 기본적인 Object Oriented System과 관련이 있는데, R은 Generic-function OO를 기반으로 하고 있는 반면에, Python에서의 OOP는 message passing 방식을 기반으로 하고 있기 때문이다.
+
+(물론 엄밀히 말하자면 R에서의 객체지향시스템은 S3, S4, RefClass 구분되고, RefClass는 Message Passing 방식이라고 볼 수도 있다. 그러나 Base R을 포함한 대다수의 패키지들은 S3로 구현되어 있으며, caret 또한 마찬가지이다.)
+
+## 5. Hands-on caret  
+
+이 글에서는 caret이 제공하는 기능들 중 Data Splitting, Model Training, Predicting, Measuring Performace에 대해서만 매우 가볍게 소개할 예정이다. 알고리즘에 대한 설명이나 결과 해석을 위한 글은 아니니, 개별적인 패키지를 이용할 경우에 비해 caret을 이용할 경우 어떤 식으로 코드가 통일성을 갖게되는지에 집중해서 살펴보면 좋을 것 같다.
+
+(1) 데이터의 분할은 createDataPartition 함수를 이용해서 수행할 수 있다.
+
+
+	`R
+library(caret)
+data(iris)
+# iris = as_tibble(iris)
+
+tr_idx = createDataPartition(iris$Species, p = 0.7, list = F)
+tr_data = iris[tr]()_idx, ]
+te_data = iris[-tr]()_idx, ]
+	`
+
+(2) 트레이닝에 이용되는 파라미터들은 `trainControl()` 함수를 통해 설정할 수 있다. 앞서 이야기 했던 Cross Validation을 위해 다음과 같이 설정하고, 두 개의 모형에서 동일한 형태로 해당 파라미터를 이용해보도록 하자.
+
+
+	`R
+par_control = trainControl(method = "repeatedcv",
+   number = 10,
+   repeats = 5)
+	`
+
+(3-1) 첫번째로 시도해 볼 모형은 Random Forest이다. `train()`이라는 동일한 함수에, method = "rf"를 지정함으로써 fitting할 수 있다.
+
+
+	`R
+(fit_rf = train(Species  .,
+data = tr_data,
+method = "rf",
+trControl = par_control,
+verbose = F))
+	`
+
+(3-2) fitting한 모형을 통한 예측은 `predict()` 함수를 통해 수행할 수 있고, `confusionMatrix()` 함수는 Classification에 이용되는 다양한 Measure들을 한 눈에 살펴볼 수 있는 기능을 제공한다.
+
+
+	`R
+pred_rf = predict(fit_rf, newdata = te_data)
+confusionMatrix(pred_rf, te_data$Species)
+	`
+
+(4-1) 다음으로는 Regularized Discriminant Analysis를 수행해보자. Random Forest와 마찬가지로 `train()` 함수를 이용하지만, 파라미터 method의 값만 "rda"로 변경해주면 된다.
+
+
+	`R
+(fit_rda = train(Species  .,
+ data = tr_data,
+ method = "rda",
+ trControl = par_control,
+ verbose = F))
+	`
+
+(4-2) RDA모형을 이용한 예측에는 역시 동일하게 `predict()` 함수를 사용하되, 이용하는 모형만 fit_rf에서 fit_rda로 변경해주면 된다.
+
+
+	`R
+pred_rda = predict(fit_rda, newdata = te_data)
+confusionMatrix(pred_rda, te_data$Species)
+	`
+
+## 6. 일관된 인터페이스(Consistent Interface)의 장점  
+
+일관된 인터페이스를 이용하는 것은 다음과 같은 장점들을 지닌다.
+
+- 각 알고리즘이 어떤 패키지를 필요로 하는지 외울 필요가 없다. `names(getModelInfo())` 명령어를 통해 caret내에서 이용할 수 있는 알고리즘의 종류를 확인할 수 있다. 튜닝 파라미터 등의 상세한 정보는 ?caret::train 혹은 [이 페이지]()[2]()를 통해 살펴볼 수 있다.
+
+- 각 라이브러리마다 다르게 구현되어 있는 모델을 생성하고, 파라미터를 튜닝하고, 트레이닝하고, 예측하고, 예측 결과의 성능을 평가하는 명령어를 별도로 외울 필요가 없다.
+
+- 대부분의 모형에 파라미터만 변경된 비슷한 코드를 이용하게 되기 때문에, 코드 재사용에 있어서 효율적인 측면이 있다. 재사용율이 높아진다는 것은 곧 생산성의 제고와도 직결된다. 여기에 덧붙여서 향상된 가독성(Enhanced Readability)은 덤 정도로 가져가면 되겠다.
+
+- 전처리부터 모델링까지의 과정의 흐름을 코드 상에서 보다 명확하게 확인할 수 있다. 따라서 집중이 필요한 부분에 보다 집중할 수 있는 환경이 구성된다. 이용할 모형을 결정하고, 지표를 보고 판단하고, 파라미터를 결정하는 방법과 같이 의사결정이 필요한 부분에 보다 집중할 수 있다.
+
+- 이와 같은 코딩 스타일은 일종의 표준으로 작동할 수 있다. 팀 플레이를 할 경우에 더욱 중요해지는 특성인데, 분석 코드를 작성한 사람에 관계없이 코드의 흐름이 통일성을 갖게 되기 때문에 유지 보수가 용이해지는 특성을 갖는다.
+
+## 7. 마무리  
+
+작성하다보니 처음 생각보다는 꽤 긴 글이 되었다. 그럼에도 불구하고 caret 패키지를 소개하는 글 치고는 패키지의 기본 기능에 대한 실습 코드가 매우 빈약하다는 느낌을 지울 수가 없을텐데, 이건 특별한 이유 때문은 아니고 작성자가 글을 쓰다가 지쳐서 그렇다. 그래도  최소한의 예의를 위해 추가적인 정보들을 얻을 수 있는 페이지들을 Reference에 남기니, 관심 있으신 분들은 확인해보시면 좋을 것 같다.
+
+사실 어떤 코딩 스타일을 선택할 것인지에 대한 결정은 전적으로 분석가에게 달려있지만, 이 글을 통해 caret 패키지와 분석 프로세스에서의 표준화된 인터페이스에 대한 매력을 조금이라도 느낄 수 있었다면 더할 나위 없이 기쁘겠다.
+
+## *\< References \>*
+
+- [caret: Intro. Document]()[3]()
+- [caret: Vignetts]()[4]()
+- [caret: R-bloggers tutorial]()[5]()
+
+[1](): https://taes.me
+[2](): http://topepo.github.io/caret/train-models-by-tag.html
+[3](): http://topepo.github.io/caret/index.html
+[4](): https://cran.r-project.org/web/packages/caret/vignettes/caret.html
+[5](): https://www.r-bloggers.com/user2013-the-caret-tutorial/

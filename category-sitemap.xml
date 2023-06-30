@@ -9,36 +9,36 @@
 
 
     <url>
-        <loc>https://taes.me/categories/WeeklyNLP/</loc>
-        <lastmod>2023-06-30T01:59:58.076Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://taes.me/categories/NLP/</loc>
-        <lastmod>2023-06-30T01:59:58.076Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://taes.me/categories/Information-Theory/</loc>
-        <lastmod>2023-06-30T01:59:58.076Z</lastmod>
+        <lastmod>2023-06-30T02:03:08.939Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://taes.me/categories/Taes-R/</loc>
-        <lastmod>2023-06-30T01:59:58.076Z</lastmod>
+        <lastmod>2023-06-30T02:03:08.939Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://taes.me/categories/WeeklyNLP/</loc>
+        <lastmod>2023-06-30T02:03:08.935Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://taes.me/categories/Information-Theory/</loc>
+        <lastmod>2023-06-30T02:03:08.935Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://taes.me/categories/Others/</loc>
-        <lastmod>2023-06-30T01:59:58.076Z</lastmod>
+        <lastmod>2023-06-30T02:03:08.935Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

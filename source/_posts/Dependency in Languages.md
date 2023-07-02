@@ -1,11 +1,6 @@
 ---
 title: Dependency in Language
 date: 2023/07/02
-category:
-- WeeklyNLP
-tag:
-- NLP
-- WNLP-PART1
 toc: true
 ---
 

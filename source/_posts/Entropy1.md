@@ -1,10 +1,11 @@
 ---
 title: "[Information Theory #1] Entropy에 대한 이해 I"
+date: 2021-03-17
 categories:
   - Information Theory
 tags:
   - Information Theory
-date: 2021-03-17
+toc: true
 ---
 
 <!-- 블로그 포스팅을 다짐했다가 포기하기를 벌써 몇 번째...
@@ -26,8 +27,8 @@ date: 2021-03-17
 이 글에서 다룰 엔트로피는 정보이론(Information Theory)의 아버지로 불리는 천재 클로드 섀넌이 창안한 개념이다. 엔트로피라는 용어 자체는 사실 열역학 등의 물리학 분야에서 먼저 사용되었지만, 이 글에서는 섀넌이 정보 이론에서 정립한 정보 엔트로피라는 개념에 대해서 살펴보고자 한다.
 
 두 개의 포스트에 걸쳐서 다음의 두 가지 서로 다른 관점에서 엔트로피를 이해해 볼 예정이다.
-  - 정보량에 대한 측도 *Measurement of Information*
-  - 불확실성에 대한 측도 *Measurement of Uncertainty (of the system)*
+    - 정보량에 대한 측도 *Measurement of Information*
+    - 불확실성에 대한 측도 *Measurement of Uncertainty (of the system)*
 
 ## 3. '정보량에 대한 측도'라는 관점에서
 

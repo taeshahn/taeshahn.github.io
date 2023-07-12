@@ -1,17 +1,18 @@
 ---
 title: "Hexo 블로그로의 전환과 Vexo 테마 수정기"
+date: 2021-05-08
 categories:
   - Others
 tags:
   - Others
-date: 2021-05-08
+toc: true
 ---
 
 이 글은 오늘은 또 무슨 딴짓을 하고 살았는지에 대한 기록이다.
 
 <center>
 
-![](https://i.imgur.com/bR69fdj.jpeg)
+![img](https://i.imgur.com/bR69fdj.jpeg)
 
  ~~하라는 데이터 공부는 안하고~~
  </center>

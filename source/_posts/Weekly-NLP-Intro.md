@@ -2,9 +2,9 @@
 title: Weekly-NLP, Introduction
 date: 2022/02/28
 category:
-- NLP
+  - NLP
 tags:
-- NLP
+  - NLP
 toc: true
 ---
  

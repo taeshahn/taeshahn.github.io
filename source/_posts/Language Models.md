@@ -2,10 +2,10 @@
 title: Language Models
 date: 2023/02/01
 category:
-- WeeklyNLP
+  - WeeklyNLP
 tag:
-- NLP
-- WNLP-PART1
+  - NLP
+  - WNLP-PART1
 toc: true
 ---
 

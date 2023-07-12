@@ -2,13 +2,14 @@
 title: Knowledge Integration in Language Models
 date: 2023/04/23
 category:
-- NLP
+  - NLP
 tags:
-- NLP
+  - NLP
 toc: true
 ---
 
 # 들어가며 *Intro*
+
 최근 OpenAI의 ChatGPT로부터 시작된 언어모형에 대한 관심이 뜨겁습니다. 마치 알파고와 이세돌 9단 사이의 바둑 대국 이후에 일어났던 인공지능 분야에 대한 관심이 재현된 것만 같네요. ChatGPT가 이러한 뜨거운 관심을 받고 있는 이유는, 마치 사람과도 같은 자연스러운 문장을 생성할 수 있을 뿐만 아니라, 일반적인 질의 응답을 넘어서 간단한 추론, 연산, 프로그래밍 등의 같은 다양한 작업들을 수행할 수 있기 때문으로 보입니다. 그러나 ChatGPT에도 여전히 극복해야할 다양한 문제점들이 남아있으며, 대표적인 과제 중 하나는 바로 언어 모형의 신뢰성*Reliability*에 대한 부분입니다. 이 글에서는 언어 모형이 사실에 기반하지 않은 내용을 마치 사실처럼 지어내는 환각 현상*Hallucination*에 대해 알아보고, 이를 완화하기 위해 어떤 방법들이 연구되어 왔는지 간단하게 리뷰해보도록 하겠습니다.
 
 # 언어 모형의 환각 현상 *Hallucination of Language Models*

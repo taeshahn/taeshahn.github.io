@@ -1,10 +1,11 @@
 ---
 title: "나를 위해 기록하는 Jupyter - HTML/PDF 변환 프로세스"
+date: 2021-02-06
 categories:
   - Others
 tags:
   - Others
-date: 2021-02-06
+toc: true
 ---
 
 노트북(.ipynb) 파일은 물론 [Reproducible Research][1]의 개념에 매우 잘 어울리는 포멧이다. 그러나 우리는 블로그 작성을 위해서라거나, Reproducibility에는 전혀 관심이 없을 분들을 위한 최종 보고서 작성을 위해서라거나, 파일 수신자가 노트북 파일을 실행할 수 없는 환경에 있다는 등의 다양한 이유로 노트북 파일을 보다 일반적인 형태의 문서로 변환해야하는 상황과 마주친다.

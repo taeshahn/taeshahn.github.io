@@ -10,35 +10,35 @@
 
     <url>
         <loc>https://taes.me/categories/R/</loc>
-        <lastmod>2023-07-16T14:54:16.942Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://taes.me/categories/NLP/</loc>
-        <lastmod>2023-07-16T14:54:16.942Z</lastmod>
+        <lastmod>2023-07-16T15:11:20.932Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://taes.me/categories/Others/</loc>
-        <lastmod>2023-07-16T14:54:16.938Z</lastmod>
+        <lastmod>2023-07-16T15:11:20.932Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://taes.me/categories/Information-Theory/</loc>
-        <lastmod>2023-07-16T14:54:16.938Z</lastmod>
+        <lastmod>2023-07-16T15:11:20.932Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://taes.me/categories/WeeklyNLP/</loc>
-        <lastmod>2023-07-16T14:54:16.938Z</lastmod>
+        <lastmod>2023-07-16T15:11:20.932Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://taes.me/categories/NLP/</loc>
+        <lastmod>2023-07-16T15:11:20.932Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

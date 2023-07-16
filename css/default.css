@@ -10775,6 +10775,10 @@ body > .section {
   border: none;
   margin-top: 0;
 }
+article img {
+  display: block;
+  margin: auto;
+}
 article.media {
   color: #7a7a7a;
 }
@@ -10783,10 +10787,6 @@ article.media a {
 }
 article.media a:hover {
   color: #cd5c5c;
-}
-article.media img {
-  display: block;
-  margin: auto;
 }
 article.media .image {
   width: 64px;

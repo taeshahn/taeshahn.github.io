@@ -29,18 +29,19 @@ KoLIMA는 LIMA에서 주장하는 내용이 한국어 언어 모형에서도 동
 
 # Learning Frameworks in NLP
 
-## Supervised Learning with `Task-specific Models`
+## Supervised Learning with Task-specific Models
 
-머신러닝을 공부하기 시작하면 가장 먼저 배우게 되는 개념들 중 하나가 바로 지도 학습과 비지도 학습에 대한 내용입니다. 지도 학습은 레이블이 붙어있는 학습 데이터셋을 활용하여 모형이 특정 Task를 수행하는 방법을 가르치는 훈련 방법이죠. 그리고 얼마 전까지만해도 대부분의 NLP Task들은 해당 Task를 수행하기 위한 구체적인 모형이 있고, 해당 모형에 지도 학습 적용하여 훈련시키는 방법을 사용했었습니다. 예를 들어, 텍스트 요약, 주제 분류, 번역과 같은 3개의 구체적인 task가 있다고 할 때, 각각의 task를 위한 세 개의 모형이 별도로 존재하는 형태였죠. 그림으로 표현해보자면 다음과 같습니다
+머신러닝을 공부하기 시작하면 가장 먼저 배우게 되는 개념들 중 하나가 바로 지도 학습과 비지도 학습에 대한 내용입니다. 지도 학습은 레이블이 붙어있는 학습 데이터셋을 활용하여 모형이 특정 Task를 수행하는 방법을 가르치는 훈련 방법이죠. 그리고 얼마 전까지만해도 대부분의 NLP Task들은 해당 Task를 수행하기 위한 구체적인 모형이 있고, 해당 모형에 지도 학습 적용하여 훈련시키는 방법을 사용했었습니다. 예를 들어, 텍스트 요약, 주제 분류, 번역과 같은 3개의 구체적인 task가 있다고 할 때, 각각의 task를 위한 세 개의 모형이 별도로 존재하는 형태였죠. 그림으로 표현해보자면 다음과 같습니다.
 
-![[Pasted image 20230716173622.png]]
 
+![img](https://i.imgur.com/8pfCAGB.png)
+(이미지 새로 그릴거임....)
 
 ## Pre-trained Models for General Knowledge
 
 그런데, 텍스트 요약과, 주제 분류, 번역이라는 세 가지 Task를 잘 하기 위해서 필요한 공통적인 지식이 있을 수 있지 않을까요? 예를 들어, 한국어를 할 줄 모르는 사람에게 한글로된 뉴스 기사를 요약하고, 주제를 분류하고, 영어로 번역하는 것을 가르치는 것보다, 한국어를 이미 알고 있는 사람에게 동일한 내용을 가르치는 것이 훨씬 더 효율적일 것입니다.
 
-![[Pasted image 20230716201512.png]]
+![img2](https://i.imgur.com/8aOi39I.png)
 
 이렇게 특정 Task *Specific Task*에 관계없이 일반적으로 활용될 수 있는 언어에 대한 지식을 일반 지식*General Knowledge*이라고 하고, 여기에는 개별 단어의 의미, 품사, 문장 내에서의 역할, 문법 구조 등이 포함됩니다. 이러한 일반 지식을 어떤 형태로 개별 모형들에게 전달할 수 있을까요?
 
@@ -52,7 +53,8 @@ KoLIMA는 LIMA에서 주장하는 내용이 한국어 언어 모형에서도 동
 
 word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 비슷한 의미를 지닌다'라는 간단한 가정을 기반으로 단어를 수치 벡터로 표현하는 방법입니다. 많은 분들께서 익숙하실 `vector("King") - vector("Man") + vector("Woman") = vector("Queen")`의 예시가 바로 word2vec의 [original paper](https://arxiv.org/abs/1301.3781)에서 처음 등장했습니다. 
 
-![[Pasted image 20230716222738.png]]
+
+![img3](https://i.imgur.com/gA6KUG8.png)
 
 다만 word2vec은 주변에 함께 등장한 단어를 고려하지 못하고 하나의 단어에 고정된 하나의 임베딩만을 할당한다는 단점이 있습니다. 다시 말해, word2vec을 통해 생성한 임베딩을 통해서는 [이 글](https://taes.me/Dependency%20in%20Languages/)에서 다루었던 여러 의미를 지닐 수 있는 '배'를 각각 다르게 표현할 수 없으며, 이러한 형태의 embedding을 우리는 static embedding 이라고 부릅니다.
 
@@ -60,18 +62,18 @@ word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 
 
 (아래에서 언급될 BERT와 동일하게) ELMo는 이러한 static embedding의 단점을 개선한 contextualised embedding을 생성하는 방법론입니다. 아래의 예시에서, static embedding이 단어 'cat'의 의미를 flying cat이든 the cat on the mat의 cat이든, the cat by the door의 cat이든 동일하게 표현할 수 밖에 없는 데에 반해, ELMo를 비롯한 Contextualised Embedding 기법들에서는 각각의 cat을 주변 맥락*Context*를 고려한 임베딩으로 나타낼 수 있습니다.
 
-![[Pasted image 20230716223431.png]]
+![img4](https://i.imgur.com/KU6SoZr.png)
 (Figure from Lena Voita)
 
 지금까지 살펴본 것처럼 word2vec과 ELMo는 단어를 표현할 때 주변 맥락을 고려할 수 있는지 없는지에 따른 차이가 있긴 하지만, 모형에서 활용되는 방법에 있어서는 차이가 없습니다. 다시 말해, 아래의 그림에서 살펴볼 수 있는 것처럼 각각의 pre-trained model은 단어 집합을 입력으로 받아 각각의 단어에 대한 pre-trained embeddings을 생성하고, 이를 다시 task-specific한 모형에 전달하는 형태로 전체 모형에서 활용되게 됩니다.
 
-![[Pasted image 20230716223735.png]]
+![img5](https://i.imgur.com/pZYbdhH.png)
 
 ### BERT: Single Model for ALL NLP Tasks with Contextualised Word Embeddings
 
 반면 BERT는 다양한 Downstream Task에 대한 접근법이 다소 다릅니다. 여러 종류의 task-specific model이 별도로 존재하고, general knowledge는 pre-trained model로부터 생성된 embedding을 통해 개별 모형에 전달되던 기존 구조와 달리, BERT는 모든 downstream task를 BERT 하나만으로 수행해도 기존 개별 모형 대비 더 높은 성능을 달성할 수 있다는 사실을 보였습니다. 
 
-![[Pasted image 20230716224255.png]]
+![img6](https://i.imgur.com/wexruys.png)
 
 # Outro
 

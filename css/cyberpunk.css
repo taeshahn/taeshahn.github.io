@@ -10785,6 +10785,10 @@ article.media a {
 article.media a:hover {
   color: #fcee09;
 }
+article.media img {
+  display: block;
+  margin: auto;
+}
 article.media .image {
   width: 64px;
   height: 64px;

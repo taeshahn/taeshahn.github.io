@@ -10,17 +10,24 @@ toc: true
 
 # Intro
 
+최근에 KoLIMA라는 사이드 프로젝트를 하나 시작했습니다. 2023년 5월에 Meta AI에서 발표한 [LIMA: Less Is More for Alignment](https://arxiv.org/abs/2305.11206)라는 모형에서 사용한 방법론이 한국어 언어 모형에도 적용 가능한지 확인해보고자 하는 목적에서 진행하는 프로젝트입니다.
+
 ## LIMA and KoLIMA
 
-최근에 KoLIMA라는 사이드 프로젝트를 하나 시작했습니다. [LIMA: Less Is More for Alignment](https://arxiv.org/abs/2305.11206)는 Meta AI에서 2023년 5월에 발표한 논문으로, 소규모의 엄선된 instruction dataset 만으로도 pre-training objective와 final objective 사이의 mismatch를 충분한 수준에서 align 할 수 있다는 내용을 다루고 있습니다.
+우선 LIMA는, 소규모의 엄선된 instruction dataset 만으로도 pre-training objective와 final objective 사이의 mismatch를 충분히 align 할 수 있다는 내용을 다루고 있습니다.
 
-우리의 최종 목표인 'LM이 Input으로 주어지는 사람의 지시*instruction*에 따르게 한다'와 Pre-training 단계의 학습 목표인 'Masked/Causal Language Modelling의 Loss를 낮춘다' 사이에는 Mismatch (혹은 Gap)이 존재하고, 이러한 상이한 학습 목표를 어떻게 Align 할 것인가는 최근 NLP 분야에서 많은 관심을 받아온 연구 주제였습니다. 이를테면, ChatGPT의 전신이자 Sibling 모형인 InstructGPT도 해당 문제를 다루고 있고, LLaMA에 Self-Instruct를 활용하여 instruction dataset을 augmentation해서 instruction-tuning을 적용한 Stanford Alpaca도 이러한 Alignment에 관심을 집중하고 있습니다.
+우리가 언어 모형을 개발하고 연구하는 이유는 무엇일까요? 다르게 표현하자면, 사람들이 언어 모형에게 기대하는 바는 무엇일까요? 아마도 우리는 언어 모형이 우리의 요청에 따라서, 질문에 올바르게 답변하고 번역이나 요약 등의 요청도 적절히 수행하기를 바랄 것입니다. 즉, 우리가 언어 모형을 학습시키는 최종 목적은 '언어 모형*Language Model*이 입력값*Input*으로 주어지는 사람의 지시*Instruction*을 따르게 하는 것'이라고 할 수 있습니다. 한편, 우리가 이미 살펴보았듯이 언어 모형의 사전 학습*Pre-training* 단계에서의 학습 목표는 'Masked/Causal Language Modelling의 Loss의 최소화'입니다. 따라서, '우리의 최종 목표와 언어 모형의 훈련 단계에서의 학습 목표 사이에는 Mismatch(혹은 Gap)가 존재하는데, 이러한 상이한 학습 목표를 어떻게 Align 할 수 있을까?'라는 질문이 떠오르는 것은 자연스럽고, 최근 NLP 분야에서 많은 관심을 받아온 연구 주제입니다. 예를 들자면, ChatGPT의 전신이자 Sibling 모형인 InstructGPT도 해당 문제를 다루고 있고, LLaMA 모형에 (Self-instruct를 활용하여 생성한 instruction dataset을 통해) instruction-tuning을 적용한 Stanford Alpaca도 동일한 주제에 관심을 집중하고 있습니다.
 
-아시다시피, ChatGPT의 핵심은 RLHF를 통한 Human Feedback을 학습 과정에 반영하는 것이지만, 해당 프로세스는 꽤 많은 비용을 필요로 합니다. 물론 최대한 자동화된 프로세스를 만들기 위해서 Human Feedback을 예측하는 모형을 만들고, 일정 시점 이후부터는 사람이 직접 LM의 output에 대한 Feedback을 annotation할 필요성이 줄어들긴 하지만, 그럼에도 불구하고 RLHF는 전체적으로 Costly한 과정일 수 밖에 없을 뿐더러, OpenAI는 학습에 사용한 데이터셋을 공개하지 않았기 때문에 데이터/모형의 재활용을 통한 비용 절감 또한 기대할 수 없는 상황이죠.
+많은 분들이 아시다시피, ChatGPT 훈련 과정의 핵심은 RLHF를 통해 Human Feedback을 학습 과정에 반영하는 것이지만, 해당 프로세스는 꽤 높은 비용을 필요로 합니다. 물론 RLHF를 최대한 자동화된 프로세스로 만들기 위해서 Human Feedback을 예측하는 모형을 별도로 훈련시켜서 활용하는 구조로 구성되어있고, 일정 시점 이후부터는 사람이 언어 모형의 아웃풋에 대한 Feedback을 직접 annotation할 필요성이 줄어들긴 합니다. 그럼에도 불구하고 RLHF는 전체적으로 고비용의 프로세스일 수 밖에 없을 뿐더러, OpenAI가 학습에 사용한 데이터셋을 공개하지 않았기 때문에 데이터와 모형의 재활용을 통한 비용 절감 또한 기대하기 어려운 상황이죠.
 
-LIMA는 '그게... 그렇게까지 할 일인가?'라는 질문에서부터 출발합니다. [(Xie et al., 2021)](https://arxiv.org/abs/2111.02080)과 [(Ahuja et al., 2023)](https://arxiv.org/abs/2306.04891)을 비롯한 여러 논문들의 실험 결과가 암시하듯이, In-context learning ability를 비롯한 LLM의 대부분의 지식은 이미 Pre-training 단계에서 학습된 것이며, instruction-tuning은 단지 사람과 LM이 상호 작용하는 방식을 학습하는 간단한 과정일 수 있습니다. 따라서 'RLHF처럼 복잡한 과정 없이도, 엄선된 1k 규모의 instruction dataset만으로도 만족할만한 성능의 alignment를 수행할 수 있다'라는 내용이 LIMA의 저자들이 주장하고자 했던 핵심적인 내용이라고 볼 수 있습니다.
+개인적으로 생각하기에, LIMA는 '그게... 그렇게까지 할 일인가?'라는 질문에서부터 출발했던 것 같습니다. [(Xie et al., 2021)](https://arxiv.org/abs/2111.02080)과 [(Ahuja et al., 2023)](https://arxiv.org/abs/2306.04891)을 비롯한 여러 논문들의 실험 결과가 암시하듯이, In-context learning ability를 비롯한 거대 언어 모형의 대부분의 지식은 이미 사전 학습 단계에서 학습된 것이며, instruction-tuning은 단지 사람과 언어 모형이 상호 작용하는 방식을 학습하는 간단한 과정일 수도 있습니다. 따라서 'RLHF처럼 복잡한 과정 없이도, 1k 규모의 엄선된 instruction dataset만으로도 만족할만한 성능의 alignment를 수행할 수 있다'라는 내용이 LIMA의 저자들이 주장하고자 했던 핵심적인 내용이라고 볼 수 있습니다.
 
-KoLIMA는 LIMA에서 주장하는 내용이 한국어 언어 모형에서도 동일하게 적용되는지 확인해보기 위한 프로젝트입니다. 우선 LIMA dataset을 DeepL API를 활용하여 한국어로 번역한 KoLIMA dataset을 생성하고, 사전 학습된 한국어 언어 모형인 Polyglot-ko을 백본 모형으로 instruction-tuning을 적용하여 모형의 성능을 평가해보고자 합니다. 현재 데이터셋의 번역은 완료된 상태이고, Polyglot-ko 1.3B, 3.8B 모형의 학습에 이어서 5.8B, 12.B 모형의 학습을 진행 중에 있습니다.
+앞서 언급했듯이, KoLIMA는 LIMA의 저자들이 주장하는 내용이 한국어 언어 모형에서도 동일하게 적용되는지 확인해보기 위한 프로젝트입니다. 조금 더 구체적으로는, 아래 두 가지의 항목에 대해 살펴보는 것을 목적으로 합니다.
+
+- 영어와 한국어의 언어적 특성에 따른 instruction-tuning의 효과 차이
+- 영어로 작성된 instruction dataset을 기계 번역을 통해 한국어로 변환하는 과정에서 필연적으로 발생하는 noise(번역 오류 등)에 대한 강건성
+
+이를 위해, 우선 LIMA dataset을 DeepL API를 활용하여 한국어로 번역한 KoLIMA dataset을 생성하고, 사전 학습된 한국어 언어 모형인 Polyglot-ko을 백본 모형으로 instruction-tuning을 적용하여 모형의 성능을 평가해보고자 합니다. 현재 데이터셋의 번역은 완료된 상태이고, Polyglot-ko 1.3B, 3.8B 모형의 학습에 이어서 5.8B, 12.B 모형의 학습을 진행 중에 있습니다.
 
 ## This article covers:
 
@@ -71,7 +78,7 @@ word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 
 
 ### BERT: Single Model for ALL NLP Tasks with Contextualised Word Embeddings
 
-반면 BERT는 다양한 Downstream Task에 대한 접근법이 다소 다릅니다. 여러 종류의 task-specific model이 별도로 존재하고, general knowledge는 pre-trained model로부터 생성된 embedding을 통해 개별 모형에 전달되던 기존 구조와 달리, BERT는 모든 downstream task를 BERT 하나만으로 수행해도 기존 개별 모형 대비 더 높은 성능을 달성할 수 있다는 사실을 보였습니다. 
+반면 BERT는 다양한 Downstream Task에 대한 접근법이 다소 다릅니다. 여러 종류의 task-specific model이 별도로 존재하고, 언어에 대한 일반 지식은 사전 학습 모형으로부터 생성된 임베딩을 통해 개별 모형에 전달되던 기존 구조와 달리, BERT는 모든 downstream task를 BERT 하나만으로 수행해도 기존 개별 모형 대비 더 높은 성능을 달성할 수 있다는 사실을 보였습니다.
 
 ![img6](https://i.imgur.com/wexruys.png)
 

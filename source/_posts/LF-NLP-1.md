@@ -69,7 +69,7 @@ toc: true
 
 ELMo는 이러한 정적 임베딩의 단점을 개선한 동적 임베딩*dynamic embeddings*을 생성하는 방법론입니다. 주변 문맥을 반영한 임베딩이라는 의미에서 문맥 임베딩*contextualised embeddings*라고 표현하기도 합니다. 여기서 '동적'이라는 표현은 주변에 등장한 단어(문맥*Context*)에 따라서 임베딩이 표현하는 단어의 의미가 변화한다는 특징을 나타내기 위한 표현입니다. 아래의 Lena Voita의 Figure를 통해, 동적 임베딩이 정적 임베딩으로부터 어떤 점이 다른지 살펴보도록 하겠습니다.
 
-![Contextualised Word Embeddings, Figure from Lena Voita](https://i.imgur.com/KU6SoZr.png)
+![Contextualised Word Embeddings (Figure from Lena Voita)](https://i.imgur.com/KU6SoZr.png)
 
 Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베딩에서 'cat'이라는 단어는 주변에 함께 등장한 단어들과 관계없이 항상 동일한 수치 표현(벡터)를 갖습니다. flying cat의 cat도, the cat on the mat의 cat도, the cat by the door의 cat도 모두 동일한 수치 벡터로 표현됩니다. 한편, ELMo (Peters et al., 2018)를 비롯한 동적 임베딩 기법에서는 각각의 cat을 주변 맥락*Context*을 고려한 임베딩으로 표현할 수 있습니다. 다시 말해, 앞선 예시의 서로 다른 세 구문에서의 cat은 모두 다른 수치 벡터로 표현되며, 이러한 특징은 상단 그림의 우측에서 확인할 수 있습니다. 이러한 동적 임베딩은 주변 맥락에 따라 달라지는 의미를 표현할 수 있을 뿐만 아니라, 동음이의어와 같이 하나의 단어가 여러 의미를 지니는 현상을 다루기에도 적합한 방법론이라고 할 수 있습니다.
 

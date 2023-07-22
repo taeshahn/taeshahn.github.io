@@ -41,7 +41,9 @@ toc: true
 
 ![Separate Models for Each NLP Task](LF-NLP-1/LF-NLP-1-20230719155429740.png)
 
-## 2.2 Pre-trained Model for General Knowledge %% Pre-trained Models as an Auxiliary Model %%
+## 2.2 Pre-trained Model for General Knowledge
+
+<!-- Pre-trained Models as an Auxiliary Model -->
 
 그런데, 텍스트 요약과, 주제 분류, 번역이라는 세 가지 Task를 잘 하기 위해서 필요한 공통적인 지식이 있을 수 있지 않을까요? 예를 들어, 한국어를 할 줄 모르는 사람에게 한글로된 뉴스 기사를 요약하고, 주제를 분류하고, 영어로 번역하는 것을 가르치는 것보다, 한국어를 이미 알고 있는 사람에게 동일한 내용을 가르치는 것이 훨씬 더 효율적일 것입니다. 이렇게 특정 Task *Specific Task*에 관계없이 일반적으로 활용될 수 있는 언어에 대한 지식을 일반 지식*General Knowledge*이라고 하고, 여기에는 개별 단어의 의미, 품사, 문장 내에서의 역할, 문법 구조 등이 포함됩니다. 이러한 일반 지식은 레이블이 필요하지 않은 비지도 학습 기법을 통해서도 학습시킬 수 있다는 사실이 선행 연구들을 통해 알려져있고, 특정 Task를 위한 레이블링이 되어 있지 않은 대량의 텍스트 데이터를 통해 이러한 일반 지식을 학습시킨 모형을 우리는 사전 학습 모형*Pre-trained Model*이라고 부릅니다. 사전 학습 모형의 일반 지식이 각각의 Task를 위한 모형*Task-specific Models*에서 활용되는 구조를 그림으로 나타내면 다음과 같습니다.
 
@@ -71,19 +73,24 @@ Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베
 
 ### 2.2.3 Pre-trained Embeddings as an Input for Task-specific Models
 
-![Knowledge Transfer through Embeddings as an Input for Task-specific Models](LF-NLP-1/LF-NLP-1-20230723000825789.png)
+지금까지 살펴본 것처럼, 정적 임베딩을 생성하는 word2vec, GloVe, FastText 등의 방법론과 동적 임베딩을 생성하는 ELMo는 단어를 표현할 때 주변 맥락을 고려할 수 있는지 없는지에 따른 차이가 있긴 하지만, 생성된 임베딩이 최종 Task를 위해 활용되는 방법에 있어서는 차이가 없습니다. 다시 말해, 아래 그림에서 살펴볼 수 있는 것처럼 사전 학습 모형은 단어 집합을 입력으로 받아 각각의 단어에 대한 임베딩을 생성하고, 이는 다시 개별 Task를 위한 모형*Task-specific Model*의 입력값으로 활용됩니다.
 
-지금까지 살펴본 것처럼, 정적 임베딩을 생성하는 word2vec, GloVe, FastText 등의 방법론과 동적 임베딩을 생성하는 ELMo는 단어를 표현할 때 주변 맥락을 고려할 수 있는지 없는지에 따른 차이가 있긴 하지만, 생성된 임베딩이 최종 Task를 위해 활용되는 방법에 있어서는 차이가 없습니다. 다시 말해, 상단의 그림에서 살펴볼 수 있는 것처럼 사전 학습 모형은 단어 집합을 입력으로 받아 각각의 단어에 대한 임베딩을 생성하고, 이는 다시 개별 Task를 위한 모형*Task-specific Model*의 입력값으로 활용됩니다.
+![Knowledge Transfer through Embeddings as an Input for Task-specific Models](LF-NLP-1/LF-NLP-1-20230723005429670.png)
 
 이러한 관점에서, 우리가 최종적으로 수행하고자 하는 작업을 위한 개별 모형을 메인 모형*Main Model*, 메인 모형에서 활용하기 위한 일반 지식을 전달하기 위한 사전 학습 모형을 보조 모형*Auxiliary Model*이라고 부르기도 합니다. 그리고 각각의 작업을 위한 개별 모형을 메인 모형으로 보는 이러한 관점은 GPT-2와 BERT를 기점으로 크게 변화하게 되는데, 다음 절에서는 이러한 관점 변화에 대해서 살펴보도록 하겠습니다.
 
-## 2.3 Universal Models %% Pre-trained Models as an Universal Model %%
+## 2.3 Universal Models 
+
+<!-- Pre-trained Models as an Universal Model -->
 
 ### 2.3.1 Universal Models with Contextualised Embeddings
 
 BERT (Devlin et al., 2019)는 이전 절에서 살펴본 ELMo와 마찬가지로 각 단어에 대한 동적 임베딩을 생성하는 모형입니다. 그러나 이번 절에서 우리가 주목할 부분은 BERT가 Task를 수행하기 위해 활용되는 방법입니다. 결론부터 이야기하자면, BERT는 단일 모형으로 여러 Task를 수행할 수 있는 범용 모형*Universal/Foundational Model*입니다.
 
-각각의 Task를 위한 task-specific model이 별도로 존재하고 사전 학습 모형으로부터 생성된 임베딩은 해당 모형의 입력으로 활용되던 기존의 프레임워크와 달리, BERT를 제안한 Devlin et al.은 요약, NER, ... 등의 다양한 task를 수행하기 위해 별도의 모형을 사용하지 않았습니다. 대신, BERT로부터 생성된 임베딩 위에 존재하는 최상단 레이어만 교체해가면서 여러 Task를 수행하는 것만으로도, 기존의 각각의 모형들보다 개선된 성능을 확보할 수 있다는 사실을 보였죠.
+각각의 Task를 위한 task-specific model이 별도로 존재하고 사전 학습 모형으로부터 생성된 임베딩은 해당 모형의 입력으로 활용되던 기존의 프레임워크와 달리, BERT를 제안한 Devlin et al.은 질의응답*Question Answering*, 시퀀스 태깅*Sequential Tagging*, 문장 혹은 문장쌍 분류*Sentence (Pair) Classification* 등의 다양한 task를 수행하기 위해 별도의 모형을 사용하지 않았습니다. 대신, BERT로부터 생성된 임베딩 위에 존재하는 최상단 레이어만 교체해가면서 여러 Task를 수행하는 것만으로도, 기존의 각각의 모형들보다 개선된 성능을 확보할 수 있다는 사실을 보였죠. 이러한 구조를 그림으로 표현하자면 다음과 같습니다. 더 이상 각각의 Task를 위한 개별 모형이 존재하지 않고, 하나의 사전 학습 모형을 통해 요약, 분류, 번역 세 가지 작업 모두를 수행한다는 점에 주목할 필요가 있습니다.
+
+![](LF-NLP-1/LF-NLP-1-20230723004440002.png)
+
 
 이는 모형의 학습 프레임워크 관점에서 혁신이라고 불릴만한 발견이었습니다. 이러한 새로운 프레임워크에서 사전 학습 모형은 더 이상 메인 모형에서 활용되기 위한 보조 모형*Auxilary Model*이 아니라, 하나의 모형만으로도 여러 Task를 수행할 수 있는 Multi-task 모형이자 메인 모형으로 기능합니다. 이러한 연구 트랜드의 변화는 GPT-2 (Radford et al, 2018)의 논문  제목에서도 살펴볼 수 있습니다. 논문 제목인 *Language Models are Unsupervised __Multitask Learners__* 에서는 모형의 아키텍쳐 상의 변화도, 모형의 크기 변화도 아닌 Multi-task를 수행할 수 있는 능력을 강조하고 있습니다.
 

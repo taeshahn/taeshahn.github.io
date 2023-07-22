@@ -57,7 +57,7 @@ toc: true
 
 ### 2.2.1 Era of Kings and Queens: Static Embeddings
 
-![Word Representations in Continuous Space from (Mikolov et al., 2013)](LF-NLP-1-draft/LF-NLP-1-draft-20230722203820316.png)
+![Word Representations in Continuous Space from (Mikolov et al., 2013)](LF-NLP-1/LF-NLP-1-20230722203820316.png)
 
 이번 섹션의 소제목인 '왕과 여왕들의 시대 *Era of Kings and Queens*'는 많은 분들께 익숙할 `vector(King) - vector(Man) + vector(Woman) = vector(queen)`의 예시로부터 가져왔습니다. 해당 예시는 word2vec을 제안했던 Tomas Mikolov의 논문에서 처음 등장했으며, word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 비슷한 의미를 지닌다'라는 간단한 가정을 기반으로 단어를 수치 벡터로 표현하는 방법입니다. (Mikolov et al., 2013)은 CBOW 혹은 Skip-gram이라는 방법을 통해 동시 발생 빈도를 기반으로 각 단어의 의미를 연속 공간*Continuous Space*에 표현하고, 이러한 단어 벡터(임베딩)가 단어들 간의 관계를 일정 수준에서 포착*Capture*할 수 있다는 사실을 보였습니다. 그 이후로도 단어의 의미를 연속 공간에서 표현하기 위한 많은 연구가 이루어졌으며, Winodw size로 인한 한계를 보완하기 위한 방법인 Glove (Pennington et al., 2014)와 Subword의 개념을 활용한 FastText (Bojanowski et al., 2016) 등이 추가로 제안되었습니다.
 
@@ -92,7 +92,7 @@ BERT (Devlin et al., 2019)는 이전 절에서 살펴본 ELMo와 마찬가지로
 ![SINGLE Universal Model for ALL Tasks](LF-NLP-1/LF-NLP-1-20230723004440002.png)
 
 
-이는 모형의 학습 프레임워크 관점에서 혁신이라고 불릴만한 발견이었습니다. 이러한 새로운 프레임워크에서 사전 학습 모형은 더 이상 메인 모형에서 활용되기 위한 보조 모형*Auxilary Model*이 아니라, 하나의 모형만으로도 여러 Task를 수행할 수 있는 Multi-task 모형이자 메인 모형으로 기능합니다. 이러한 연구 트랜드의 변화는 GPT-2 (Radford et al, 2018)의 논문  제목에서도 살펴볼 수 있습니다. 논문 제목인 *Language Models are Unsupervised __Multitask Learners__* 에서는 모형의 아키텍쳐 상의 변화도, 모형의 크기 변화도 아닌 Multi-task를 수행할 수 있는 능력을 강조하고 있습니다.
+이는 모형의 학습 프레임워크 관점에서 혁신이라고 불릴만한 발견이었습니다. 이러한 새로운 프레임워크에서 사전 학습 모형은 더 이상 메인 모형에서 활용되기 위한 보조 모형*Auxilary Model*이 아니라, 하나의 모형만으로도 여러 Task를 수행할 수 있는 Multi-task 모형이자 메인 모형으로 기능합니다. 이러한 연구 트랜드의 변화는 GPT-2 (Radford et al, 2018)의 논문  제목에서도 살펴볼 수 있습니다. 논문 제목인 Language Models are Unsupervised **Multitask Learners** 에서는 모형의 아키텍쳐 상의 변화도, 모형의 크기 변화도 아닌 Multi-task를 수행할 수 있는 능력을 강조하고 있습니다.
 
 ### 2.3.2 Welcome to Sesame Street!
 

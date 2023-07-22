@@ -57,9 +57,11 @@ toc: true
 
 ### 2.2.2 Era of Kings and Queens: Static Embeddings
 
+이번 섹션의 소제목인 '왕과 여왕들의 시대 *Era of Kings and Queens*'는 많은 분들께 익숙할 `vector(King) - vector(Man) + vector(Woman) = vector(queen)`의 예시로부터 가져왔습니다. 해당 예시는 word2vec을 제안했던 Tomas Mikolov의 논문에서 처음 등장했으며, word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 비슷한 의미를 지닌다'라는 간단한 가정을 기반으로 단어를 수치 벡터로 표현하는 방법입니다. 
+
 ![Word Representations in Continuous Space from (Mikolov et al., 2013)](LF-NLP-1/LF-NLP-1-20230722203820316.png)
 
-이번 섹션의 소제목인 '왕과 여왕들의 시대 *Era of Kings and Queens*'는 많은 분들께 익숙할 `vector(King) - vector(Man) + vector(Woman) = vector(queen)`의 예시로부터 가져왔습니다. 해당 예시는 word2vec을 제안했던 Tomas Mikolov의 논문에서 처음 등장했으며, word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 비슷한 의미를 지닌다'라는 간단한 가정을 기반으로 단어를 수치 벡터로 표현하는 방법입니다. (Mikolov et al., 2013)은 CBOW 혹은 Skip-gram이라는 방법을 통해 동시 발생 빈도를 기반으로 각 단어의 의미를 연속 공간*Continuous Space*에 표현하고, 이러한 단어 벡터(임베딩)가 단어들 간의 관계를 일정 수준에서 포착*Capture*할 수 있다는 사실을 보였습니다. 그 이후로도 단어의 의미를 연속 공간에서 표현하기 위한 많은 연구가 이루어졌으며, Winodw size로 인한 한계를 보완하기 위한 방법인 Glove (Pennington et al., 2014)와 Subword의 개념을 활용한 FastText (Bojanowski et al., 2016) 등이 추가로 제안되었습니다.
+(Mikolov et al., 2013)은 CBOW 혹은 Skip-gram이라는 방법을 통해 동시 발생 빈도를 기반으로 각 단어의 의미를 연속 공간*Continuous Space*에 표현하고, 이러한 단어 벡터(임베딩)가 단어들 간의 관계를 일정 수준에서 포착*Capture*할 수 있다는 사실을 보였습니다. 그 이후로도 단어의 의미를 연속 공간에서 표현하기 위한 많은 연구가 이루어졌으며, Winodw size로 인한 한계를 보완하기 위한 방법인 Glove (Pennington et al., 2014)와 Subword의 개념을 활용한 FastText (Bojanowski et al., 2016) 등이 추가로 제안되었습니다.
 
 다만 word2vec을 비롯한 이러한 방법론들은 주변에 함께 등장한 단어를 고려하지 못하고, 하나의 단어에 문맥에 관계없이 고정된 하나의 임베딩만을 할당한다는 단점이 있습니다. 다시 말해, word2vec을 통해 생성한 임베딩을 통해서는 [이 글](https://taes.me/Dependency%20in%20Languages/)에서 다루었던 여러 의미를 지닐 수 있는 '배'를 각각 다르게 표현할 수 없다는 한계를 지닙니다. 우리는 이러한 특징을 지니는 임베딩을 다음 장에서 살펴볼 동적 임베딩*Contextualised/Dynamic Embeddings*과 구분하는 의미에서 정적 임베딩*Static Embeddings*이라고 부릅니다.
 

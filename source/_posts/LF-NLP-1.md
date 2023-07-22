@@ -71,7 +71,7 @@ ELMo는 이러한 정적 임베딩의 단점을 개선한 동적 임베딩*dyna
 
 ![Contextualised Word Embeddings, Figure from Lena Voita](https://i.imgur.com/KU6SoZr.png)
 
-Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베딩에서 'cat'이라는 단어는 주변에 함께 등장한 단어들과 관계없이 항상 동일한 수치 표현(벡터)를 갖습니다. flying cat의 cat도, the cat on the mat의 cat도, the cat by the door의 cat도 모두 동일한 수치 벡터로 표현됩니다. 한편, ELMo (Peters et al., 2018)를 비롯한 동적 임베딩 기법에서는 각각의 cat을 주변 맥락*Context*을 고려한 임베딩으로 표현할 수 있습니다. 다시 말해, 앞선 예시의 서로 다른 세 구문에서의 cat은 모두 다른 수치 벡터로 표현됩니다. 이러한 동적 임베딩은 주변 맥락에 따라 달라지는 의미를 표현할 수 있을 뿐만 아니라, 동음이의어와 같이 하나의 단어가 여러 의미를 지니는 현상을 다루기에도 적합한 방법론이라고 할 수 있습니다.
+Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베딩에서 'cat'이라는 단어는 주변에 함께 등장한 단어들과 관계없이 항상 동일한 수치 표현(벡터)를 갖습니다. flying cat의 cat도, the cat on the mat의 cat도, the cat by the door의 cat도 모두 동일한 수치 벡터로 표현됩니다. 한편, ELMo (Peters et al., 2018)를 비롯한 동적 임베딩 기법에서는 각각의 cat을 주변 맥락*Context*을 고려한 임베딩으로 표현할 수 있습니다. 다시 말해, 앞선 예시의 서로 다른 세 구문에서의 cat은 모두 다른 수치 벡터로 표현되며, 이러한 특징은 상단 그림의 우측에서 확인할 수 있습니다. 이러한 동적 임베딩은 주변 맥락에 따라 달라지는 의미를 표현할 수 있을 뿐만 아니라, 동음이의어와 같이 하나의 단어가 여러 의미를 지니는 현상을 다루기에도 적합한 방법론이라고 할 수 있습니다.
 
 ### 2.2.4 Pre-trained Embeddings as an Input for Task-specific Models
 

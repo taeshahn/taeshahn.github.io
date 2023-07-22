@@ -9,56 +9,8 @@
 
 
     <url>
-        <loc>https://taes.me/LF-NLP-1/</loc>
-        <lastmod>2023-07-19T06:55:29.080Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://taes.me/Language%20Models/</loc>
-        <lastmod>2023-07-19T06:55:29.080Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://taes.me/R01/</loc>
-        <lastmod>2023-07-19T06:55:29.080Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://taes.me/R02/</loc>
-        <lastmod>2023-07-19T06:55:29.080Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://taes.me/R03/</loc>
-        <lastmod>2023-07-19T06:55:29.080Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://taes.me/Weekly-NLP-Intro/</loc>
-        <lastmod>2023-07-19T06:55:29.080Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>https://taes.me/Dependency%20in%20Languages/</loc>
-        <lastmod>2023-07-19T06:55:29.076Z</lastmod>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -66,7 +18,7 @@
 
     <url>
         <loc>https://taes.me/Entropy1/</loc>
-        <lastmod>2023-07-19T06:55:29.076Z</lastmod>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -74,7 +26,7 @@
 
     <url>
         <loc>https://taes.me/HexoVexo/</loc>
-        <lastmod>2023-07-19T06:55:29.076Z</lastmod>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -82,7 +34,7 @@
 
     <url>
         <loc>https://taes.me/JupToDoc/</loc>
-        <lastmod>2023-07-19T06:55:29.076Z</lastmod>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -90,7 +42,55 @@
 
     <url>
         <loc>https://taes.me/Knowledge%20Integration%20in%20Language%20Model/</loc>
-        <lastmod>2023-07-19T06:55:29.076Z</lastmod>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://taes.me/LF-NLP-1/</loc>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://taes.me/Language%20Models/</loc>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://taes.me/R01/</loc>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://taes.me/R02/</loc>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://taes.me/R03/</loc>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://taes.me/Weekly-NLP-Intro/</loc>
+        <lastmod>2023-07-22T15:25:33.110Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

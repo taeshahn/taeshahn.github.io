@@ -67,7 +67,7 @@ toc: true
 
 ### 2.2.3 ELMo: Contextualised Word Embeddings
 
-ELMo는 이러한 정적 임베딩의 단점을 개선한 동적 임베딩*dynamic embeddings*을 생성하는 방법론입니다. 주변 문맥을 반영한 임베딩이라는 의미에서 문맥 임베딩*contextualised embeddings*라고 표현하기도 합니다. 여기서 '동적'이라는 표현은 주변에 등장한 단어(문맥*Context*)에 따라서 임베딩이 표현하는 단어의 의미가 변화한다는 특징을 나타내기 위한 표현입니다. 아래의 Lena Voita의 Figure를 통해, 동적 임베딩이 정적 임베딩으로부터 어떤 점이 다른지 살펴보도록 하겠습니다.
+ELMo는 이러한 정적 임베딩의 단점을 개선한 동적 임베딩*Dynamic Embeddings*을 생성하는 방법론입니다. 주변 문맥을 반영한 임베딩이라는 의미에서 문맥 임베딩*Contextualised Embeddings*라고 표현하기도 합니다. 여기서 '동적'이라는 표현은 주변에 등장한 단어(문맥*Context*)에 따라서 임베딩이 표현하는 단어의 의미가 변화한다는 특징을 나타내기 위한 표현입니다. 아래의 Lena Voita의 Figure를 통해, 동적 임베딩이 정적 임베딩으로부터 어떤 점이 다른지 살펴보도록 하겠습니다.
 
 ![Contextualised Word Embeddings (Figure from Lena Voita)](https://i.imgur.com/KU6SoZr.png)
 
@@ -102,8 +102,8 @@ BERT (Devlin et al., 2019)는 이전 절에서 살펴본 ELMo와 마찬가지로
 
 Grover (Zellers et al., 2019), ERNIE (Zhang et al., 2019), BART (Lewis et al., 2019), Kermit (Zanzotto et al., 2019), Big Bird (Zaheer et al., 2020) 등 다양한 친구들이 등장했죠. 국내에서는 카카오 엔터프라이즈가 Little Bird (Lee et al., 2022)라는 모형을 발표하여 KorQuAD 2.0 챌린지에서 1위를 달성하기도 했습니다. 한편으로는 BERT를 개선한 많은 모형들이 연구되기도 했습니다. 이러한 모형들의 예시로는, Dynamic Masking의 적용과 NSP Loss 제거 등을 통해 조금 더 Optimimal한 성능을 확보하고자 했던 RoBERTa (Liu et al., 2019), 상대적으로 가벼운 아키텍쳐를 갖고 있는 ALBERT (Lan et al, 2019), 언어 구조를 동시에 학습시킨 StructBERT (Wang et al., 2019) 등이 있습니다.
 
-마지막으로, 범용 모형*Universal/Foundational Model*에 대해 조금 더 자세히 알아보고 싶은 분들께 'On the Opportunities and Risks of Foundation Models (Bommasani et al., 2021)'이라는 논문을 권해드리며 이번 절을 마무리하고자 합니다.
+마지막으로, 범용 모형*Universal/Foundational Model*에 대해 조금 더 자세히 알아보고 싶은 분들께 'On the Opportunities and Risks of Foundation Models (Bommasani et al., 2021)'이라는 논문을 권해드리며 이번 절을 마무리하고자 합니다.
 
 # 3. Outro
 
-이번 글에서는 Sequential Transfer Learning의 기본적인 개념인 Pre-training과 Fine-tuning에 대해 살펴보았습니다. 다음 글에서는 Few/Zero-shot Learning, Prompting, In-context Learning, Instruction-tuning등의 개념에 대해 살펴보도록 하겠습니다.
+이번 글에서는 Sequential Transfer Learning의 기본적인 개념인 사전 학습*Pre-training*과 미세 조정*Fine-tuning*, 그리고 사전 학습 모형의 역할이 어떻게 변해왔는지에 대해 살펴보았습니다. 다음 글에서는 Few/Zero-shot Learning, Prompting, In-context Learning, Instruction-tuning 등의 개념에 대해 살펴보도록 하겠습니다.

@@ -29,7 +29,7 @@ KoLIMA는 LIMA에서 주장하는 내용이 한국어 언어 모형에서도 동
 
 # Learning Frameworks in NLP
 
-## Supervised Learning with `Task-specific Models`
+## Supervised Learning with Task-specific Models
 
 머신러닝을 공부하기 시작하면 가장 먼저 배우게 되는 개념들 중 하나가 바로 지도 학습과 비지도 학습에 대한 내용입니다. 지도 학습은 레이블이 붙어있는 학습 데이터셋을 활용하여 모형이 특정 Task를 수행하는 방법을 가르치는 훈련 방법이죠. 그리고 얼마 전까지만해도 대부분의 NLP Task들은 해당 Task를 수행하기 위한 구체적인 모형이 있고, 해당 모형에 지도 학습 적용하여 훈련시키는 방법을 사용했었습니다. 예를 들어, 텍스트 요약, 주제 분류, 번역과 같은 3개의 구체적인 task가 있다고 할 때, 각각의 task를 위한 세 개의 모형이 별도로 존재하는 형태였죠. 그림으로 표현해보자면 다음과 같습니다
 
@@ -124,29 +124,17 @@ It's Not Just Size That Matters: Small Language Models Are Also Few-Shot Learner
 
 최근 주목받고 있는 언어 모형들은 단일 모형으로 여러 종류의 Downstream NLP Tasks를 수행할 수 있습니다. 예를 들어, ChatGPT는 주어지는 Input에 따라 텍스트 요약, 분류, 번역 등 다양한 작업을 수행합니다. 하지만 불과 몇 년 전까지만 하더라도 이것은 일반적이지 않았습니다. 분류에는 분류를 위한 모형이, 요약에는 요약을 위한 모형이, 번역에는 또 번역을 위한 모형이 필요했죠. 각각의 모형들은 아키텍쳐도 달랐고, 훈련을 위해 사용되는 데이터셋도 달랐습니다. 
 
-## Era of Sesame Street
 
-ELMo, BERT, Rosita, ERNIE, Grover, KERMIT, Big BIRD, 
-
-RoBERTa, StructBert, ALBERT, BERTQA, BETO, BETO
-
-# Scaling Law
-
-GPT
-GPT-2
-GPT-3
-GPT-4
+---
 
 
+이렇게 특정 Task *Specific Task*에 관계없이 일반적으로 활용될 수 있는 언어에 대한 지식을 일반 지식*General Knowledge*이라고 하고, 여기에는 개별 단어의 의미, 품사, 문장 내에서의 역할, 문법 구조 등이 포함됩니다. 이러한 일반 지식을 어떤 형태로 개별 모형들에게 전달할 수 있을까요?
 
-## Animal Kingdom
+가장 일반적인 방법은 단어 임베딩*Word Embeddings*에 이러한 정보들을 담아 개별 모형의 입력값으로 활용하는 것입니다. 혹은 [지난 글](https://taes.me/Knowledge%20Integration%20in%20Language%20Model/)에서 살펴봤던 것처럼 개체 임베딩*Entity Embeddings*을 활용할 수도 있습니다. 이러한 임베딩을 생성하기 위한 다양한 방법들이 연구되어 왔으며, 대표적으로는 word2vec, ELMo, BERT 등이 있습니다.
 
-LLaMA
-Alpaca KoAlpaca
-Gopher Chinchilla
-Dolly
-Vicuna
-RedPajama
+각각의 방법론들이 어떤 차이점을 지니고 있는지 Learning Framework의 관점에서 살펴보도록 하겠습니다.
+
+
 
 
 Learning Framework, 즉 어떻게 모형을 훈련시킬 것인가
@@ -175,3 +163,55 @@ LIMA
 
 Polyglot
 
+
+
+---
+
+### 2.3.?? Scaling Law
+
+GPT-1
+GPT-2
+GPT-3
+
+### 2.3.2 Multi-taskers
+
+GPT-2: Multi-task learner
+Massive Multi-task Learning
+T5: Multi-task fine-tuning
+ExT5
+
+### 2.3.3 Few-shot Learners & Prompting
+
+Few-shot learning
+Zero-shot learning
+Prompting
+
+### 2.3.4 Animal Kingdom
+
+LLaMA / Alpaca / KoAlpaca
+Gopher / Chinchilla
+Dolly / Vicuna / RedPajama
+
+
+
+
+
+%%### 2.2.1 word2vec: Static Word Embeddings
+
+word2vec은 '함께 등장하는 단어 집합이 유사한 단어들은 서로 비슷한 의미를 지닌다'라는 간단한 가정을 기반으로 단어를 수치 벡터로 표현하는 방법입니다. 많은 분들께서 익숙하실 `vector('King') - vector('Man') + vector('Woman') = vector('Queen')`의 예시가 바로 word2vec의 [original paper](https://arxiv.org/abs/1301.3781)에서 처음 등장했습니다. 
+
+![img3](https://i.imgur.com/gA6KUG8.png)
+
+다만 word2vec은 주변에 함께 등장한 단어를 고려하지 못하고 하나의 단어에 고정된 하나의 임베딩만을 할당한다는 단점이 있습니다. 다시 말해, word2vec을 통해 생성한 임베딩을 통해서는 [이 글](https://taes.me/Dependency%20in%20Languages/)에서 다루었던 여러 의미를 지닐 수 있는 '배'를 각각 다르게 표현할 수 없으며, 이러한 형태의 embedding을 우리는 static embedding 이라고 부릅니다.
+
+### 2.2.2 ELMo: Contextualised Word Embeddings
+
+
+
+![Image to be digitised](https://i.imgur.com/pZYbdhH.png)
+
+## 2.3 BERT: Single Model for ALL NLP Tasks with Contextualised Word Embeddings
+
+반면 BERT는 다양한 Downstream Task에 대한 접근법이 다소 다릅니다. 여러 종류의 task-specific model이 별도로 존재하고, 언어에 대한 일반 지식은 사전 학습 모형으로부터 생성된 임베딩을 통해 개별 모형에 전달되던 기존 구조와 달리, BERT는 모든 downstream task를 BERT 하나만으로 수행해도 기존 개별 모형 대비 더 높은 성능을 달성할 수 있다는 사실을 보였습니다.
+
+![iImage to be digitised](https://i.imgur.com/wexruys.png)%%

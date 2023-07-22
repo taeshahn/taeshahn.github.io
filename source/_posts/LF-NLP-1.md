@@ -89,7 +89,7 @@ BERT (Devlin et al., 2019)는 이전 절에서 살펴본 ELMo와 마찬가지로
 
 각각의 Task를 위한 task-specific model이 별도로 존재하고 사전 학습 모형으로부터 생성된 임베딩은 해당 모형의 입력으로 활용되던 기존의 프레임워크와 달리, BERT를 제안한 Devlin et al.은 질의응답*Question Answering*, 시퀀스 태깅*Sequential Tagging*, 문장 혹은 문장쌍 분류*Sentence (Pair) Classification* 등의 다양한 task를 수행하기 위해 별도의 모형을 사용하지 않았습니다. 대신, BERT로부터 생성된 임베딩 위에 존재하는 최상단 레이어만 교체해가면서 여러 Task를 수행하는 것만으로도, 기존의 각각의 모형들보다 개선된 성능을 확보할 수 있다는 사실을 보였죠. 이러한 구조를 그림으로 표현하자면 다음과 같습니다. 더 이상 각각의 Task를 위한 개별 모형이 존재하지 않고, 하나의 사전 학습 모형을 통해 요약, 분류, 번역 세 가지 작업 모두를 수행한다는 점에 주목할 필요가 있습니다.
 
-![](LF-NLP-1/LF-NLP-1-20230723004440002.png)
+![SINGLE Universal Model for ALL Tasks](LF-NLP-1/LF-NLP-1-20230723004440002.png)
 
 
 이는 모형의 학습 프레임워크 관점에서 혁신이라고 불릴만한 발견이었습니다. 이러한 새로운 프레임워크에서 사전 학습 모형은 더 이상 메인 모형에서 활용되기 위한 보조 모형*Auxilary Model*이 아니라, 하나의 모형만으로도 여러 Task를 수행할 수 있는 Multi-task 모형이자 메인 모형으로 기능합니다. 이러한 연구 트랜드의 변화는 GPT-2 (Radford et al, 2018)의 논문  제목에서도 살펴볼 수 있습니다. 논문 제목인 *Language Models are Unsupervised __Multitask Learners__* 에서는 모형의 아키텍쳐 상의 변화도, 모형의 크기 변화도 아닌 Multi-task를 수행할 수 있는 능력을 강조하고 있습니다.

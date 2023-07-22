@@ -41,9 +41,9 @@ toc: true
 
 ![Separate Models for Each NLP Task](LF-NLP-1/LF-NLP-1-20230719155429740.png)
 
-## 2.2 Pre-trained Model for General Knowledge
+## 2.2 Pre-trained Models as Auxiliary Model
 
-<!-- Pre-trained Models as an Auxiliary Model -->
+### 2.2.1 Pre-trained Model for General Knowledge
 
 그런데, 텍스트 요약과, 주제 분류, 번역이라는 세 가지 Task를 잘 하기 위해서 필요한 공통적인 지식이 있을 수 있지 않을까요? 예를 들어, 한국어를 할 줄 모르는 사람에게 한글로된 뉴스 기사를 요약하고, 주제를 분류하고, 영어로 번역하는 것을 가르치는 것보다, 한국어를 이미 알고 있는 사람에게 동일한 내용을 가르치는 것이 훨씬 더 효율적일 것입니다. 이렇게 특정 Task *Specific Task*에 관계없이 일반적으로 활용될 수 있는 언어에 대한 지식을 일반 지식*General Knowledge*이라고 하고, 여기에는 개별 단어의 의미, 품사, 문장 내에서의 역할, 문법 구조 등이 포함됩니다. 이러한 일반 지식은 레이블이 필요하지 않은 비지도 학습 기법을 통해서도 학습시킬 수 있다는 사실이 선행 연구들을 통해 알려져있고, 특정 Task를 위한 레이블링이 되어 있지 않은 대량의 텍스트 데이터를 통해 이러한 일반 지식을 학습시킨 모형을 우리는 사전 학습 모형*Pre-trained Model*이라고 부릅니다. 사전 학습 모형의 일반 지식이 각각의 Task를 위한 모형*Task-specific Models*에서 활용되는 구조를 그림으로 나타내면 다음과 같습니다.
 
@@ -55,7 +55,7 @@ toc: true
 
 각각의 방법론이 어떤 특징을 지니고 있는지 간략히 살펴보고, Learning Framework의 관점에서 어떤 방식으로 활용되는지 다시 한 번 정리해보도록 하겠습니다.
 
-### 2.2.1 Era of Kings and Queens: Static Embeddings
+### 2.2.2 Era of Kings and Queens: Static Embeddings
 
 ![Word Representations in Continuous Space from (Mikolov et al., 2013)](LF-NLP-1/LF-NLP-1-20230722203820316.png)
 
@@ -63,7 +63,7 @@ toc: true
 
 다만 word2vec을 비롯한 이러한 방법론들은 주변에 함께 등장한 단어를 고려하지 못하고, 하나의 단어에 문맥에 관계없이 고정된 하나의 임베딩만을 할당한다는 단점이 있습니다. 다시 말해, word2vec을 통해 생성한 임베딩을 통해서는 [이 글](https://taes.me/Dependency%20in%20Languages/)에서 다루었던 여러 의미를 지닐 수 있는 '배'를 각각 다르게 표현할 수 없다는 한계를 지닙니다. 우리는 이러한 특징을 지니는 임베딩을 다음 장에서 살펴볼 동적 임베딩*Contextualised/Dynamic Embeddings*과 구분하는 의미에서 정적 임베딩*Static Embeddings*이라고 부릅니다.
 
-### 2.2.2 ELMo: Contextualised Word Embeddings
+### 2.2.3 ELMo: Contextualised Word Embeddings
 
 ELMo는 이러한 정적 임베딩의 단점을 개선한 동적 임베딩*dynamic embeddings*을 생성하는 방법론입니다. 주변 문맥을 반영한 임베딩이라는 의미에서 문맥 임베딩*contextualised embeddings*라고 표현하기도 합니다. 여기서 '동적'이라는 표현은 주변에 등장한 단어(문맥*Context*)에 따라서 임베딩이 표현하는 단어의 의미가 변화한다는 특징을 나타내기 위한 표현입니다. 아래의 Lena Voita의 Figure를 통해, 동적 임베딩이 정적 임베딩으로부터 어떤 점이 다른지 살펴보도록 하겠습니다.
 
@@ -71,7 +71,7 @@ ELMo는 이러한 정적 임베딩의 단점을 개선한 동적 임베딩*dyna
 
 Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베딩에서 'cat'이라는 단어는 주변에 함께 등장한 단어들과 관계없이 항상 동일한 수치 표현(벡터)를 갖습니다. flying cat의 cat도, the cat on the mat의 cat도, the cat by the door의 cat도 모두 동일한 수치 벡터로 표현됩니다. 한편, ELMo (Peters et al., 2018)를 비롯한 동적 임베딩 기법에서는 각각의 cat을 주변 맥락*Context*을 고려한 임베딩으로 표현할 수 있습니다. 다시 말해, 앞선 예시의 서로 다른 세 구문에서의 cat은 모두 다른 수치 벡터로 표현됩니다. 이러한 동적 임베딩은 주변 맥락에 따라 달라지는 의미를 표현할 수 있을 뿐만 아니라, 동음이의어와 같이 하나의 단어가 여러 의미를 지니는 현상을 다루기에도 적합한 방법론이라고 할 수 있습니다.
 
-### 2.2.3 Pre-trained Embeddings as an Input for Task-specific Models
+### 2.2.4 Pre-trained Embeddings as an Input for Task-specific Models
 
 지금까지 살펴본 것처럼, 정적 임베딩을 생성하는 word2vec, GloVe, FastText 등의 방법론과 동적 임베딩을 생성하는 ELMo는 단어를 표현할 때 주변 맥락을 고려할 수 있는지 없는지에 따른 차이가 있긴 하지만, 생성된 임베딩이 최종 Task를 위해 활용되는 방법에 있어서는 차이가 없습니다. 다시 말해, 아래 그림에서 살펴볼 수 있는 것처럼 사전 학습 모형은 단어 집합을 입력으로 받아 각각의 단어에 대한 임베딩을 생성하고, 이는 다시 개별 Task를 위한 모형*Task-specific Model*의 입력값으로 활용됩니다.
 
@@ -79,9 +79,7 @@ Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베
 
 이러한 관점에서, 우리가 최종적으로 수행하고자 하는 작업을 위한 개별 모형을 메인 모형*Main Model*, 메인 모형에서 활용하기 위한 일반 지식을 전달하기 위한 사전 학습 모형을 보조 모형*Auxiliary Model*이라고 부르기도 합니다. 그리고 각각의 작업을 위한 개별 모형을 메인 모형으로 보는 이러한 관점은 GPT-2와 BERT를 기점으로 크게 변화하게 되는데, 다음 절에서는 이러한 관점 변화에 대해서 살펴보도록 하겠습니다.
 
-## 2.3 Universal Models 
-
-<!-- Pre-trained Models as an Universal Model -->
+## 2.3 Pre-trained Models as Universal Model
 
 ### 2.3.1 Universal Models with Contextualised Embeddings
 

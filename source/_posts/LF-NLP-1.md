@@ -14,7 +14,7 @@ toc: true
 
 ## 1.1 LIMA and KoLIMA
 
-우선 LIMA는, 소규모의 엄선된 instruction dataset 만으로도 pre-training objective와 final objective 사이의 mismatch를 충분히 align 할 수 있다는 내용을 다루고 있습니다.
+우선 LIMA는, 소규모의 엄선된 instruction dataset 만으로도 사전 학습*Pre-training*과 미세 조정*Fine-tuning* 단계의 학습 목표 사이에 존재하는 mismatch를 충분히 align 할 수 있다는 내용을 다루고 있습니다.
 
 우리가 언어 모형을 연구하고 개발하는 이유는 무엇일까요? 다르게 표현하자면, 사람들이 언어 모형에게 기대하는 바는 무엇일까요? 아마도 우리는 언어 모형이 우리의 요청에 따라 질문에 올바르게 답변하고, 번역이나 요약 등의 요청도 적절히 수행하기를 바랄 것입니다. 즉, 우리가 언어 모형을 학습시키는 최종 목적은 '언어 모형*Language Model*이 입력값*Input*으로 주어지는 사람의 지시*Instruction*을 따르게 하는 것'이라고 할 수 있습니다. 한편, 우리가 이미 살펴보았듯이 언어 모형의 사전 학습*Pre-training* 단계에서의 학습 목표는 'Masked/Causal Language Modelling의 Loss의 최소화'입니다. 따라서, '우리의 최종 목표와 언어 모형의 훈련 단계에서의 학습 목표 사이에는 Mismatch(혹은 Gap)가 존재하는데, 이러한 상이한 학습 목표를 어떻게 Align 할 수 있을까?'라는 자연스러운 질문은 최근 NLP 분야에서 많은 관심을 받아온 연구 주제입니다. 예를 들자면, ChatGPT의 전신이자 Sibling 모형인 InstructGPT도 해당 문제를 다루고 있고, LLaMA 모형에 (Self-instruct를 활용하여 생성한 Instruction dataset을 통해) Instruction-tuning을 적용한 Stanford Alpaca도 동일한 주제에 관심을 집중하고 있습니다.
 
@@ -45,7 +45,7 @@ toc: true
 
 ### 2.2.1 Pre-trained Model for General Knowledge
 
-그런데, 텍스트 요약과, 주제 분류, 번역이라는 세 가지 Task를 잘 하기 위해서 필요한 공통적인 지식이 있을 수 있지 않을까요? 예를 들어, 한국어를 할 줄 모르는 사람에게 한글로된 뉴스 기사를 요약하고, 주제를 분류하고, 영어로 번역하는 것을 가르치는 것보다, 한국어를 이미 알고 있는 사람에게 동일한 내용을 가르치는 것이 훨씬 더 효율적일 것입니다. 이렇게 특정 Task *Specific Task*에 관계없이 일반적으로 활용될 수 있는 언어에 대한 지식을 일반 지식*General Knowledge*이라고 하고, 여기에는 개별 단어의 의미, 품사, 문장 내에서의 역할, 문법 구조 등이 포함됩니다. 이러한 일반 지식은 레이블이 필요하지 않은 비지도 학습 기법을 통해서도 학습시킬 수 있다는 사실이 선행 연구들을 통해 알려져있고, 특정 Task를 위한 레이블링이 되어 있지 않은 대량의 텍스트 데이터를 통해 이러한 일반 지식을 학습시킨 모형을 우리는 사전 학습 모형*Pre-trained Model*이라고 부릅니다. 사전 학습 모형의 일반 지식이 각각의 Task를 위한 모형*Task-specific Models*에서 활용되는 구조를 그림으로 나타내면 다음과 같습니다.
+그런데, 텍스트 요약과, 주제 분류, 번역이라는 세 가지 Task를 잘 하기 위해서 필요한 공통적인 지식이 있을 수 있지 않을까요? 예를 들어, 한국어를 할 줄 모르는 사람에게 한글로된 뉴스 기사를 요약하고, 주제를 분류하고, 영어로 번역하는 것을 가르치는 것보다, 한국어를 이미 알고 있는 사람에게 동일한 내용을 가르치는 것이 훨씬 더 효율적일 것입니다. 이렇게 특정 Task *Specific Task*에 관계없이 일반적으로 활용될 수 있는 언어에 대한 지식을 일반 지식*General Knowledge*이라고 하고, 여기에는 개별 단어의 의미, 품사, 문장 내에서의 역할, 문법 구조 등이 포함됩니다. 이러한 일반 지식은 레이블이 필요하지 않은 비지도 학습 기법을 통해서도 학습시킬 수 있다는 사실이 선행 연구들을 통해 알려져있고, 특정 Task를 위한 레이블링이 되어 있지 않은 대량의 텍스트 데이터를 통해 이러한 일반 지식을 학습시킨 모형을 우리는 사전 학습 모형*Pre-trained Model*이라고 부릅니다. 사전 학습 모형의 일반 지식이 개별 Task를 위한 모형*Task-specific Models*에서 활용되는 구조를 그림으로 나타내면 다음과 같습니다.
 
 ![Knowledge Transfer from a Pre-trained Model](LF-NLP-1/LF-NLP-1-20230723000209909.png)
 
@@ -87,12 +87,12 @@ Figure의 좌측은 정적 임베딩을 나타내고 있습니다. 정적 임베
 
 BERT (Devlin et al., 2019)는 이전 절에서 살펴본 ELMo와 마찬가지로 각 단어에 대한 동적 임베딩을 생성하는 모형입니다. 그러나 이번 절에서 우리가 주목할 부분은 BERT가 Task를 수행하기 위해 활용되는 방법입니다. 결론부터 이야기하자면, BERT는 단일 모형으로 여러 Task를 수행할 수 있는 범용 모형*Universal/Foundational Model*입니다.
 
-각각의 Task를 위한 task-specific model이 별도로 존재하고 사전 학습 모형으로부터 생성된 임베딩은 해당 모형의 입력으로 활용되던 기존의 프레임워크와 달리, BERT를 제안한 Devlin et al.은 질의응답*Question Answering*, 시퀀스 태깅*Sequential Tagging*, 문장 혹은 문장쌍 분류*Sentence (Pair) Classification* 등의 다양한 task를 수행하기 위해 별도의 모형을 사용하지 않았습니다. 대신, BERT로부터 생성된 임베딩 위에 존재하는 최상단 레이어만 교체해가면서 여러 Task를 수행하는 것만으로도, 기존의 각각의 모형들보다 개선된 성능을 확보할 수 있다는 사실을 보였죠. 이러한 구조를 그림으로 표현하자면 다음과 같습니다. 더 이상 각각의 Task를 위한 개별 모형이 존재하지 않고, 하나의 사전 학습 모형을 통해 요약, 분류, 번역 세 가지 작업 모두를 수행한다는 점에 주목할 필요가 있습니다.
+각각의 Task를 위한 task-specific model이 별도로 존재하고 사전 학습 모형으로부터 생성된 임베딩은 해당 모형의 입력으로 활용되던 기존의 프레임워크와 달리, BERT를 제안한 Devlin et al.은 질의응답*Question Answering*, 시퀀스 태깅*Sequential Tagging*, 문장 혹은 문장쌍 분류*Sentence (Pair) Classification* 등의 다양한 task를 수행하기 위해 별도의 모형을 사용하지 않았습니다. 대신, BERT로부터 생성된 임베딩 위에 존재하는 최상단 레이어만 교체해가면서 여러 Task를 수행하는 것만으로도, 기존의 각각의 모형들보다 개선된 성능을 확보할 수 있다는 사실을 보였죠. 이러한 구조를 그림으로 표현하자면 아래와 같습니다. 더 이상 각각의 Task를 위한 개별 모형이 존재하지 않고, 하나의 사전 학습 모형을 통해 요약, 분류, 번역 세 가지 작업 모두를 수행한다는 점에 주목할 필요가 있습니다.
 
 ![SINGLE Universal Model for ALL Tasks](LF-NLP-1/LF-NLP-1-20230723004440002.png)
 
 
-이는 모형의 학습 프레임워크 관점에서 혁신이라고 불릴만한 발견이었습니다. 이러한 새로운 프레임워크에서 사전 학습 모형은 더 이상 메인 모형에서 활용되기 위한 보조 모형*Auxilary Model*이 아니라, 하나의 모형만으로도 여러 Task를 수행할 수 있는 Multi-task 모형이자 메인 모형으로 기능합니다. 이러한 연구 트랜드의 변화는 GPT-2 (Radford et al, 2018)의 논문 제목에서도 살펴볼 수 있는데요, 논문 제목인 'Language Models are Unsupervised **Multitask Learners**'에서는 GPT-2의 아키텍쳐 변화도, 모형의 크기 증가도 아닌 Multi-task를 수행할 수 있는 능력을 강조하고 있습니다.
+이는 모형의 학습 프레임워크 관점에서 혁신이라고 불릴만한 발전이었습니다. 이러한 새로운 프레임워크에서, 사전 학습 모형은 더 이상 메인 모형에서 활용되기 위한 보조 모형*Auxilary Model*이 아니라 하나의 모형만으로도 여러 Task를 수행할 수 있는 Multi-task 모형이자 메인 모형으로 기능합니다. 이러한 연구 트랜드의 변화는 GPT-2 (Radford et al, 2018)의 논문 제목에서도 살펴볼 수 있는데요, 논문 제목인 'Language Models are Unsupervised **Multitask Learners**'에서는 GPT-2의 아키텍쳐 변화도, 모형의 크기 증가도 아닌 Multi-task를 수행할 수 있는 능력을 강조하고 있습니다.
 
 ### 2.3.2 Welcome to Sesame Street!
 
